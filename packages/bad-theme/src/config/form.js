@@ -1142,7 +1142,9 @@ export const associateFilters = [
   "formus_typeofpractice",
   // 👉 step #5 filters
   "py3_gmcnumber",
-  "py3_ntnno",
+  "bad_currentpost",
+  "bad_proposer1",
+  "bad_proposer2",
   "py3_currentgrade",
   "bad_preferredmailingaddress",
   "sky_cvurl",
@@ -1174,9 +1176,9 @@ export const juniorFilters = [
   // 👉 step #5 filters
   "py3_gmcnumber",
   "bad_currentpost",
-  "bad_preferredmailingaddress",
   "bad_proposer1",
   "bad_proposer2",
+  "bad_preferredmailingaddress",
   "sky_cvurl",
   // 👉 checkboxes
   "bad_memberdirectory",
@@ -1209,6 +1211,8 @@ export const traineeFilters = [
   "py3_gmcnumber",
   "py3_ntnno",
   "py3_currentgrade",
+  "bad_proposer1",
+  "bad_proposer2",
   "bad_preferredmailingaddress",
   "sky_cvurl",
   // 👉 checkboxes
@@ -1299,7 +1303,9 @@ export const associateOverseasFilters = [
   "formus_typeofpractice",
   // 👉 step #5 filters
   "py3_gmcnumber",
-  "py3_ntnno",
+  "bad_currentpost",
+  "bad_proposer1",
+  "bad_proposer2",
   "py3_currentgrade",
   "bad_preferredmailingaddress",
   "sky_cvurl",

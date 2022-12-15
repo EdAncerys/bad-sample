@@ -482,6 +482,107 @@ export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   }
 };
 
+export const requiredFieldHandler = ({ form }) => {
+  // --------------------------------------------------------------------------------
+  // 📌  Required field handler & config
+  // ⚠️ applying filters based on bad_categorytype type
+  // --------------------------------------------------------------------------------
+
+  const step = form?.step;
+  let requiredFields = [];
+
+  if (form?.bad_categorytype === "Junior") {
+    if (step === 3)
+      requiredFields = [
+        "formus_staffgroupcategory",
+        "formus_jobrole",
+        "py3_hospitalid",
+        "formus_professionalregistrationbody",
+        "formus_professionalregistrationstatus",
+        "formus_clinicalspecialtysofpractice", // 👈 multi picker
+        "formus_typeofcontract",
+      ];
+    if (step === 4)
+      requiredFields = [
+        "py3_gmcnumber",
+        "bad_currentpost",
+        "bad_proposer1",
+        "bad_proposer2",
+      ];
+  }
+  if (form?.bad_categorytype === "Trainee") {
+    if (step === 3)
+      requiredFields = [
+        "formus_staffgroupcategory",
+        "formus_jobrole",
+        "py3_hospitalid",
+        "formus_professionalregistrationbody",
+        "formus_professionalregistrationstatus",
+        "formus_clinicalspecialtysofpractice", // 👈 multi picker
+        "formus_typeofcontract",
+      ];
+    if (step === 4)
+      requiredFields = [
+        "py3_gmcnumber",
+        "py3_ntnno",
+        "bad_proposer1",
+        "bad_proposer2",
+      ];
+  }
+  if (form?.bad_categorytype === "Student") {
+    if (step === 3)
+      requiredFields = ["formus_staffgroupcategory", "formus_jobrole"];
+    if (step === 4) requiredFields = ["bad_currentpost", "bad_proposer1"];
+  }
+  if (
+    form?.bad_categorytype === "Ordinary" ||
+    form?.bad_categorytype === "Ordinary SAS"
+  ) {
+    if (step === 3)
+      requiredFields = [
+        "formus_staffgroupcategory",
+        "formus_jobrole",
+        "py3_hospitalid",
+        "formus_professionalregistrationbody",
+        "formus_professionalregistrationstatus",
+        "formus_clinicalspecialtysofpractice", // 👈 multi picker
+        "formus_typeofcontract",
+        "formus_mainspecialtyqualification",
+      ];
+    if (step === 4)
+      requiredFields = [
+        "py3_gmcnumber",
+        "bad_currentpost",
+        "bad_proposer1",
+        "bad_proposer2",
+      ];
+  }
+  if (
+    form?.bad_categorytype === "Associate Overseas" ||
+    form?.bad_categorytype === "Associate"
+  ) {
+    if (step === 3)
+      requiredFields = [
+        "formus_staffgroupcategory",
+        "formus_jobrole",
+        "py3_hospitalid",
+        "formus_professionalregistrationbody",
+        "formus_professionalregistrationstatus",
+        "formus_clinicalspecialtysofpractice", // 👈 multi picker
+        "formus_typeofcontract",
+      ];
+    if (step === 4)
+      requiredFields = [
+        "py3_gmcnumber",
+        "bad_currentpost",
+        "bad_proposer1",
+        "bad_proposer2",
+      ];
+  }
+
+  return requiredFields;
+};
+
 export const formValidationHandler = ({
   form,
   application,
@@ -499,62 +600,13 @@ export const formValidationHandler = ({
   let isCategoryType = form?.["bad_categorytype"] !== undefined; // required to select matching application type
   const wpFilter = form?.dev_application_input_filter; // required to select matching application type
 
+  console.log("⭐️ MANUAL_HANDLER", MANUALLY_REQUIRED);
+
   updatedApplication?.map((input, key) => {
     let { name, value, cargo } = input;
     if (name === "core_membershipapplicationid") return; // if name is not defined | core_membership_id, skip
     let required = FORM_CONFIG?.[name]?.Required !== "None"; // check if field is required |  info?.Required !== 'None'
     if (!!MANUALLY_REQUIRED) required = MANUALLY_REQUIRED?.includes(name); // if MANUALLY_REQUIRED array provided check if value is name is in array
-    // --------------------------------------------------------------------------------
-    // 📌  Skip input validation for application if input values not specified in configuration
-    // --------------------------------------------------------------------------------
-    if (form?.bad_categorytype === "Student") {
-      // check if MANUALLY_REQUIRED array have any values equal ro studentFilters
-      if (!MANUALLY_REQUIRED?.some((item) => studentFilters.includes(item))) {
-        required = false;
-      }
-    }
-    if (form?.bad_categorytype === "Ordinary") {
-      // check if MANUALLY_REQUIRED array have any values equal ro ordinaryFilters
-      if (!MANUALLY_REQUIRED?.some((item) => ordinaryFilters.includes(item))) {
-        required = false;
-      }
-    }
-    if (form?.bad_categorytype === "Ordinary SAS") {
-      // check if MANUALLY_REQUIRED array have any values equal ro ordinarySASFilters
-      if (
-        !MANUALLY_REQUIRED?.some((item) => ordinarySASFilters.includes(item))
-      ) {
-        required = false;
-      }
-    }
-    if (form?.bad_categorytype === "Associate Overseas") {
-      // check if MANUALLY_REQUIRED array have any values equal ro associateOverseasFilters
-      if (
-        !MANUALLY_REQUIRED?.some((item) =>
-          associateOverseasFilters.includes(item)
-        )
-      ) {
-        required = false;
-      }
-    }
-    if (form?.bad_categorytype === "Associate") {
-      // check if MANUALLY_REQUIRED array have any values equal ro associateFilters
-      if (!MANUALLY_REQUIRED?.some((item) => associateFilters.includes(item))) {
-        required = false;
-      }
-    }
-    if (form?.bad_categorytype === "Junior") {
-      // check if MANUALLY_REQUIRED array have any values equal ro juniorFilters
-      if (!MANUALLY_REQUIRED?.some((item) => juniorFilters.includes(item))) {
-        required = false;
-      }
-    }
-    if (form?.bad_categorytype === "Trainee") {
-      // check if MANUALLY_REQUIRED array have any values equal ro traineeFilters
-      if (!MANUALLY_REQUIRED?.some((item) => traineeFilters.includes(item))) {
-        required = false;
-      }
-    }
 
     if (form?.[name] !== undefined) {
       value = form?.[name]; // ⚠️ set value to from value/user input
@@ -568,8 +620,8 @@ export const formValidationHandler = ({
     }
 
     // --------------------------------------------------------------------------------
-    // 📌  From validation
-    //  Note: use cargo to trigger condition once
+    // ⚠️ From validation
+    // 📌 Note: use cargo to trigger condition once
     // --------------------------------------------------------------------------------
     if (!isCategoryType && cargo) {
       // --------------------------------------------------------------------------------
@@ -583,28 +635,39 @@ export const formValidationHandler = ({
       updatedForm["error_bad_categorytype"] = true;
       isValid = false;
     }
+
+    // --------------------------------------------------------------------------------
+    // 📌  Error message cleaning
+    // --------------------------------------------------------------------------------
     if (isCategoryType && cargo) {
       updatedForm["bad_categorytype"] = form?.["bad_categorytype"];
       updatedForm["error_bad_categorytype"] = false;
     }
 
     // 👉 check that value form?.[name] is not undefined & is not empty string
-    const formValueRequired = form?.[name] !== undefined && form?.[name] !== "";
+    const isValidInput = form?.[name] !== undefined && form?.[name] !== "";
 
-    if (required && !formValueRequired && name) {
+    if (required && !isValidInput && name) {
       // --------------------------------------------------------------------------------
       // ⚠️ if wpFilter & wpFilter don`t include name, skip validation
       // --------------------------------------------------------------------------------
       const badApp = form?.bad_organisedfor === "810170000"; // check if BAD application
       const nameWithPrefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig
 
-      if (wpFilter && !wpFilter?.[nameWithPrefix]) return; // ⚠️ dont validate input if inputs that not allowed to show in UI (wpFilter)
+      // --------------------------------------------------------------------------------
+      // 📌  SIGs only
+      // --------------------------------------------------------------------------------
+      if (!badApp && wpFilter && !wpFilter?.[nameWithPrefix]) return; // ⚠️ do not validate input if inputs that not allowed to show in UI (wpFilter)
 
       isValid = false; // ⚠️  if required field is empty, set isValid to false
       console.log("🐞 ⭐️⭐️ FAILS ON: ⭐️⭐️", name, value);
       updatedForm["error_" + name] = true;
     }
-    if (required && formValueRequired && name) {
+
+    // --------------------------------------------------------------------------------
+    // 📌  Error message cleaning
+    // --------------------------------------------------------------------------------
+    if (required && isValidInput && name) {
       updatedForm["error_" + name] = false;
     }
   });
