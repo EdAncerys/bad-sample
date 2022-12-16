@@ -75,6 +75,12 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       (app) =>
         app?.core_name?.includes("Overseas") && app?.statecode === "Active"
     )?.length > 0;
+  const isAssociateOverseasApp =
+    formData?.dev_subs?.filter(
+      (app) =>
+        app?.core_name?.includes("Associate Overseas") &&
+        app?.statecode === "Active"
+    )?.length > 0;
 
   // --------------------------------------------------------------------------------
   // 📌  Apply job filters on groupe cat changes
@@ -538,7 +544,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   name="_formus_residencystatus"
                   value={formData?._formus_residencystatus || ""}
                   onChange={handleInputChange}
-                  Choices={[...FORM_CONFIG?._formus_residencystatus?.Choices]}
+                  Choices={[...FORM_CONFIG?.formus_residencystatus?.Choices]}
                   labelClass="form-label"
                 />
               </div>
