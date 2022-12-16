@@ -487,18 +487,15 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 />
               </div>
               <div className="form-row">
-                {isAssociateOverseasApp && (
-                  <div>
-                    <label>Other regulatory body</label>
-                    <input
-                      name="bad_otherregulatorybodyreference"
-                      value={formData.bad_otherregulatorybodyreference}
-                      onChange={handleInputChange}
-                      className="form-control input"
-                      placeholder="Other regulatory body"
-                    />
-                  </div>
-                )}
+                <label>Qualification Type</label>
+                <PickListInput
+                  form={formData}
+                  name="_formus_qualificationtype"
+                  value={formData?._formus_qualificationtype || ""}
+                  onChange={handleInputChange}
+                  Choices={[...FORM_CONFIG?.formus_qualificationtype?.Choices]}
+                  labelClass="form-label"
+                />
               </div>
             </div>
           )}
@@ -756,23 +753,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   </div>
                 </div>
               )}
-
-              <div className="flex-form-row">
-                <div className="form-row">
-                  <label>Qualification Type</label>
-                  <PickListInput
-                    form={formData}
-                    name="_formus_qualificationtype"
-                    value={formData?._formus_qualificationtype || ""}
-                    onChange={handleInputChange}
-                    Choices={[
-                      ...FORM_CONFIG?.formus_qualificationtype?.Choices,
-                    ]}
-                    labelClass="form-label"
-                  />
-                </div>
-                <div className="form-row" />
-              </div>
             </div>
           )}
         </div>
