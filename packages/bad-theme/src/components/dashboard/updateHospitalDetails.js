@@ -13,6 +13,18 @@ import {
   getApplicationStatus,
 } from "../../context";
 import PickListInput from "../inputs/PickListInput";
+import MultiCheckboxInput from "../inputs/MultiCheckboxInput";
+import {
+  FORM_CONFIG,
+  group_810170000,
+  group_810170001,
+  group_810170002,
+  group_810170003,
+  group_810170004,
+  group_810170005,
+  group_810170006,
+  group_810170007,
+} from "../../config/form";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
@@ -28,9 +40,18 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     bad_otherregulatorybodyreference: "",
     formus_jobrole: "",
   });
+  console.log("⭐️ FORM ", formData);
+  console.log(
+    "⭐️ FORM DATA: ",
+    formData?.["_formus_clinicalspecialtysofpractice"]
+  );
+  console.log(
+    "⭐️ FORM DATA: ",
+    formData?.["dev_multi_select__formus_clinicalspecialtysofpractice"]
+  );
 
   // --------------------------------------------------------------------------------
-  // 📌  User application types
+  //  ⚠️ User application types & Job Roles updates ⚠️
   // --------------------------------------------------------------------------------
   const isBADMember =
     isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
@@ -44,6 +65,49 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       (app) =>
         app?.core_name?.includes("Ordinary") && app?.statecode === "Active"
     )?.length > 0;
+  const isTraineeApp =
+    formData?.dev_subs?.filter(
+      (app) =>
+        app?.core_name?.includes("Trainee") && app?.statecode === "Active"
+    )?.length > 0;
+  const isOverseasApp =
+    formData?.dev_subs?.filter(
+      (app) =>
+        app?.core_name?.includes("Overseas") && app?.statecode === "Active"
+    )?.length > 0;
+
+  // --------------------------------------------------------------------------------
+  // 📌  Apply job filters on groupe cat changes
+  // --------------------------------------------------------------------------------
+  let _JOBS = FORM_CONFIG?.formus_jobrole?.Choices;
+
+  if (formData?._formus_staffgroupcategory?.toString() === "810170007") {
+    // filter out all _JOBS & include only those that are in group_810170007 array
+    _JOBS = _JOBS?.filter((job) => group_810170007.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170006") {
+    _JOBS = _JOBS?.filter((job) => group_810170006.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170005") {
+    _JOBS = _JOBS?.filter((job) => group_810170005.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170004") {
+    _JOBS = _JOBS?.filter((job) => group_810170004.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170003") {
+    _JOBS = _JOBS?.filter((job) => group_810170003.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170002") {
+    _JOBS = _JOBS?.filter((job) => group_810170002.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170001") {
+    _JOBS = _JOBS?.filter((job) => group_810170001.includes(job?.Label));
+  }
+  if (formData?._formus_staffgroupcategory?.toString() === "810170000") {
+    _JOBS = _JOBS?.filter((job) => group_810170000.includes(job?.Label));
+  }
+
+  console.log("⭐️ _JOBS", _JOBS);
 
   useEffect(() => {
     if (!isActiveUser) return null;
@@ -74,15 +138,58 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         console.log("error", error);
       }
     })();
+
+    // --------------------------------------------------------------------------------
+    // 📌  Apply onClickEvenHandler to DOM elements
+    // --------------------------------------------------------------------------------
+    const body = document.querySelector("body");
+    body.addEventListener("click", onClickEvenHandler);
   }, [isActiveUser]);
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    console.log("⭐️ name & value", name, value);
+
+    // 👉 if Stuff category is changed, reset job roles
+    if (name === "_formus_staffgroupcategory") {
+      setForm((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+        _formus_jobrole: "",
+      }));
+
+      return;
+    }
+
     setForm((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const onClickEvenHandler = (e) => {
+    // --------------------------------------------------------------------------------
+    // 📌  Multi select dropdown cleaner
+    // 📌  onClick event listener. Close all formus multiselect fields if DOM element clicked
+    // --------------------------------------------------------------------------------
+    console.log("⭐️ list ", e.target.classList);
+
+    if (
+      e.target.classList.contains("flex-col") ||
+      e.target.classList.contains("input") ||
+      e.target.classList.contains("flex-form-col") ||
+      e.target.classList.contains("form-select") ||
+      e.target.classList.contains("form-control")
+    ) {
+      setForm((prev) => ({
+        ...prev,
+        ["dev_selected_" + "_formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+        ["dev_selected_" + "_formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "_formus_clinicalspecialtysofpractice"]: undefined,
+      }));
+    }
   };
 
   const handleContactForm = async () => {
@@ -115,15 +222,82 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       formData?.bad_otherregulatorybodyreference;
     const formus_rotapattern = formData?._formus_rotapattern;
     const formus_residencystatus = formData?._formus_residencystatus;
+    const formus_staffgroupcategory = formData?._formus_staffgroupcategory;
+    const formus_jobrole = formData?._formus_jobrole;
+    const formus_qualificationtype = formData?._formus_qualificationtype;
+    const formus_professionalregistrationbody =
+      formData?._formus_professionalregistrationbody;
+    const formus_professionalregistrationstatus =
+      formData?._formus_professionalregistrationstatus;
+    const formus_typeofcontract = formData?._formus_typeofcontract;
+    const formus_clinicalspecialtysofpractice =
+      formData?._formus_clinicalspecialtysofpractice;
+    const formus_fixedtermtemporaryreasonforemploymentcont =
+      formData?._formus_fixedtermtemporaryreasonforemploymentcont;
+    const formus_typeofpractice = formData?._formus_typeofpractice;
+    const formus_mainspecialtyqualification =
+      formData?._formus_mainspecialtyqualification;
+    const formus_specialiseddermatologyareasofpractice =
+      formData?._formus_specialiseddermatologyareasofpractice;
 
     const data = Object.assign(
       {}, // add empty object
-      { bad_gmcno },
-      { bad_ntnno },
-      { bad_otherregulatorybodyreference },
-      { formus_rotapattern },
-      { formus_residencystatus }
+
+      // --------------------------------------------------------------------------------
+      // 📌  Only add valid values. If undefined-skip & all tostring
+      // --------------------------------------------------------------------------------
+      bad_gmcno && { bad_gmcno: bad_gmcno?.toString() },
+      bad_ntnno && { bad_ntnno: bad_ntnno?.toString() },
+      bad_otherregulatorybodyreference && {
+        bad_otherregulatorybodyreference:
+          bad_otherregulatorybodyreference?.toString(),
+      },
+      formus_rotapattern && {
+        formus_rotapattern: formus_rotapattern?.toString(),
+      },
+      formus_residencystatus && {
+        formus_residencystatus: formus_residencystatus?.toString(),
+      },
+      formus_staffgroupcategory && {
+        formus_staffgroupcategory: formus_staffgroupcategory?.toString(),
+      },
+      formus_jobrole && { formus_jobrole: formus_jobrole?.toString() },
+      formus_qualificationtype && {
+        formus_qualificationtype: formus_qualificationtype?.toString(),
+      },
+      formus_professionalregistrationbody && {
+        formus_professionalregistrationbody:
+          formus_professionalregistrationbody?.toString(),
+      },
+      formus_professionalregistrationstatus && {
+        formus_professionalregistrationstatus:
+          formus_professionalregistrationstatus?.toString(),
+      },
+      formus_typeofcontract && {
+        formus_typeofcontract: formus_typeofcontract?.toString(),
+      },
+      formus_clinicalspecialtysofpractice && {
+        formus_clinicalspecialtysofpractice:
+          formus_clinicalspecialtysofpractice?.toString(), // 👈  multi picker
+      },
+      formus_fixedtermtemporaryreasonforemploymentcont && {
+        formus_fixedtermtemporaryreasonforemploymentcont:
+          formus_fixedtermtemporaryreasonforemploymentcont?.toString(),
+      },
+      formus_typeofpractice && {
+        formus_typeofpractice: formus_typeofpractice?.toString(),
+      },
+      formus_mainspecialtyqualification && {
+        formus_mainspecialtyqualification:
+          formus_mainspecialtyqualification?.toString(), // 👈  multi picker
+      },
+      formus_specialiseddermatologyareasofpractice && {
+        formus_specialiseddermatologyareasofpractice:
+          formus_specialiseddermatologyareasofpractice?.toString(), // 👈  multi picker
+      }
     );
+
+    console.log("⭐️ DATA FEED to UPDATE", data);
 
     try {
       const response = await updateProfileAction({
@@ -139,7 +313,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         isError: { message: `Professional information updated successfully` },
       });
     } catch (error) {
-      // console.log("error", error);
+      console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {
@@ -150,6 +324,88 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     } finally {
       setIsFetching(false);
     }
+  };
+
+  const multiSelectHandler = ({ title, value, name }) => {
+    // ⚠️ remove first character from name
+    const _name = name?.substring(1);
+    let currentValues = formData?.[name] || "";
+    let currentTitles = "";
+
+    if (!currentValues?.includes(value)) {
+      // 👉 if value is already selected, add to it by comma separated
+      currentValues = currentValues ? "," + value : value; // if string have no values add value, othervise comma seperated
+    } else {
+      // 👉 if value is already selected, remove it
+      if (currentValues?.includes("," + value)) {
+        currentValues = currentValues?.replace("," + value, "");
+      } else {
+        currentValues = currentValues?.replace(value, "");
+      }
+    }
+    // ⚠️ String clean up. If currentValues starts with comma, remove it
+    // ⚠️ removing first string values bug
+    if (currentValues?.startsWith(",")) {
+      currentValues = currentValues?.substring(1);
+    }
+
+    // Filter out Choices list based on selection/currentValues string. If value includes in currentValues, add Label to currentTitles
+    FORM_CONFIG?.formus_clinicalspecialtysofpractice?.Choices?.forEach(
+      (item) => {
+        const Label = item.Label;
+        const value = item.value;
+        if (currentValues?.includes(value) && !currentTitles.includes(Label)) {
+          currentTitles = currentTitles
+            ? currentTitles + "; " + item.Label
+            : item.Label;
+        }
+      }
+    );
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: currentValues,
+      ["dev_multi_select_" + name]: currentTitles,
+    }));
+  };
+
+  const multiSelectDropDownHandler = ({ name, value }) => {
+    console.log("🐞 name: ", name);
+    let handler = {
+      ["dev_selected_" + name]: !formData?.["dev_selected_" + name],
+    };
+    // 📌 conditional dropdown closing based on selection
+    if (name === "_formus_mainspecialtyqualification") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "_formus_clinicalspecialtysofpractice"]: undefined,
+        ["dev_selected_" + "_formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+      };
+    }
+
+    if (name === "_formus_clinicalspecialtysofpractice") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "_formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "_formus_specialiseddermatologyareasofpractice"]:
+          undefined,
+      };
+    }
+
+    if (name === "_formus_specialiseddermatologyareasofpractice") {
+      handler = {
+        ...handler,
+        ["dev_selected_" + "_formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "_formus_clinicalspecialtysofpractice"]: undefined,
+      };
+    }
+
+    // 👉 formus_mainspecialtyqualification
+    setForm((prev) => ({
+      ...prev,
+      ...handler,
+    }));
   };
 
   // SERVERS ---------------------------------------------
@@ -230,38 +486,43 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               />
             </div>
             <div className="form-row">
-              <label>Other regulatory body</label>
-              <input
-                name="bad_otherregulatorybodyreference"
-                value={formData.bad_otherregulatorybodyreference}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Other regulatory body"
-              />
+              {isOverseasApp && (
+                <div>
+                  <label>Other regulatory body</label>
+                  <input
+                    name="bad_otherregulatorybodyreference"
+                    value={formData.bad_otherregulatorybodyreference}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Other regulatory body"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex-form-row">
             <div className="form-row">
               <label>Staff Group Category</label>
-              <input
-                name="formus_staffgroupcategory"
-                value={formData?.formus_staffgroupcategory || ""}
+              <PickListInput
+                form={formData}
+                name="_formus_staffgroupcategory"
+                value={formData?._formus_staffgroupcategory || ""}
                 onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Staff Group Category"
-                disabled
+                Choices={[...FORM_CONFIG?.formus_staffgroupcategory?.Choices]}
+                labelClass="form-label"
               />
             </div>
             <div className="form-row">
               <label>Job Role</label>
-              <input
-                name="formus_jobrole"
-                value={formData?.formus_jobrole || ""}
+              <PickListInput
+                form={formData}
+                name="_formus_jobrole"
+                value={formData?._formus_jobrole || ""}
                 onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Job Title"
-                disabled
+                Choices={[..._JOBS]}
+                labelClass="form-label"
+                dashboardWidget="Job Role"
               />
             </div>
           </div>
@@ -275,29 +536,20 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   name="_formus_residencystatus"
                   value={formData?._formus_residencystatus || ""}
                   onChange={handleInputChange}
-                  Choices={[
-                    {
-                      value: 810170000,
-                      Label: "Permanent",
-                    },
-                    {
-                      value: 810170001,
-                      Label: "Temporary",
-                    },
-                  ]}
+                  Choices={[...FORM_CONFIG?._formus_residencystatus?.Choices]}
                   labelClass="form-label"
                 />
               </div>
 
               <div className="form-row">
                 <label>Qualification Type</label>
-                <input
-                  name="formus_qualificationtype"
-                  value={formData?.formus_qualificationtype || ""}
+                <PickListInput
+                  form={formData}
+                  name="_formus_qualificationtype"
+                  value={formData?._formus_qualificationtype || ""}
                   onChange={handleInputChange}
-                  className="form-control input"
-                  placeholder="Qualification Type"
-                  disabled
+                  Choices={[...FORM_CONFIG?.formus_qualificationtype?.Choices]}
+                  labelClass="form-label"
                 />
               </div>
             </div>
@@ -308,26 +560,32 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               <div className="flex-form-row">
                 <div className="form-row">
                   <label>Professional Registration Body</label>
-                  <input
-                    name="formus_professionalregistrationbody"
-                    value={formData?.formus_professionalregistrationbody || ""}
+                  <PickListInput
+                    form={formData}
+                    name="_formus_professionalregistrationbody"
+                    value={formData?._formus_professionalregistrationbody || ""}
                     onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Professional Registration Body"
-                    disabled
+                    Choices={[
+                      ...FORM_CONFIG?.formus_professionalregistrationbody
+                        ?.Choices,
+                    ]}
+                    labelClass="form-label"
                   />
                 </div>
                 <div className="form-row">
                   <label>Professional Registration Status</label>
-                  <input
-                    name="formus_professionalregistrationstatus"
+                  <PickListInput
+                    form={formData}
+                    name="_formus_professionalregistrationstatus"
                     value={
-                      formData?.formus_professionalregistrationstatus || ""
+                      formData?._formus_professionalregistrationstatus || ""
                     }
                     onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Professional Registration Status"
-                    disabled
+                    Choices={[
+                      ...FORM_CONFIG?.formus_professionalregistrationstatus
+                        ?.Choices,
+                    ]}
+                    labelClass="form-label"
                   />
                 </div>
               </div>
@@ -335,25 +593,29 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               <div className="flex-form-row">
                 <div className="form-row">
                   <label>Type of Contract</label>
-                  <input
-                    name="formus_typeofcontract"
-                    value={formData?.formus_typeofcontract || ""}
+                  <PickListInput
+                    form={formData}
+                    name="_formus_typeofcontract"
+                    value={formData?._formus_typeofcontract || ""}
                     onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Type of Contract"
-                    disabled
+                    Choices={[...FORM_CONFIG?.formus_typeofcontract?.Choices]}
+                    labelClass="form-label"
                   />
                 </div>
 
                 <div className="form-row">
                   <label>Clinical Specialty(s) of practice</label>
-                  <input
-                    name="formus_clinicalspecialtysofpractice"
-                    value={formData?.formus_clinicalspecialtysofpractice || ""}
-                    onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Clinical Specialty(s) of practice"
-                    disabled
+                  <MultiCheckboxInput
+                    form={formData}
+                    name="_formus_clinicalspecialtysofpractice"
+                    labelClass="form-label"
+                    Choices={[
+                      ...FORM_CONFIG?.formus_clinicalspecialtysofpractice
+                        ?.Choices,
+                    ]}
+                    multiSelectHandler={multiSelectHandler}
+                    multiSelectDropDownHandler={multiSelectDropDownHandler}
+                    dashboardWidget="formus_clinicalspecialtysofpractice"
                   />
                 </div>
               </div>
@@ -363,28 +625,32 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   <label>
                     Fixed term/temporary reason for employment contract
                   </label>
-                  <input
-                    name="formus_fixedtermtemporaryreasonforemploymentcont"
+                  <PickListInput
+                    form={formData}
+                    name="_formus_fixedtermtemporaryreasonforemploymentcont"
                     value={
-                      formData?.formus_fixedtermtemporaryreasonforemploymentcont ||
+                      formData?._formus_fixedtermtemporaryreasonforemploymentcont ||
                       ""
                     }
                     onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Fixed term/temporary reason for employment contract"
-                    disabled
+                    Choices={[
+                      ...FORM_CONFIG
+                        ?.formus_fixedtermtemporaryreasonforemploymentcont
+                        ?.Choices,
+                    ]}
+                    labelClass="form-label"
                   />
                 </div>
 
                 <div className="form-row">
                   <label>Type of Practice</label>
-                  <input
-                    name="formus_typeofpractice"
-                    value={formData?.formus_typeofpractice || ""}
+                  <PickListInput
+                    form={formData}
+                    name="_formus_typeofpractice"
+                    value={formData?._formus_typeofpractice || ""}
                     onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Type of Practice"
-                    disabled
+                    Choices={[...FORM_CONFIG?.formus_typeofpractice?.Choices]}
+                    labelClass="form-label"
                   />
                 </div>
               </div>
@@ -393,27 +659,59 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Main Specialty Qualification</label>
-                    <input
-                      name="formus_mainspecialtyqualification"
-                      value={formData?.formus_mainspecialtyqualification || ""}
-                      onChange={handleInputChange}
-                      className="form-control input"
-                      placeholder="Main Specialty Qualification"
-                      disabled
+                    <MultiCheckboxInput
+                      form={formData}
+                      name="_formus_mainspecialtyqualification"
+                      labelClass="form-label"
+                      Choices={[
+                        ...FORM_CONFIG?.formus_mainspecialtyqualification
+                          ?.Choices,
+                      ]}
+                      multiSelectHandler={multiSelectHandler}
+                      multiSelectDropDownHandler={multiSelectDropDownHandler}
                     />
                   </div>
                   <div className="form-row">
                     <label>Specialized Dermatology Areas of practice</label>
+                    <MultiCheckboxInput
+                      form={formData}
+                      name="_formus_specialiseddermatologyareasofpractice"
+                      labelClass="form-label"
+                      Choices={[
+                        ...FORM_CONFIG
+                          ?.formus_specialiseddermatologyareasofpractice
+                          ?.Choices,
+                      ]}
+                      multiSelectHandler={multiSelectHandler}
+                      multiSelectDropDownHandler={multiSelectDropDownHandler}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {isTraineeApp && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Qualification Type</label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_qualificationtype"
+                      value={formData?._formus_qualificationtype || ""}
+                      onChange={handleInputChange}
+                      Choices={[
+                        ...FORM_CONFIG?.formus_qualificationtype?.Choices,
+                      ]}
+                      labelClass="form-label"
+                    />
+                  </div>
+                  <div className="form-row">
+                    <label>Reason for moving CCST date</label>
                     <input
-                      name="formus_specialiseddermatologyareasofpractice"
-                      value={
-                        formData?.formus_specialiseddermatologyareasofpractice ||
-                        ""
-                      }
+                      name="formus_otherreasonformovingccstdate"
+                      value={formData.formus_otherreasonformovingccstdate}
                       onChange={handleInputChange}
                       className="form-control input"
-                      placeholder="Specialized Dermatology Areas of practice"
-                      disabled
+                      placeholder="Reason for moving CCST date"
                     />
                   </div>
                 </div>
@@ -427,16 +725,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     name="_formus_residencystatus"
                     value={formData?._formus_residencystatus || ""}
                     onChange={handleInputChange}
-                    Choices={[
-                      {
-                        value: 810170000,
-                        Label: "Permanent",
-                      },
-                      {
-                        value: 810170001,
-                        Label: "Temporary",
-                      },
-                    ]}
+                    Choices={[...FORM_CONFIG?.formus_residencystatus?.Choices]}
                     labelClass="form-label"
                   />
                 </div>
@@ -448,39 +737,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     name="_formus_rotapattern"
                     value={formData?._formus_rotapattern || ""}
                     onChange={handleInputChange}
-                    Choices={[
-                      {
-                        value: 810170000,
-                        Label: "On Call",
-                      },
-                      {
-                        value: 810170002,
-                        Label: "Trainee On Call",
-                      },
-                      {
-                        value: 810170001,
-                        Label: "Ward Rounds",
-                      },
-                    ]}
+                    Choices={[...FORM_CONFIG?.formus_rotapattern?.Choices]}
                     labelClass="form-label"
                   />
                 </div>
               </div>
-
-              {/* <div className="flex-form-row">
-                <div className="form-row">
-                  <label>Qualification Type</label>
-                  <input
-                    name="formus_qualificationtype"
-                    value={formData?.formus_qualificationtype || ""}
-                    onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Qualification Type"
-                    disabled
-                  />
-                </div>
-                <div className="form-row" />
-              </div> */}
             </div>
           )}
         </div>
