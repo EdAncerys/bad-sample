@@ -453,30 +453,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         <div className="flex-form-col">
           <div className="flex-form-row">
             <div className="form-row">
-              <label>GMC / IMC Number</label>
-              <input
-                name="bad_gmcno"
-                value={formData?.bad_gmcno || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="GMC / IMC Number"
-              />
-            </div>
-            <div className="form-row">
-              <label>NTN Number</label>
-              <input
-                name="bad_ntnno"
-                type="text"
-                value={formData?.bad_ntnno || ""}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="NTN Number"
-              />
-            </div>
-          </div>
-
-          <div className="flex-form-row">
-            <div className="form-row">
               <label>
                 Main Hospital / Place of Work / Medical School details
               </label>
@@ -727,6 +703,25 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       className="form-control input"
                       placeholder="Reason for moving CCST date"
                     />
+                  </div>
+                </div>
+              )}
+
+              {isTraineeApp && (
+                <div className="flex-form-row">
+                  <div className="flex-form-row">
+                    <div className="form-row">
+                      <label>NTN Number</label>
+                      <input
+                        name="bad_ntnno"
+                        type="text"
+                        value={formData?.bad_ntnno || ""}
+                        onChange={handleInputChange}
+                        className="form-control input"
+                        placeholder="NTN Number"
+                      />
+                    </div>
+                    <div className="form-row" />
                   </div>
                 </div>
               )}
