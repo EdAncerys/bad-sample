@@ -1673,20 +1673,3 @@ export const associateOverseasFilters = [
   "py3_constitutionagreement",
   "bad_readpolicydocument",
 ];
-
-const blob = {
-  bad_ntnno: "updated",
-  bad_otherregulatorybodyreference: "12345",
-  formus_clinicalspecialtysofpractice: "810170003",
-  formus_fixedtermtemporaryreasonforemploymentcont: "810170004",
-  formus_jobrole: "Research Fellow",
-  formus_mainspecialtyqualification: "810170000,810170001",
-  formus_professionalregistrationbody: "810170002",
-  formus_professionalregistrationstatus: "Expired",
-  formus_residencystatus: "810170001",
-  formus_rotapattern: "810170002",
-  formus_specialiseddermatologyareasofpractice: "810170001",
-  formus_staffgroupcategory: "810170004",
-  formus_typeofcontract: "810170001",
-  formus_typeofpractice: "810170000",
-};
