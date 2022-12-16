@@ -1472,6 +1472,7 @@ export const ordinarySASFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
+  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "bad_currentpost",
   "bad_proposer1",
@@ -1504,6 +1505,7 @@ export const associateFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
+  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "bad_currentpost",
   "bad_proposer1",
@@ -1536,6 +1538,7 @@ export const juniorFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
+  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "bad_currentpost",
   "bad_proposer1",
@@ -1567,6 +1570,7 @@ export const traineeFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
+  "formus_privatepracticeorganisation",
   "formus_reasonformovingccstdate", // Trainee only
   "formus_otherreasonformovingccstdate",
   // 👉 step #5 filters
@@ -1629,6 +1633,7 @@ export const ordinaryFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
+  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "bad_currentpost",
   "bad_proposer1",
@@ -1661,6 +1666,7 @@ export const associateOverseasFilters = [
   "formus_fixedtermtemporaryreasonforemploymentcont",
   "formus_rotapattern",
   "formus_typeofpractice",
+  "formus_privatepracticeorganisation",
   // 👉 step #5 filters
   "bad_currentpost",
   "bad_proposer1",
