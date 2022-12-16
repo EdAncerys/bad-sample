@@ -1473,7 +1473,6 @@ export const ordinarySASFilters = [
   "formus_rotapattern",
   "formus_typeofpractice",
   // 👉 step #5 filters
-  "py3_gmcnumber",
   "bad_currentpost",
   "bad_proposer1",
   "bad_proposer2",
@@ -1506,7 +1505,6 @@ export const associateFilters = [
   "formus_rotapattern",
   "formus_typeofpractice",
   // 👉 step #5 filters
-  "py3_gmcnumber",
   "bad_currentpost",
   "bad_proposer1",
   "bad_proposer2",
@@ -1539,7 +1537,6 @@ export const juniorFilters = [
   "formus_rotapattern",
   "formus_typeofpractice",
   // 👉 step #5 filters
-  "py3_gmcnumber",
   "bad_currentpost",
   "bad_proposer1",
   "bad_proposer2",
@@ -1573,7 +1570,6 @@ export const traineeFilters = [
   "formus_reasonformovingccstdate", // Trainee only
   "formus_otherreasonformovingccstdate",
   // 👉 step #5 filters
-  "py3_gmcnumber",
   "py3_ntnno",
   "py3_currentgrade",
   "bad_proposer1",
@@ -1590,10 +1586,10 @@ export const studentFilters = [
   "formus_staffgroupcategory",
   "formus_jobrole",
   // 🚨 HOSPITAL DATA
-  "py3_hospitalid",
-  "sky_newhospitaltype",
-  "bad_newhospitaladded",
-  "sky_newhospitalname",
+  // "py3_hospitalid",
+  // "sky_newhospitaltype",
+  // "bad_newhospitaladded",
+  // "sky_newhospitalname",
   // 🚨 HOSPITAL DATA
   "formus_residencystatus",
   "formus_qualificationtype",
@@ -1634,7 +1630,6 @@ export const ordinaryFilters = [
   "formus_rotapattern",
   "formus_typeofpractice",
   // 👉 step #5 filters
-  "py3_gmcnumber",
   "bad_currentpost",
   "bad_proposer1",
   "bad_proposer2",
@@ -1667,7 +1662,6 @@ export const associateOverseasFilters = [
   "formus_rotapattern",
   "formus_typeofpractice",
   // 👉 step #5 filters
-  "py3_gmcnumber",
   "bad_currentpost",
   "bad_proposer1",
   "bad_proposer2",
