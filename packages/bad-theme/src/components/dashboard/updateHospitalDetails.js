@@ -53,34 +53,49 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   //  ⚠️ User application types & Job Roles updates ⚠️
   // --------------------------------------------------------------------------------
-  const isBADMember =
+  let isBADMember =
     isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
-  const isStudentApp =
+  let isStudentApp =
     formData?.dev_subs?.filter(
       (app) =>
         app?.core_name?.includes("Student") && app?.statecode === "Active"
     )?.length > 0;
-  const isOrdinaryApp =
+  let isOrdinaryApp =
     formData?.dev_subs?.filter(
       (app) =>
         app?.core_name?.includes("Ordinary") && app?.statecode === "Active"
     )?.length > 0;
-  const isTraineeApp =
+  let isTraineeApp =
     formData?.dev_subs?.filter(
       (app) =>
         app?.core_name?.includes("Trainee") && app?.statecode === "Active"
     )?.length > 0;
-  const isOverseasApp =
+  let isOverseasApp =
     formData?.dev_subs?.filter(
       (app) =>
         app?.core_name?.includes("Overseas") && app?.statecode === "Active"
     )?.length > 0;
-  const isAssociateOverseasApp =
+  let isAssociateOverseasApp =
     formData?.dev_subs?.filter(
       (app) =>
         app?.core_name?.includes("Associate Overseas") &&
         app?.statecode === "Active"
     )?.length > 0;
+  let isJuniorApp =
+    formData?.dev_subs?.filter(
+      (app) => app?.core_name?.includes("Junior") && app?.statecode === "Active"
+    )?.length > 0;
+
+  // --------------------------------------------------------------------------------
+  // ⚠️ TESTING OVERWRITES
+  // --------------------------------------------------------------------------------
+  isBADMember = true;
+  isStudentApp = false; // ✅ tested
+  isOrdinaryApp = false; // ✅ tested
+  isTraineeApp = false; // ✅ tested
+  isOverseasApp = false; // ✅ tested
+  isAssociateOverseasApp = true; // ✅ tested
+  isJuniorApp = false;
 
   // --------------------------------------------------------------------------------
   // 📌  Apply job filters on groupe cat changes
@@ -451,40 +466,44 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           Workforce Details:
         </div>
         <div className="flex-form-col">
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>
-                Main Hospital / Place of Work / Medical School details
-              </label>
-              <input
-                name="address1_line1"
-                value={
-                  formData[
-                    "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-                  ]
-                }
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Main Hospital / Place of Work / Medical School details"
-                disabled
-              />
+          {/* 👉 APPLICABLE TO ALL APPS APART FROM 👉 STUDENT */}
+          {!isStudentApp && (
+            <div className="flex-form-row">
+              <div className="form-row">
+                <label>
+                  Main Hospital / Place of Work / Medical School details
+                </label>
+                <input
+                  name="address1_line1"
+                  value={
+                    formData[
+                      "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
+                    ]
+                  }
+                  onChange={handleInputChange}
+                  className="form-control input"
+                  placeholder="Main Hospital / Place of Work / Medical School details"
+                  disabled
+                />
+              </div>
+              <div className="form-row">
+                {isAssociateOverseasApp && (
+                  <div>
+                    <label>Other regulatory body</label>
+                    <input
+                      name="bad_otherregulatorybodyreference"
+                      value={formData.bad_otherregulatorybodyreference}
+                      onChange={handleInputChange}
+                      className="form-control input"
+                      placeholder="Other regulatory body"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="form-row">
-              {isOverseasApp && (
-                <div>
-                  <label>Other regulatory body</label>
-                  <input
-                    name="bad_otherregulatorybodyreference"
-                    value={formData.bad_otherregulatorybodyreference}
-                    onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Other regulatory body"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+          )}
 
+          {/* 👉 APPLICABLE TO ALL APPS */}
           <div className="flex-form-row">
             <div className="form-row">
               <label>Staff Group Category</label>
@@ -511,6 +530,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           </div>
 
+          {/* 👉 APPLICABLE TO STUDENT APPS ONLY */}
           {isBADMember && isStudentApp && (
             <div className="flex-form-row">
               <div className="form-row">
@@ -681,34 +701,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
               {isTraineeApp && (
                 <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>Qualification Type</label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_qualificationtype"
-                      value={formData?._formus_qualificationtype || ""}
-                      onChange={handleInputChange}
-                      Choices={[
-                        ...FORM_CONFIG?.formus_qualificationtype?.Choices,
-                      ]}
-                      labelClass="form-label"
-                    />
-                  </div>
-                  <div className="form-row">
-                    <label>Reason for moving CCST date</label>
-                    <input
-                      name="formus_otherreasonformovingccstdate"
-                      value={formData.formus_otherreasonformovingccstdate}
-                      onChange={handleInputChange}
-                      className="form-control input"
-                      placeholder="Reason for moving CCST date"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {isTraineeApp && (
-                <div className="flex-form-row">
                   <div className="flex-form-row">
                     <div className="form-row">
                       <label>NTN Number</label>
@@ -721,7 +713,16 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                         placeholder="NTN Number"
                       />
                     </div>
-                    <div className="form-row" />
+                    <div className="form-row">
+                      <label>Reason for moving CCST date</label>
+                      <input
+                        name="formus_otherreasonformovingccstdate"
+                        value={formData.formus_otherreasonformovingccstdate}
+                        onChange={handleInputChange}
+                        className="form-control input"
+                        placeholder="Reason for moving CCST date"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -755,6 +756,23 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   </div>
                 </div>
               )}
+
+              <div className="flex-form-row">
+                <div className="form-row">
+                  <label>Qualification Type</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_qualificationtype"
+                    value={formData?._formus_qualificationtype || ""}
+                    onChange={handleInputChange}
+                    Choices={[
+                      ...FORM_CONFIG?.formus_qualificationtype?.Choices,
+                    ]}
+                    labelClass="form-label"
+                  />
+                </div>
+                <div className="form-row" />
+              </div>
             </div>
           )}
         </div>
