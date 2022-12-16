@@ -50,6 +50,7 @@ const Video = ({ state, actions, libraries }) => {
   const isBADMember =
     isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
   const isMemberOnlyVideo = post?.acf?.members;
+  const isUserOnlyVideo = post?.acf?.active_user;
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -256,7 +257,8 @@ const Video = ({ state, actions, libraries }) => {
             }}
           >
             {!videoStatus ||
-            (isMemberOnlyVideo && !isBADMember) ||
+            (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
+            (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
             videoStatus === "locked" ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
