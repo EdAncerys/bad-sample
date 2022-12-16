@@ -180,6 +180,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       e.target.classList.contains("input") ||
       e.target.classList.contains("flex-form-col") ||
       e.target.classList.contains("form-select") ||
+      e.target.classList.contains("blue-btn") ||
       e.target.classList.contains("form-control")
     ) {
       setForm((prev) => ({
@@ -248,7 +249,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       // --------------------------------------------------------------------------------
       bad_gmcno && { bad_gmcno: bad_gmcno?.toString() },
       bad_ntnno && { bad_ntnno: bad_ntnno?.toString() },
-      bad_otherregulatorybodyreference && {
+      {
         bad_otherregulatorybodyreference:
           bad_otherregulatorybodyreference?.toString(),
       },
@@ -327,26 +328,27 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   const multiSelectHandler = ({ title, value, name }) => {
-    // ⚠️ remove first character from name
-    const _name = name?.substring(1);
     let currentValues = formData?.[name] || "";
     let currentTitles = "";
+    console.log("⭐️ START BASE", currentValues);
+    console.log("⭐️ START value", value);
 
     if (!currentValues?.includes(value)) {
       // 👉 if value is already selected, add to it by comma separated
-      currentValues = currentValues ? "," + value : value; // if string have no values add value, othervise comma seperated
+      currentValues = currentValues ? currentValues + "," + value : "" + value; // if string have no values add value, otherwise comma seperated
     } else {
-      // 👉 if value is already selected, remove it
-      if (currentValues?.includes("," + value)) {
-        currentValues = currentValues?.replace("," + value, "");
+      // 👉 remove value from string
+      // if starts with value, remove it
+      if (currentValues?.startsWith(value)) {
+        currentValues = currentValues?.replace(value + ",", "");
+
+        // --------------------------------------------------------------------------------
+        // 📌  Value ir required to be passed in to Dynamics
+        // 📌  If string have only that value ignore/don't remove
+        // --------------------------------------------------------------------------------
       } else {
-        currentValues = currentValues?.replace(value, "");
+        currentValues = currentValues?.replace("," + value, "");
       }
-    }
-    // ⚠️ String clean up. If currentValues starts with comma, remove it
-    // ⚠️ removing first string values bug
-    if (currentValues?.startsWith(",")) {
-      currentValues = currentValues?.substring(1);
     }
 
     // Filter out Choices list based on selection/currentValues string. If value includes in currentValues, add Label to currentTitles
@@ -669,6 +671,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       ]}
                       multiSelectHandler={multiSelectHandler}
                       multiSelectDropDownHandler={multiSelectDropDownHandler}
+                      dashboardWidget="formus_mainspecialtyqualification"
                     />
                   </div>
                   <div className="form-row">
@@ -684,6 +687,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       ]}
                       multiSelectHandler={multiSelectHandler}
                       multiSelectDropDownHandler={multiSelectDropDownHandler}
+                      dashboardWidget="formus_specialiseddermatologyareasofpractice"
                     />
                   </div>
                 </div>
