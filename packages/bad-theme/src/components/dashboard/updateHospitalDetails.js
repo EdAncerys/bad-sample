@@ -89,13 +89,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // ⚠️ TESTING OVERWRITES
   // --------------------------------------------------------------------------------
-  isBADMember = true;
-  isStudentApp = false; // ✅ tested
-  isOrdinaryApp = false; // ✅ tested
-  isTraineeApp = false; // ✅ tested
-  isOverseasApp = false; // ✅ tested
-  isAssociateOverseasApp = true; // ✅ tested
-  isJuniorApp = false;
+  // isBADMember = true;
+  // isStudentApp = false; // ✅ tested
+  // isOrdinaryApp = false; // ✅ tested
+  // isTraineeApp = false; // ✅ tested
+  // isOverseasApp = false; // ✅ tested
+  // isAssociateOverseasApp = true; // ✅ tested
+  // isJuniorApp = false;
 
   // --------------------------------------------------------------------------------
   // 📌  Apply job filters on groupe cat changes
