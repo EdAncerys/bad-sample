@@ -23,6 +23,11 @@ const PickListInput = ({
   if (name === "formus_staffgroupcategory" || name === "formus_jobrole") {
     console.log("⭐️ Choices ", Choices);
   }
+  // ⚠️ css bug fix for formus_staffgroupcategory pick list
+  let cssOverrides;
+  if (name === "formus_staffgroupcategory") {
+    cssOverrides = form?.[name];
+  }
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
@@ -35,7 +40,7 @@ const PickListInput = ({
         value={form?.[name] === undefined ? value || "" : form?.[name]}
         onChange={onChange}
         className="input"
-        style={{ color: value ? "inherit" : "#ced4da" }}
+        style={{ color: value || cssOverrides ? "inherit" : "#ced4da" }}
       >
         <option value="" hidden className="select-option-hidden">
           {Label || dashboardWidget || "Select"}

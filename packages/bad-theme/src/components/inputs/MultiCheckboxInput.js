@@ -20,10 +20,10 @@ const MultiCheckboxInput = ({
   const hasSelection = form?.[name] !== undefined && form?.[name].length > 0;
   let userSelection =
     form?.["dev_multi_select_" + name] || form?.[dashboardWidget];
-  // 👉 replace ; with ""
-  userSelection = userSelection?.replace(/^; /, "");
-  // 👉 replace , with ""
-  userSelection = userSelection?.replace(/, /g, "");
+  // if userSelection starts with a comma, remove it
+  if (userSelection?.startsWith(",")) {
+    userSelection = userSelection.substring(1);
+  }
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
