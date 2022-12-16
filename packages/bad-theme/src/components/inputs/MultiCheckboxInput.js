@@ -10,17 +10,20 @@ const MultiCheckboxInput = ({
   form,
   name,
   Label,
-  value,
   labelClass,
-  onChange,
   Choices,
   multiSelectHandler,
   multiSelectDropDownHandler,
+  // 👉 dashboard widget
+  dashboardWidget,
 }) => {
   const hasSelection = form?.[name] !== undefined && form?.[name].length > 0;
-  const userSelection = form?.["dev_multi_select_" + name];
-  // if userSelection starts with " ," replace with ""
-  const userSelectionClean = userSelection?.replace(/^, /, "");
+  let userSelection =
+    form?.["dev_multi_select_" + name] || form?.[dashboardWidget];
+  // 👉 replace ; with ""
+  userSelection = userSelection?.replace(/^; /, "");
+  // 👉 replace , with ""
+  userSelection = userSelection?.replace(/, /g, "");
 
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
@@ -41,7 +44,7 @@ const MultiCheckboxInput = ({
               width: "99%",
             }}
           >
-            {userSelectionClean || Label || "Select"}
+            {userSelection || Label || "Select"}
             <div className="filter-icon" style={{ top: 0 }}>
               <KeyboardArrowDownIcon
                 style={{

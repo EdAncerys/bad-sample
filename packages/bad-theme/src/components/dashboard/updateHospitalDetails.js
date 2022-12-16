@@ -41,6 +41,14 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     formus_jobrole: "",
   });
   console.log("⭐️ FORM ", formData);
+  console.log(
+    "⭐️ FORM DATA: ",
+    formData?.["_formus_clinicalspecialtysofpractice"]
+  );
+  console.log(
+    "⭐️ FORM DATA: ",
+    formData?.["dev_multi_select__formus_clinicalspecialtysofpractice"]
+  );
 
   // --------------------------------------------------------------------------------
   //  ⚠️ User application types & Job Roles updates ⚠️
@@ -62,34 +70,44 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       (app) =>
         app?.core_name?.includes("Trainee") && app?.statecode === "Active"
     )?.length > 0;
+  const isOverseasApp =
+    formData?.dev_subs?.filter(
+      (app) =>
+        app?.core_name?.includes("Overseas") && app?.statecode === "Active"
+    )?.length > 0;
 
+  // --------------------------------------------------------------------------------
+  // 📌  Apply job filters on groupe cat changes
+  // --------------------------------------------------------------------------------
   let _JOBS = FORM_CONFIG?.formus_jobrole?.Choices;
 
-  if (formData?._formus_staffgroupcategory === "810170007") {
+  if (formData?._formus_staffgroupcategory?.toString() === "810170007") {
     // filter out all _JOBS & include only those that are in group_810170007 array
-    _JOBS = _JOBS?.filter((job) => group_810170007.includes(job));
+    _JOBS = _JOBS?.filter((job) => group_810170007.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170006") {
-    _JOBS = _JOBS?.filter((job) => group_810170006.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170006") {
+    _JOBS = _JOBS?.filter((job) => group_810170006.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170005") {
-    _JOBS = _JOBS?.filter((job) => group_810170005.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170005") {
+    _JOBS = _JOBS?.filter((job) => group_810170005.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170004") {
-    _JOBS = _JOBS?.filter((job) => group_810170004.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170004") {
+    _JOBS = _JOBS?.filter((job) => group_810170004.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170003") {
-    _JOBS = _JOBS?.filter((job) => group_810170003.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170003") {
+    _JOBS = _JOBS?.filter((job) => group_810170003.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170002") {
-    _JOBS = _JOBS?.filter((job) => group_810170002.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170002") {
+    _JOBS = _JOBS?.filter((job) => group_810170002.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170001") {
-    _JOBS = _JOBS?.filter((job) => group_810170001.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170001") {
+    _JOBS = _JOBS?.filter((job) => group_810170001.includes(job?.Label));
   }
-  if (formData?._formus_staffgroupcategory === "810170000") {
-    _JOBS = _JOBS?.filter((job) => group_810170000.includes(job));
+  if (formData?._formus_staffgroupcategory?.toString() === "810170000") {
+    _JOBS = _JOBS?.filter((job) => group_810170000.includes(job?.Label));
   }
+
+  console.log("⭐️ _JOBS", _JOBS);
 
   useEffect(() => {
     if (!isActiveUser) return null;
@@ -131,6 +149,19 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+    console.log("⭐️ name & value", name, value);
+
+    // 👉 if Stuff category is changed, reset job roles
+    if (name === "_formus_staffgroupcategory") {
+      setForm((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+        _formus_jobrole: "",
+      }));
+
+      return;
+    }
+
     setForm((prevFormData) => ({
       ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
@@ -145,17 +176,18 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     console.log("⭐️ list ", e.target.classList);
 
     if (
-      e.target.classList.contains("applications-side-panel") ||
       e.target.classList.contains("flex-col") ||
-      e.target.classList.contains("form-label") ||
-      e.target.classList.contains("input")
+      e.target.classList.contains("input") ||
+      e.target.classList.contains("flex-form-col") ||
+      e.target.classList.contains("form-select") ||
+      e.target.classList.contains("form-control")
     ) {
       setForm((prev) => ({
         ...prev,
-        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+        ["dev_selected_" + "_formus_specialiseddermatologyareasofpractice"]:
           undefined,
-        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
-        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+        ["dev_selected_" + "_formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "_formus_clinicalspecialtysofpractice"]: undefined,
       }));
     }
   };
@@ -214,54 +246,54 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       // --------------------------------------------------------------------------------
       // 📌  Only add valid values. If undefined-skip & all tostring
       // --------------------------------------------------------------------------------
-      bad_gmcno && { bad_gmcno: bad_gmcno.toString() },
-      bad_ntnno && { bad_ntnno: bad_ntnno.toString() },
+      bad_gmcno && { bad_gmcno: bad_gmcno?.toString() },
+      bad_ntnno && { bad_ntnno: bad_ntnno?.toString() },
       bad_otherregulatorybodyreference && {
         bad_otherregulatorybodyreference:
-          bad_otherregulatorybodyreference.toString(),
+          bad_otherregulatorybodyreference?.toString(),
       },
       formus_rotapattern && {
-        formus_rotapattern: formus_rotapattern.toString(),
+        formus_rotapattern: formus_rotapattern?.toString(),
       },
       formus_residencystatus && {
-        formus_residencystatus: formus_residencystatus.toString(),
+        formus_residencystatus: formus_residencystatus?.toString(),
       },
       formus_staffgroupcategory && {
-        formus_staffgroupcategory: formus_staffgroupcategory.toString(),
+        formus_staffgroupcategory: formus_staffgroupcategory?.toString(),
       },
-      formus_jobrole && { formus_jobrole: formus_jobrole.toString() },
+      formus_jobrole && { formus_jobrole: formus_jobrole?.toString() },
       formus_qualificationtype && {
-        formus_qualificationtype: formus_qualificationtype.toString(),
+        formus_qualificationtype: formus_qualificationtype?.toString(),
       },
       formus_professionalregistrationbody && {
         formus_professionalregistrationbody:
-          formus_professionalregistrationbody.toString(),
+          formus_professionalregistrationbody?.toString(),
       },
       formus_professionalregistrationstatus && {
         formus_professionalregistrationstatus:
-          formus_professionalregistrationstatus.toString(),
+          formus_professionalregistrationstatus?.toString(),
       },
       formus_typeofcontract && {
-        formus_typeofcontract: formus_typeofcontract.toString(),
+        formus_typeofcontract: formus_typeofcontract?.toString(),
       },
       formus_clinicalspecialtysofpractice && {
         formus_clinicalspecialtysofpractice:
-          formus_clinicalspecialtysofpractice.toString(), // 👈  multi picker
+          formus_clinicalspecialtysofpractice?.toString(), // 👈  multi picker
       },
       formus_fixedtermtemporaryreasonforemploymentcont && {
         formus_fixedtermtemporaryreasonforemploymentcont:
-          formus_fixedtermtemporaryreasonforemploymentcont.toString(),
+          formus_fixedtermtemporaryreasonforemploymentcont?.toString(),
       },
       formus_typeofpractice && {
-        formus_typeofpractice: formus_typeofpractice.toString(),
+        formus_typeofpractice: formus_typeofpractice?.toString(),
       },
       formus_mainspecialtyqualification && {
         formus_mainspecialtyqualification:
-          formus_mainspecialtyqualification.toString(), // 👈  multi picker
+          formus_mainspecialtyqualification?.toString(), // 👈  multi picker
       },
       formus_specialiseddermatologyareasofpractice && {
         formus_specialiseddermatologyareasofpractice:
-          formus_specialiseddermatologyareasofpractice.toString(), // 👈  multi picker
+          formus_specialiseddermatologyareasofpractice?.toString(), // 👈  multi picker
       }
     );
 
@@ -295,27 +327,40 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   const multiSelectHandler = ({ title, value, name }) => {
+    // ⚠️ remove first character from name
+    const _name = name?.substring(1);
     let currentValues = formData?.[name] || "";
-    let currentTitles = formData?.["dev_multi_select_" + name] || "";
+    let currentTitles = "";
 
-    if (!currentValues.includes(value)) {
+    if (!currentValues?.includes(value)) {
       // 👉 if value is already selected, add to it by comma separated
-      const newValue = currentValues?.length > 0 ? "," + value : value; // if string have no values add value, othervise comma seperated
-      const newTitle = currentTitles?.length > 0 ? ", " + title : title; // if string have no values add value, othervise comma seperated
-      currentValues = currentValues + newValue;
-      currentTitles = currentTitles + newTitle;
+      currentValues = currentValues ? "," + value : value; // if string have no values add value, othervise comma seperated
     } else {
       // 👉 if value is already selected, remove it
-      const hasValue = currentValues?.includes("," + value); // check if value is comma separated
-      currentValues = hasValue
-        ? currentValues?.replace("," + value, "")
-        : currentValues?.replace(value, "");
-
-      const hasTitle = currentTitles?.includes(", " + title); // check if value is comma separated
-      currentTitles = hasTitle
-        ? currentTitles?.replace(", " + title, "")
-        : currentTitles?.replace(title, "");
+      if (currentValues?.includes("," + value)) {
+        currentValues = currentValues?.replace("," + value, "");
+      } else {
+        currentValues = currentValues?.replace(value, "");
+      }
     }
+    // ⚠️ String clean up. If currentValues starts with comma, remove it
+    // ⚠️ removing first string values bug
+    if (currentValues?.startsWith(",")) {
+      currentValues = currentValues?.substring(1);
+    }
+
+    // Filter out Choices list based on selection/currentValues string. If value includes in currentValues, add Label to currentTitles
+    FORM_CONFIG?.formus_clinicalspecialtysofpractice?.Choices?.forEach(
+      (item) => {
+        const Label = item.Label;
+        const value = item.value;
+        if (currentValues?.includes(value) && !currentTitles.includes(Label)) {
+          currentTitles = currentTitles
+            ? currentTitles + "; " + item.Label
+            : item.Label;
+        }
+      }
+    );
 
     setForm((prev) => ({
       ...prev,
@@ -330,42 +375,29 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       ["dev_selected_" + name]: !formData?.["dev_selected_" + name],
     };
     // 📌 conditional dropdown closing based on selection
-    if (name === "formus_mainspecialtyqualification") {
+    if (name === "_formus_mainspecialtyqualification") {
       handler = {
         ...handler,
-        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
-        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+        ["dev_selected_" + "_formus_clinicalspecialtysofpractice"]: undefined,
+        ["dev_selected_" + "_formus_specialiseddermatologyareasofpractice"]:
           undefined,
       };
     }
 
-    if (name === "formus_clinicalspecialtysofpractice") {
+    if (name === "_formus_clinicalspecialtysofpractice") {
       handler = {
         ...handler,
-        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
-        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
+        ["dev_selected_" + "_formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "_formus_specialiseddermatologyareasofpractice"]:
           undefined,
       };
     }
 
-    if (name === "formus_specialiseddermatologyareasofpractice") {
+    if (name === "_formus_specialiseddermatologyareasofpractice") {
       handler = {
         ...handler,
-        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
-        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
-      };
-    }
-
-    // --------------------------------------------------------------------------------
-    // 📌  onClick listener. Close all formus multiselect fields if DOM element clicked
-    // --------------------------------------------------------------------------------
-    if (name === "close_formus_multiselect") {
-      handler = {
-        ...handler,
-        ["dev_selected_" + "formus_specialiseddermatologyareasofpractice"]:
-          undefined,
-        ["dev_selected_" + "formus_mainspecialtyqualification"]: undefined,
-        ["dev_selected_" + "formus_clinicalspecialtysofpractice"]: undefined,
+        ["dev_selected_" + "_formus_mainspecialtyqualification"]: undefined,
+        ["dev_selected_" + "_formus_clinicalspecialtysofpractice"]: undefined,
       };
     }
 
@@ -454,14 +486,18 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               />
             </div>
             <div className="form-row">
-              <label>Other regulatory body</label>
-              <input
-                name="bad_otherregulatorybodyreference"
-                value={formData.bad_otherregulatorybodyreference}
-                onChange={handleInputChange}
-                className="form-control input"
-                placeholder="Other regulatory body"
-              />
+              {isOverseasApp && (
+                <div>
+                  <label>Other regulatory body</label>
+                  <input
+                    name="bad_otherregulatorybodyreference"
+                    value={formData.bad_otherregulatorybodyreference}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Other regulatory body"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -486,6 +522,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 onChange={handleInputChange}
                 Choices={[..._JOBS]}
                 labelClass="form-label"
+                dashboardWidget="Job Role"
               />
             </div>
           </div>
@@ -571,8 +608,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   <MultiCheckboxInput
                     form={formData}
                     name="_formus_clinicalspecialtysofpractice"
-                    value={formData?._formus_clinicalspecialtysofpractice || ""}
-                    onChange={handleInputChange}
                     labelClass="form-label"
                     Choices={[
                       ...FORM_CONFIG?.formus_clinicalspecialtysofpractice
@@ -580,6 +615,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     ]}
                     multiSelectHandler={multiSelectHandler}
                     multiSelectDropDownHandler={multiSelectDropDownHandler}
+                    dashboardWidget="formus_clinicalspecialtysofpractice"
                   />
                 </div>
               </div>
@@ -626,13 +662,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     <MultiCheckboxInput
                       form={formData}
                       name="_formus_mainspecialtyqualification"
-                      value={formData?._formus_mainspecialtyqualification || ""}
-                      onChange={handleInputChange}
+                      labelClass="form-label"
                       Choices={[
                         ...FORM_CONFIG?.formus_mainspecialtyqualification
                           ?.Choices,
                       ]}
-                      labelClass="form-label"
+                      multiSelectHandler={multiSelectHandler}
+                      multiSelectDropDownHandler={multiSelectDropDownHandler}
                     />
                   </div>
                   <div className="form-row">
@@ -640,11 +676,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     <MultiCheckboxInput
                       form={formData}
                       name="_formus_specialiseddermatologyareasofpractice"
-                      value={
-                        formData?._formus_specialiseddermatologyareasofpractice ||
-                        ""
-                      }
-                      onChange={handleInputChange}
                       labelClass="form-label"
                       Choices={[
                         ...FORM_CONFIG

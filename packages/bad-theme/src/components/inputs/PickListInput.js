@@ -13,14 +13,12 @@ const PickListInput = ({
   onChange,
   Choices,
   labelClass,
+  // 👉 dashboard widget
+  dashboardWidget,
 }) => {
   // --------------------------------------------------------------------------------
   // 📌  Extend Choises with custom options
   // --------------------------------------------------------------------------------
-  // const customChoices = FORM_CONFIG[name].Choices;
-  // if (customChoices) {
-  //   Choices = [...Choices, ...customChoices]; // 👉 extend choices
-  // }
 
   if (name === "formus_staffgroupcategory" || name === "formus_jobrole") {
     console.log("⭐️ Choices ", Choices);
@@ -39,7 +37,7 @@ const PickListInput = ({
         className="input"
       >
         <option value="" hidden className="select-option-hidden">
-          {Label}
+          {Label || dashboardWidget || "Select"}
         </option>
         {Choices?.map(({ value, Label }, key) => {
           // --------------------------------------------------------------------------------
