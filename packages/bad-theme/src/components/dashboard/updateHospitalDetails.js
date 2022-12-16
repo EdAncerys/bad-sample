@@ -598,70 +598,74 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               </div>
 
-              <div className="flex-form-row">
-                <div className="form-row">
-                  <label>Type of Contract</label>
-                  <PickListInput
-                    form={formData}
-                    name="_formus_typeofcontract"
-                    value={formData?._formus_typeofcontract || ""}
-                    onChange={handleInputChange}
-                    Choices={[...FORM_CONFIG?.formus_typeofcontract?.Choices]}
-                    labelClass="form-label"
-                  />
-                </div>
+              {!isAssociateOverseasApp && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Type of Contract</label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_typeofcontract"
+                      value={formData?._formus_typeofcontract || ""}
+                      onChange={handleInputChange}
+                      Choices={[...FORM_CONFIG?.formus_typeofcontract?.Choices]}
+                      labelClass="form-label"
+                    />
+                  </div>
 
-                <div className="form-row">
-                  <label>Clinical Specialty(s) of practice</label>
-                  <MultiCheckboxInput
-                    form={formData}
-                    name="_formus_clinicalspecialtysofpractice"
-                    labelClass="form-label"
-                    Choices={[
-                      ...FORM_CONFIG?.formus_clinicalspecialtysofpractice
-                        ?.Choices,
-                    ]}
-                    multiSelectHandler={multiSelectHandler}
-                    multiSelectDropDownHandler={multiSelectDropDownHandler}
-                    dashboardWidget="formus_clinicalspecialtysofpractice"
-                  />
+                  <div className="form-row">
+                    <label>Clinical Specialty(s) of practice</label>
+                    <MultiCheckboxInput
+                      form={formData}
+                      name="_formus_clinicalspecialtysofpractice"
+                      labelClass="form-label"
+                      Choices={[
+                        ...FORM_CONFIG?.formus_clinicalspecialtysofpractice
+                          ?.Choices,
+                      ]}
+                      multiSelectHandler={multiSelectHandler}
+                      multiSelectDropDownHandler={multiSelectDropDownHandler}
+                      dashboardWidget="formus_clinicalspecialtysofpractice"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="flex-form-row">
-                <div className="form-row">
-                  <label>
-                    Fixed term/temporary reason for employment contract
-                  </label>
-                  <PickListInput
-                    form={formData}
-                    name="_formus_fixedtermtemporaryreasonforemploymentcont"
-                    value={
-                      formData?._formus_fixedtermtemporaryreasonforemploymentcont ||
-                      ""
-                    }
-                    onChange={handleInputChange}
-                    Choices={[
-                      ...FORM_CONFIG
-                        ?.formus_fixedtermtemporaryreasonforemploymentcont
-                        ?.Choices,
-                    ]}
-                    labelClass="form-label"
-                  />
-                </div>
+              {!isAssociateOverseasApp && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>
+                      Fixed term/temporary reason for employment contract
+                    </label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_fixedtermtemporaryreasonforemploymentcont"
+                      value={
+                        formData?._formus_fixedtermtemporaryreasonforemploymentcont ||
+                        ""
+                      }
+                      onChange={handleInputChange}
+                      Choices={[
+                        ...FORM_CONFIG
+                          ?.formus_fixedtermtemporaryreasonforemploymentcont
+                          ?.Choices,
+                      ]}
+                      labelClass="form-label"
+                    />
+                  </div>
 
-                <div className="form-row">
-                  <label>Type of Practice</label>
-                  <PickListInput
-                    form={formData}
-                    name="_formus_typeofpractice"
-                    value={formData?._formus_typeofpractice || ""}
-                    onChange={handleInputChange}
-                    Choices={[...FORM_CONFIG?.formus_typeofpractice?.Choices]}
-                    labelClass="form-label"
-                  />
+                  <div className="form-row">
+                    <label>Type of Practice</label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_typeofpractice"
+                      value={formData?._formus_typeofpractice || ""}
+                      onChange={handleInputChange}
+                      Choices={[...FORM_CONFIG?.formus_typeofpractice?.Choices]}
+                      labelClass="form-label"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {isOrdinaryApp && (
                 <div className="flex-form-row">
@@ -727,31 +731,35 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              <div className="flex-form-row">
-                <div className="form-row">
-                  <label>Residency Status</label>
-                  <PickListInput
-                    form={formData}
-                    name="_formus_residencystatus"
-                    value={formData?._formus_residencystatus || ""}
-                    onChange={handleInputChange}
-                    Choices={[...FORM_CONFIG?.formus_residencystatus?.Choices]}
-                    labelClass="form-label"
-                  />
-                </div>
+              {!isAssociateOverseasApp && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Residency Status</label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_residencystatus"
+                      value={formData?._formus_residencystatus || ""}
+                      onChange={handleInputChange}
+                      Choices={[
+                        ...FORM_CONFIG?.formus_residencystatus?.Choices,
+                      ]}
+                      labelClass="form-label"
+                    />
+                  </div>
 
-                <div className="form-row">
-                  <label>Rota Pattern</label>
-                  <PickListInput
-                    form={formData}
-                    name="_formus_rotapattern"
-                    value={formData?._formus_rotapattern || ""}
-                    onChange={handleInputChange}
-                    Choices={[...FORM_CONFIG?.formus_rotapattern?.Choices]}
-                    labelClass="form-label"
-                  />
+                  <div className="form-row">
+                    <label>Rota Pattern</label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_rotapattern"
+                      value={formData?._formus_rotapattern || ""}
+                      onChange={handleInputChange}
+                      Choices={[...FORM_CONFIG?.formus_rotapattern?.Choices]}
+                      labelClass="form-label"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
         </div>

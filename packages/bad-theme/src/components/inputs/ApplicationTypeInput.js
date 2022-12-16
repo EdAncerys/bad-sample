@@ -38,6 +38,7 @@ const ApplicationTypeInput = ({ form, onChange }) => {
         value={form?.bad_categorytype || ""}
         onChange={onChange}
         className="form-control input"
+        style={{ color: form?.bad_categorytype ? "inherit" : "#ced4da" }}
       >
         <option value="" hidden>
           Membership Category
