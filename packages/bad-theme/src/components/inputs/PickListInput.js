@@ -35,6 +35,7 @@ const PickListInput = ({
         value={form?.[name] === undefined ? value || "" : form?.[name]}
         onChange={onChange}
         className="input"
+        style={{ color: value ? "inherit" : "#ced4da" }}
       >
         <option value="" hidden className="select-option-hidden">
           {Label || dashboardWidget || "Select"}
