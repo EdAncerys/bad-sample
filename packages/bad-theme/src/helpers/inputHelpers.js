@@ -342,7 +342,11 @@ export const inputShowHandler = ({ form, name, badApp }) => {
   // 📌  Handle input show/hide logic for multiple inputs
   // --------------------------------------------------------------------------------
   if (name === "formus_privatepracticeorganisation") {
-    if (form?.["formus_typeofpractice"] !== "810170002") show = false;
+    if (
+      form?.["formus_typeofpractice"] &&
+      form?.["formus_typeofpractice"] !== "810170001"
+    )
+      show = false;
   }
 
   // --------------------------------------------------------------------------------
