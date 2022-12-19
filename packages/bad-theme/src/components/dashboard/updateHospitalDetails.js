@@ -60,10 +60,15 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       (app) =>
         app?.core_name?.includes("Student") && app?.statecode === "Active"
     )?.length > 0;
+  // --------------------------------------------------------------------------------
+  // 📌  Ordinary / Honorary UI logic are the same
+  // --------------------------------------------------------------------------------
   let isOrdinaryApp =
     formData?.dev_subs?.filter(
       (app) =>
-        app?.core_name?.includes("Ordinary") && app?.statecode === "Active"
+        (app?.core_name?.includes("Ordinary") ||
+          app?.core_name?.includes("Honorary")) &&
+        app?.statecode === "Active"
     )?.length > 0;
   let isTraineeApp =
     formData?.dev_subs?.filter(
