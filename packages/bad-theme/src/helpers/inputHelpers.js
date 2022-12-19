@@ -344,7 +344,7 @@ export const inputShowHandler = ({ form, name, badApp }) => {
   if (name === "formus_privatepracticeorganisation") {
     if (
       form?.["formus_typeofpractice"] &&
-      form?.["formus_typeofpractice"] !== "810170001"
+      form?.["formus_typeofpractice"] === "810170001"
     )
       show = false;
   }
