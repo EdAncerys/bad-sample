@@ -207,6 +207,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       e.target.classList.contains("flex-form-col") ||
       e.target.classList.contains("form-select") ||
       e.target.classList.contains("blue-btn") ||
+      e.target.classList.contains("form-row") ||
       e.target.classList.contains("form-control")
     ) {
       setForm((prev) => ({
