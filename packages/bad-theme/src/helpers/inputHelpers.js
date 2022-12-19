@@ -17,6 +17,7 @@ import {
   studentFilters,
   ordinaryFilters,
   associateOverseasFilters,
+  genericFilters,
 } from "../config/form";
 // --------------------------------------------------------------------------------
 
@@ -427,7 +428,7 @@ export const manualFilterHandler = ({ form, name, show }) => {
   // 📌  for form step 2 return show. All input will be shown
   // --------------------------------------------------------------------------------
   if (form?.step === 2) return show;
-  let filterOptions = retiredTypeFilters;
+  let filterOptions = genericFilters; // 👈 ⚠️ default filter options
 
   if (form?.bad_categorytype === "Ordinary SAS") {
     filterOptions = ordinarySASFilters;

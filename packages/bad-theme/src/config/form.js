@@ -1679,3 +1679,14 @@ export const associateOverseasFilters = [
   "py3_constitutionagreement",
   "bad_readpolicydocument",
 ];
+
+// --------------------------------------------------------------------------------
+// 📌 Generic BAD app filters 👇
+// --------------------------------------------------------------------------------
+export const genericFilters = [
+  // ⚠️ spred keys form BAD_STEP_FOUR_FORM_CONFIG & BAD_STEP_FIVE_FORM_CONFIG object
+  // 👉 step #4 filters 👇
+  ...Object.keys(BAD_STEP_FOUR_FORM_CONFIG),
+  // 👉 step #5 filters 👇
+  ...Object.keys(BAD_STEP_FIVE_FORM_CONFIG),
+];
