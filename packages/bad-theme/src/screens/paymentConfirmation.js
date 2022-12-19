@@ -10,20 +10,22 @@ import Image from "@frontity/components/image";
 const PaymentConfirmation = ({ state }) => {
   const [data, setData] = useState(null);
 
+  // link is the current URL
+  const link = state.source.get(state.router.link);
+
   useEffect(() => {
     const queryParams = new Proxy(new URLSearchParams(window.location.search), {
       get: (searchParams, prop) => searchParams.get(prop),
     });
-    const data = state.source.get(state.router.link);
     let backUrl = queryParams?.redirect;
-    let success = data?.query?.sagepay === "success";
+    let success = link?.query?.sagepay === "true";
 
     setData((prev) => ({
       ...prev,
       backUrl,
       success,
     }));
-  }, []);
+  }, [link]);
 
   // --------------------------------------------------------------------------------
   // 📌  Component configuration.
