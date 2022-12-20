@@ -103,22 +103,27 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     )?.length > 0;
 
   // --------------------------------------------------------------------------------
-  // 📌  Type of practice question logic
+  // 📌  Additional show field conditional logic
   // --------------------------------------------------------------------------------
-  const isNHSOnly =
+  let isPrivatePractice =
     formData?._formus_typeofpractice &&
     formData?._formus_typeofpractice?.toString() !== "810170001";
+  let isOtherSpecialtyQ =
+    formData?._formus_mainspecialtyqualification?.includes("810170008");
+  let isOtherCCSTDates =
+    formData?._formus_reasonformovingccstdate?.includes("810170005");
+  let isOtherQType = formData?._formus_qualificationtype?.includes("810170007");
 
   // --------------------------------------------------------------------------------
   // ⚠️ TESTING OVERWRITES
   // --------------------------------------------------------------------------------
   // isBADMember = true;
-  // isStudentApp = false; // ✅ tested
-  // isOrdinaryApp = false; // ✅ tested
-  // isTraineeApp = false; // ✅ tested
-  // isOverseasApp = false; // ✅ tested
-  // isAssociateOverseasApp = true; // ✅ tested
-  // isJuniorApp = false;
+  isStudentApp = true; // ✅ tested
+  isOrdinaryApp = true; // ✅ tested
+  isTraineeApp = true; // ✅ tested
+  isOverseasApp = true; // ✅ tested
+  isAssociateOverseasApp = true; // ✅ tested
+  isJuniorApp = true;
 
   // --------------------------------------------------------------------------------
   // 📌  Apply job filters on groupe cat changes
@@ -287,6 +292,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       formData?._formus_privatepracticeorganisation;
     const formus_specialiseddermatologyareasofpractice =
       formData?._formus_specialiseddermatologyareasofpractice;
+    const formus_reasonformovingccstdate =
+      formData?._formus_reasonformovingccstdate;
 
     const data = Object.assign(
       {}, // add empty object
@@ -346,6 +353,10 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       formus_specialiseddermatologyareasofpractice && {
         formus_specialiseddermatologyareasofpractice:
           formus_specialiseddermatologyareasofpractice?.toString(), // 👈  multi picker
+      },
+      formus_reasonformovingccstdate && {
+        formus_reasonformovingccstdate:
+          formus_reasonformovingccstdate?.toString(), // 👈  multi picker
       }
     );
 
@@ -583,6 +594,23 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
+          {isBADMember && isStudentApp && isOtherQType && (
+            <div className="flex-form-row">
+              <div className="form-row">
+                <label>Please specify other Specialty Qualification</label>
+                <input
+                  name="formus_otherqualificationtype"
+                  type="text"
+                  value={formData?.formus_otherqualificationtype || ""}
+                  onChange={handleInputChange}
+                  className="form-control input"
+                  placeholder="Please specify other Specialty Qualification"
+                />
+              </div>
+              <div className="form-row" />
+            </div>
+          )}
+
           {isBADMember && !isStudentApp && (
             <div className="flex-form-col">
               <div className="flex-form-row">
@@ -687,7 +715,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {!isAssociateOverseasApp && isNHSOnly && (
+              {!isAssociateOverseasApp && isPrivatePractice && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Private Practice Organisation</label>
@@ -746,6 +774,25 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
+              {isOrdinaryApp && isOtherSpecialtyQ && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Please specify other main qualification type</label>
+                    <input
+                      name="formus_othermainspecialtyqualification"
+                      type="text"
+                      value={
+                        formData?.formus_othermainspecialtyqualification || ""
+                      }
+                      onChange={handleInputChange}
+                      className="form-control input"
+                      placeholder="Please specify other main qualification type"
+                    />
+                  </div>
+                  <div className="form-row" />
+                </div>
+              )}
+
               {isTraineeApp && (
                 <div className="flex-form-row">
                   <div className="flex-form-row">
@@ -762,17 +809,38 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     </div>
                     <div className="form-row">
                       <label>Reason for moving CCST date</label>
-                      <input
-                        name="formus_otherreasonformovingccstdate"
-                        value={
-                          formData?.formus_otherreasonformovingccstdate || ""
-                        }
+                      <PickListInput
+                        form={formData}
+                        name="_formus_reasonformovingccstdate"
+                        value={formData?._formus_reasonformovingccstdate || ""}
                         onChange={handleInputChange}
-                        className="form-control input"
-                        placeholder="Reason for moving CCST date"
+                        Choices={[
+                          ...FORM_CONFIG?.formus_reasonformovingccstdate
+                            ?.Choices,
+                        ]}
+                        labelClass="form-label"
                       />
                     </div>
                   </div>
+                </div>
+              )}
+
+              {isTraineeApp && isOtherCCSTDates && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Other Reason for moving CCST date</label>
+                    <input
+                      name="formus_otherreasonformovingccstdate"
+                      type="text"
+                      value={
+                        formData?.formus_otherreasonformovingccstdate || ""
+                      }
+                      onChange={handleInputChange}
+                      className="form-control input"
+                      placeholder="Other Reason for moving CCST date"
+                    />
+                  </div>
+                  <div className="form-row" />
                 </div>
               )}
 

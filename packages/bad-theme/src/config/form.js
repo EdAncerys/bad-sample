@@ -912,6 +912,14 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
+    Choices: [
+      { value: 810170000, Label: "Education" },
+      { value: 810170001, Label: "Research" },
+      { value: 810170002, Label: "Sickness/Accident" },
+      { value: 810170003, Label: "Maternity" },
+      { value: 810170004, Label: "Original Date" },
+      { value: 810170005, Label: "Other" },
+    ],
   },
   formus_residencystatus: {
     Label: "Residency Status",
