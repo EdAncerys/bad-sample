@@ -121,7 +121,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // isBADMember = true;
   // isStudentApp = true; // ✅ tested
   // isOrdinaryApp = true; // ✅ tested
-  // isTraineeApp = true; // ✅ tested
+  isTraineeApp = true; // ✅ tested
   // isOverseasApp = true; // ✅ tested
   // isAssociateOverseasApp = true; // ✅ tested
   // isJuniorApp = true;
@@ -607,7 +607,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {isBADMember && isStudentApp && isOtherQType && (
+          {isBADMember && isOtherQType && (
             <div className="flex-form-row">
               <div className="form-row">
                 <label>Please specify other Specialty Qualification</label>
