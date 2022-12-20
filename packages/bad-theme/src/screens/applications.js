@@ -186,6 +186,9 @@ const Applications = ({ state, actions }) => {
           sky_cvurl: documentUrl, // set documentUrl to form
           sky_profilepicture: profilePicture, // set profilePicture to form
           step: application?.[0]?.step || 0,
+          formus_staffgroupcategory:
+            isActiveUser?._formus_staffgroupcategory?.toString(),
+          formus_jobrole: isActiveUser?._formus_jobrole?.toString(),
           ...formDefaults,
           formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
           formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
