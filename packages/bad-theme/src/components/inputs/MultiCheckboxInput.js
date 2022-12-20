@@ -17,7 +17,7 @@ const MultiCheckboxInput = ({
   // 👉 dashboard widget
   dashboardWidget,
 }) => {
-  const hasSelection = form?.[name] !== undefined && form?.[name].length > 0;
+  const hasSelection = form?.[name] !== undefined && form?.[name]?.length > 0;
   let userSelection =
     form?.["dev_multi_select_" + name] || form?.[dashboardWidget];
   // if userSelection starts with a comma, remove it

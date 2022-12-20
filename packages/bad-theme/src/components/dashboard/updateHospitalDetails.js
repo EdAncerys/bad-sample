@@ -484,7 +484,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   value={
                     isActiveUser?.[
                       "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-                    ]
+                    ] || ""
                   }
                   onChange={handleInputChange}
                   className="form-control input"
@@ -720,7 +720,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       <label>Reason for moving CCST date</label>
                       <input
                         name="formus_otherreasonformovingccstdate"
-                        value={formData.formus_otherreasonformovingccstdate}
+                        value={
+                          formData?.formus_otherreasonformovingccstdate || ""
+                        }
                         onChange={handleInputChange}
                         className="form-control input"
                         placeholder="Reason for moving CCST date"
