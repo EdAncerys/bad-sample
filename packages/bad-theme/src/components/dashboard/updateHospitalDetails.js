@@ -58,7 +58,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   let isStudentApp =
     formData?.dev_subs?.filter(
       (app) =>
-        app?.core_name?.includes("Student") && app?.statecode === "Active"
+        app?.core_name?.includes("Student") &&
+        app?.statecode === "Active" &&
+        app?.bad_organisedfor === "BAD"
     )?.length > 0;
   // --------------------------------------------------------------------------------
   // 📌  Ordinary / Honorary UI logic are the same
@@ -68,27 +70,36 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       (app) =>
         (app?.core_name?.includes("Ordinary") ||
           app?.core_name?.includes("Honorary")) &&
-        app?.statecode === "Active"
+        app?.statecode === "Active" &&
+        app?.bad_organisedfor === "BAD"
     )?.length > 0;
   let isTraineeApp =
     formData?.dev_subs?.filter(
       (app) =>
-        app?.core_name?.includes("Trainee") && app?.statecode === "Active"
+        app?.core_name?.includes("Trainee") &&
+        app?.statecode === "Active" &&
+        app?.bad_organisedfor === "BAD"
     )?.length > 0;
   let isOverseasApp =
     formData?.dev_subs?.filter(
       (app) =>
-        app?.core_name?.includes("Overseas") && app?.statecode === "Active"
+        app?.core_name?.includes("Overseas") &&
+        app?.statecode === "Active" &&
+        app?.bad_organisedfor === "BAD"
     )?.length > 0;
   let isAssociateOverseasApp =
     formData?.dev_subs?.filter(
       (app) =>
         app?.core_name?.includes("Associate Overseas") &&
-        app?.statecode === "Active"
+        app?.statecode === "Active" &&
+        app?.bad_organisedfor === "BAD"
     )?.length > 0;
   let isJuniorApp =
     formData?.dev_subs?.filter(
-      (app) => app?.core_name?.includes("Junior") && app?.statecode === "Active"
+      (app) =>
+        app?.core_name?.includes("Junior") &&
+        app?.statecode === "Active" &&
+        app?.bad_organisedfor === "BAD"
     )?.length > 0;
 
   // --------------------------------------------------------------------------------

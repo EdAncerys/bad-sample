@@ -98,7 +98,9 @@ const DashboardNotifications = ({ state }) => {
             onClick={() =>
               setDashboardNotificationsAction({
                 dispatch,
-                isDashboardNotifications: [...isDashboardNotifications, id],
+                isDashboardNotifications: isDashboardNotifications.filter(
+                  (item) => item !== id
+                ),
               })
             }
           >
@@ -126,7 +128,7 @@ const DashboardNotifications = ({ state }) => {
 
     if (
       dashboardPath === "My Profile" ||
-      (isDashboardNotifications && isDashboardNotifications.includes(id))
+      !isDashboardNotifications.includes(id)
     )
       return null;
 
@@ -173,7 +175,7 @@ const DashboardNotifications = ({ state }) => {
     if (
       membership.isValid ||
       isBilling ||
-      (isDashboardNotifications && isDashboardNotifications.includes(id))
+      !isDashboardNotifications.includes(id)
     )
       return null;
 
@@ -218,7 +220,7 @@ const DashboardNotifications = ({ state }) => {
     if (
       dashboardPath === "Billing" ||
       !dynamicsApps ||
-      isDashboardNotifications.includes(id)
+      !isDashboardNotifications.includes(id)
     )
       return null;
 
