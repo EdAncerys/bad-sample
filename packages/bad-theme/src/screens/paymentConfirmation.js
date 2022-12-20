@@ -27,6 +27,13 @@ const PaymentConfirmation = ({ state }) => {
     }));
   }, [link]);
 
+  const onClickHandler = () => {
+    // --------------------------------------------------------------------------------
+    // ⚠️ close current window to switch user back to prev screen
+    // --------------------------------------------------------------------------------
+    window.close();
+  };
+
   // --------------------------------------------------------------------------------
   // 📌  Component configuration.
   // --------------------------------------------------------------------------------
@@ -71,7 +78,8 @@ const PaymentConfirmation = ({ state }) => {
           <div id="ask-to-close">{MESSAGE}</div>
           <a
             style={{ marginTop: "1em" }}
-            href={data?.backUrl ? data?.backUrl : state.auth.APP_URL}
+            // href={data?.backUrl ? data?.backUrl : state.auth.APP_URL}
+            onClick={onClickHandler}
             className="blue-btn"
           >
             Go back
