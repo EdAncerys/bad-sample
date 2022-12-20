@@ -119,12 +119,12 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // ⚠️ TESTING OVERWRITES
   // --------------------------------------------------------------------------------
   // isBADMember = true;
-  isStudentApp = true; // ✅ tested
-  isOrdinaryApp = true; // ✅ tested
-  isTraineeApp = true; // ✅ tested
-  isOverseasApp = true; // ✅ tested
-  isAssociateOverseasApp = true; // ✅ tested
-  isJuniorApp = true;
+  // isStudentApp = true; // ✅ tested
+  // isOrdinaryApp = true; // ✅ tested
+  // isTraineeApp = true; // ✅ tested
+  // isOverseasApp = true; // ✅ tested
+  // isAssociateOverseasApp = true; // ✅ tested
+  // isJuniorApp = true;
 
   // --------------------------------------------------------------------------------
   // 📌  Apply job filters on groupe cat changes
@@ -358,6 +358,18 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       formus_reasonformovingccstdate && {
         formus_reasonformovingccstdate:
           formus_reasonformovingccstdate?.toString(), // 👈  multi picker
+      },
+      formData?.formus_othermainspecialtyqualification && {
+        formus_othermainspecialtyqualification:
+          formData?.formus_othermainspecialtyqualification?.toString(), // 👈  multi picker
+      },
+      formData?.formus_otherreasonformovingccstdate && {
+        formus_otherreasonformovingccstdate:
+          formData?.formus_otherreasonformovingccstdate?.toString(), // 👈  multi picker
+      },
+      formData?.formus_otherqualificationtype && {
+        formus_otherqualificationtype:
+          formData?.formus_otherqualificationtype?.toString(), // 👈  multi picker
       }
     );
 
