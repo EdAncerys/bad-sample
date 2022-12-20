@@ -4,7 +4,6 @@ import { connect } from "frontity";
 import { colors } from "../../config/imports";
 import PaymentModal from "./paymentModal";
 import Loading from "../loading";
-import TitleBlock from "../titleBlock";
 import PaymentHistory from "./paymentHistory";
 import ActionPlaceholder from "../actionPlaceholder";
 // CONTEXT ---------------------------------------------

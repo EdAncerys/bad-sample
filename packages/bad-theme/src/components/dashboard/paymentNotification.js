@@ -1,15 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "frontity";
 
-import { colors } from "../../config/imports";
-import { handleGetCookie } from "../../helpers/cookie";
 import PaymentModal from "./paymentModal";
 import { setErrorAction, fetchDataHandler } from "../../context";
-const PaymentNotification = ({
-  state,
-
-  application,
-}) => {
+const PaymentNotification = ({ state, application }) => {
   const [paymentUrl, setPaymentUrl] = useState(null);
   const [buttonClicked, setButtonClicked] = useState(false);
 
@@ -107,10 +101,6 @@ const PaymentNotification = ({
       />
     </div>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(PaymentNotification);
