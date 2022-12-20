@@ -92,8 +92,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
     // 👇 set on focus handler
     window.addEventListener("focus", onfocusHandler);
-    // 👉 remove initiatedPayments on mount action
-    state.data.initiatedPayments = [];
 
     return () => {
       useEffectRef.current = false; // clean up function
@@ -135,6 +133,8 @@ const AccountDashboard = ({ state, actions, libraries }) => {
         dispatch,
         contactid: isActiveUser.contactid,
       });
+      // 👉 remove initiatedPayments on mount action
+      state.data.initiatedPayments = [];
     } catch (error) {
       console.log("🐞 error", error);
     }
