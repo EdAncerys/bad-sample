@@ -174,7 +174,7 @@ export const handleApplyForMembershipAction = async ({
     if (isActiveUser && store) {
       setGoToAction({
         state,
-        path: "/membership/applications/", // redirect to application form general path
+        path: path || "/membership/applications/", // 👉 redirect to application form general path
         actions,
       });
 

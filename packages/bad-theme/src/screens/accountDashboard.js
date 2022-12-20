@@ -75,11 +75,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     if (!isActiveUser?.birthdate) isProfileComplete = false;
     if (!isActiveUser?.py3_ethnicity) isProfileComplete = false;
 
-    console.log("⭐️ ", isProfileComplete);
-    console.log("⭐️ ", !isActiveUser?.lastname);
-    console.log("⭐️ ", isActiveUser?.lastname);
-    console.log("⭐️ ", isActiveUser?.lastname === null);
-
     if (!isProfileComplete)
       setDashboardNotificationsAction({
         dispatch,
