@@ -111,7 +111,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   let isOtherSpecialtyQ =
     formData?._formus_mainspecialtyqualification?.includes("810170008"); // 👈 multiselect string
   let isOtherCCSTDates =
-    formData?._formus_reasonformovingccstdate?.includes("810170005"); // 👈 multiselect string
+    formData?._formus_reasonformovingccstdate?.toString() === "810170005";
   let isOtherQType =
     formData?._formus_qualificationtype?.toString() === "810170007";
 
