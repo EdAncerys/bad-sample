@@ -96,7 +96,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     return () => {
       useEffectRef.current = false; // clean up function
     };
-  }, []);
+  }, [isActiveUser]);
 
   // prevent dashboard actions to load before all server side mutations loaded
   // allow css to load
