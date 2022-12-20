@@ -14,7 +14,6 @@ export const handleUpdateMembershipApplication = async ({
   app,
   applicationData,
   setFetching,
-  isApplicationChange,
 }) => {
   // if no app data found break & display error
   if (!app) {
