@@ -59,14 +59,15 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
     // 📌 SET Dashboard notification if user profile not complete
     // --------------------------------------------------------------------------------
-    if (!isActiveUser.emailaddress1) isProfileComplete = false;
     if (!isActiveUser.address2_line1) isProfileComplete = false;
+    // 👉 skip on address2_line2
     if (!isActiveUser.address2_city) isProfileComplete = false;
-    if (!isActiveUser.address2_postalcode) isProfileComplete = false;
     if (!isActiveUser.address2_country) isProfileComplete = false;
-    if (!isActiveUser.jobtitle) isProfileComplete = false;
+
+    if (!isActiveUser.emailaddress1) isProfileComplete = false;
+    if (!isActiveUser.address2_postalcode) isProfileComplete = false;
     if (!isActiveUser.mobilephone) isProfileComplete = false;
-    // personal information pane
+    // 👉 personal information pane
     if (!isActiveUser.firstname) isProfileComplete = false;
     if (!isActiveUser.lastname) isProfileComplete = false;
     if (!isActiveUser.gendercode) isProfileComplete = false;

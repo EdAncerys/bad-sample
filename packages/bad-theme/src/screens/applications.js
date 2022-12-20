@@ -190,7 +190,6 @@ const Applications = ({ state, actions }) => {
           formus_mainspecialtyqualification: undefined, // 📌  remove default value from form
           formus_clinicalspecialtysofpractice: undefined, // 📌  remove default value from form
           formus_specialiseddermatologyareasofpractice: undefined, // 📌  remove default value from form
-          formus_staffgroupcategory: "", // 📌  remove default value from form as filed is conditional field for others
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
@@ -429,6 +428,9 @@ const Applications = ({ state, actions }) => {
     }
 
     if (name === "formus_staffgroupcategory") {
+      // 👉 validate if formus_jobrole is included in staff group cat list
+      let filters = "group_" + form?.formus_staffgroupcategory;
+
       setForm({
         ...form,
         [name]: type === "checkbox" ? checked : value,

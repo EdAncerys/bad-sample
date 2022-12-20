@@ -480,9 +480,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   Main Hospital / Place of Work / Medical School details
                 </label>
                 <input
-                  name="address1_line1"
+                  name="bad_py3_hospitalid"
                   value={
-                    formData[
+                    isActiveUser?.[
                       "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
                     ]
                   }
