@@ -846,6 +846,10 @@ export const FORM_CONFIG = {
     hidden: false,
     width: "100%",
     caption: "",
+    Choices: [
+      { value: 810170000, Label: "Private Hospital" },
+      { value: 810170001, Label: "independent practice" },
+    ],
   },
   formus_professionalregistrationbody: {
     Label: "Professional Registration Body",

@@ -103,6 +103,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     )?.length > 0;
 
   // --------------------------------------------------------------------------------
+  // 📌  Type of practice question logic
+  // --------------------------------------------------------------------------------
+  const isNHSOnly = formData?._formus_typeofpractice === "810170000";
+
+  // --------------------------------------------------------------------------------
   // ⚠️ TESTING OVERWRITES
   // --------------------------------------------------------------------------------
   // isBADMember = true;
@@ -276,6 +281,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     const formus_typeofpractice = formData?._formus_typeofpractice;
     const formus_mainspecialtyqualification =
       formData?._formus_mainspecialtyqualification;
+    const formus_privatepracticeorganisation =
+      formData?._formus_privatepracticeorganisation;
     const formus_specialiseddermatologyareasofpractice =
       formData?._formus_specialiseddermatologyareasofpractice;
 
@@ -325,6 +332,10 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       },
       formus_typeofpractice && {
         formus_typeofpractice: formus_typeofpractice?.toString(),
+      },
+      formus_privatepracticeorganisation && {
+        formus_privatepracticeorganisation:
+          formus_privatepracticeorganisation?.toString(),
       },
       formus_mainspecialtyqualification && {
         formus_mainspecialtyqualification:
@@ -670,6 +681,29 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       labelClass="form-label"
                     />
                   </div>
+                </div>
+              )}
+
+              {!isAssociateOverseasApp && isNHSOnly && (
+                <div className="flex-form-row">
+                  <div className="form-row">
+                    <label>Private Practice Organisation</label>
+                    <PickListInput
+                      form={formData}
+                      name="_formus_privatepracticeorganisation"
+                      value={
+                        formData?._formus_privatepracticeorganisation || ""
+                      }
+                      onChange={handleInputChange}
+                      Choices={[
+                        ...FORM_CONFIG?.formus_privatepracticeorganisation
+                          ?.Choices,
+                      ]}
+                      labelClass="form-label"
+                    />
+                  </div>
+
+                  <div className="form-row" />
                 </div>
               )}
 
