@@ -121,7 +121,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // isBADMember = true;
   // isStudentApp = true; // ✅ tested
   // isOrdinaryApp = true; // ✅ tested
-  isTraineeApp = true; // ✅ tested
+  // isTraineeApp = true; // ✅ tested
   // isOverseasApp = true; // ✅ tested
   // isAssociateOverseasApp = true; // ✅ tested
   // isJuniorApp = true;
@@ -551,33 +551,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {/* 👉 APPLICABLE TO ALL APPS */}
-          <div className="flex-form-row">
-            <div className="form-row">
-              <label>Staff Group Category</label>
-              <PickListInput
-                form={formData}
-                name="_formus_staffgroupcategory"
-                value={formData?._formus_staffgroupcategory || ""}
-                onChange={handleInputChange}
-                Choices={[...FORM_CONFIG?.formus_staffgroupcategory?.Choices]}
-                labelClass="form-label"
-              />
-            </div>
-            <div className="form-row">
-              <label>Job Role</label>
-              <PickListInput
-                form={formData}
-                name="_formus_jobrole"
-                value={formData?._formus_jobrole || ""}
-                onChange={handleInputChange}
-                Choices={[..._JOBS]}
-                labelClass="form-label"
-                dashboardWidget="Job Role"
-              />
-            </div>
-          </div>
-
           {/* 👉 APPLICABLE TO STUDENT APPS ONLY */}
           {isBADMember && isStudentApp && (
             <div className="flex-form-row">
@@ -623,6 +596,33 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               <div className="form-row" />
             </div>
           )}
+
+          {/* 👉 APPLICABLE TO ALL APPS */}
+          <div className="flex-form-row">
+            <div className="form-row">
+              <label>Staff Group Category</label>
+              <PickListInput
+                form={formData}
+                name="_formus_staffgroupcategory"
+                value={formData?._formus_staffgroupcategory || ""}
+                onChange={handleInputChange}
+                Choices={[...FORM_CONFIG?.formus_staffgroupcategory?.Choices]}
+                labelClass="form-label"
+              />
+            </div>
+            <div className="form-row">
+              <label>Job Role</label>
+              <PickListInput
+                form={formData}
+                name="_formus_jobrole"
+                value={formData?._formus_jobrole || ""}
+                onChange={handleInputChange}
+                Choices={[..._JOBS]}
+                labelClass="form-label"
+                dashboardWidget="Job Role"
+              />
+            </div>
+          </div>
 
           {isBADMember && !isStudentApp && (
             <div className="flex-form-col">
