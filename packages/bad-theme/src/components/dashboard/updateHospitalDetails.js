@@ -403,17 +403,15 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     }
 
     // Filter out Choices list based on selection/currentValues string. If value includes in currentValues, add Label to currentTitles
-    FORM_CONFIG?.formus_clinicalspecialtysofpractice?.Choices?.forEach(
-      (item) => {
-        const Label = item.Label;
-        const value = item.value;
-        if (currentValues?.includes(value) && !currentTitles.includes(Label)) {
-          currentTitles = currentTitles
-            ? currentTitles + "; " + item.Label
-            : item.Label;
-        }
+    FORM_CONFIG?.[name]?.Choices?.forEach((item) => {
+      const Label = item.Label;
+      const value = item.value;
+      if (currentValues?.includes(value) && !currentTitles.includes(Label)) {
+        currentTitles = currentTitles
+          ? currentTitles + "; " + item.Label
+          : item.Label;
       }
-    );
+    });
 
     setForm((prev) => ({
       ...prev,
