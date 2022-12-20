@@ -105,7 +105,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // 📌  Type of practice question logic
   // --------------------------------------------------------------------------------
-  const isNHSOnly = formData?._formus_typeofpractice === "810170000";
+  const isNHSOnly =
+    formData?._formus_typeofpractice &&
+    formData?._formus_typeofpractice?.toString() !== "810170001";
 
   // --------------------------------------------------------------------------------
   // ⚠️ TESTING OVERWRITES

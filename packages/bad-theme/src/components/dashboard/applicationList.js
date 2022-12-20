@@ -172,6 +172,7 @@ const ApplicationList = ({ state, actions, libraries }) => {
                         app,
                         applicationData,
                         setFetching,
+                        isApplicationChange: true,
                       })
                     }
                   >
