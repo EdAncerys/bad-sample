@@ -44,10 +44,7 @@ const Applications = ({ state, actions }) => {
   const [memberships, setMemberships] = useState([]);
   const isSIG = application?.[0]?.bad_organisedfor === "SIG";
   const hasError = form?.dev_selected_application_types?.length === 0;
-  console.log(
-    "⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️",
-    form?.dev_application_input_filter
-  );
+  console.log("⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️", form);
 
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);
