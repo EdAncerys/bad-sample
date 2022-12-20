@@ -109,10 +109,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     formData?._formus_typeofpractice &&
     formData?._formus_typeofpractice?.toString() !== "810170001";
   let isOtherSpecialtyQ =
-    formData?._formus_mainspecialtyqualification?.includes("810170008");
+    formData?._formus_mainspecialtyqualification?.includes("810170008"); // 👈 multiselect string
   let isOtherCCSTDates =
-    formData?._formus_reasonformovingccstdate?.includes("810170005");
-  let isOtherQType = formData?._formus_qualificationtype?.includes("810170007");
+    formData?._formus_reasonformovingccstdate?.includes("810170005"); // 👈 multiselect string
+  let isOtherQType =
+    formData?._formus_qualificationtype?.toString() === "810170007";
 
   // --------------------------------------------------------------------------------
   // ⚠️ TESTING OVERWRITES
