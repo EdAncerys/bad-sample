@@ -38,6 +38,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps, applicationData } = useAppState();
+  console.log("⭐️ 👉 isActiveUser", isActiveUser);
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
