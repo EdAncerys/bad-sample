@@ -481,11 +481,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </label>
                 <input
                   name="bad_py3_hospitalid"
-                  value={
-                    isActiveUser?.[
-                      "_parentcustomerid_value@OData.Community.Display.V1.FormattedValue"
-                    ] || ""
-                  }
+                  value={isActiveUser?.["_parentcustomerid_value"] || ""}
                   onChange={handleInputChange}
                   className="form-control input"
                   placeholder="Main Hospital / Place of Work / Medical School details"
