@@ -220,8 +220,6 @@ export const getBADMembershipSubscriptionData = async ({
 };
 
 export const jobRoleHandler = ({ name, Label, form }) => {
-  console.log("⭐️ ", form, !form?.formus_staffgroupcategory);
-
   if (!form?.formus_staffgroupcategory) {
     // 📌  if no job role is selected, return all job roles
     return true;
