@@ -83,7 +83,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     if (!isProfileComplete)
       setDashboardNotificationsAction({
         dispatch,
-        isDashboardNotifications: [2], // 2 = profile not complete
+        isDashboardNotifications: ["profile-incomplete"], // 2 = profile not complete
       });
 
     await getDirectDebitAction({

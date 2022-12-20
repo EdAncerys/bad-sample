@@ -98,9 +98,7 @@ const DashboardNotifications = ({ state }) => {
             onClick={() =>
               setDashboardNotificationsAction({
                 dispatch,
-                isDashboardNotifications: isDashboardNotifications.filter(
-                  (item) => item !== id
-                ),
+                isDashboardNotifications: [...isDashboardNotifications, id],
               })
             }
           >
@@ -128,9 +126,11 @@ const DashboardNotifications = ({ state }) => {
 
     if (
       dashboardPath === "My Profile" ||
-      !isDashboardNotifications.includes(id)
+      isDashboardNotifications?.includes(id)
     )
       return null;
+
+    if (!isDashboardNotifications?.includes("profile-incomplete")) return null; // if profile incomplete notification is not in array then return null
 
     return (
       <div
@@ -175,7 +175,7 @@ const DashboardNotifications = ({ state }) => {
     if (
       membership.isValid ||
       isBilling ||
-      !isDashboardNotifications.includes(id)
+      isDashboardNotifications?.includes(id)
     )
       return null;
 
@@ -220,7 +220,7 @@ const DashboardNotifications = ({ state }) => {
     if (
       dashboardPath === "Billing" ||
       !dynamicsApps ||
-      !isDashboardNotifications.includes(id)
+      isDashboardNotifications?.includes(id)
     )
       return null;
 
