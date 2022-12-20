@@ -402,8 +402,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       }
     }
 
+    // ⚠️ strip first character from name
+    let adjustedName = name?.substring(1);
+
     // Filter out Choices list based on selection/currentValues string. If value includes in currentValues, add Label to currentTitles
-    FORM_CONFIG?.[name]?.Choices?.forEach((item) => {
+    FORM_CONFIG?.[adjustedName]?.Choices?.forEach((item) => {
       const Label = item.Label;
       const value = item.value;
       if (currentValues?.includes(value) && !currentTitles.includes(Label)) {
