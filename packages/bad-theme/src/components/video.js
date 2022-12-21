@@ -39,8 +39,6 @@ const Video = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
   const link = state.source.get(state.router.link);
-  console.log("⭐️ post ", post);
-  console.log("⭐️ data", data);
 
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
@@ -51,10 +49,6 @@ const Video = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   const isMemberOnlyVideo = post?.acf?.members;
   const isUserOnlyVideo = post?.acf?.active_user;
-
-  console.log("⭐️ CF 👉 ", isMemberOnlyVideo && !isBADMember);
-  console.log("⭐️ isMemberOnlyVideo ", isMemberOnlyVideo);
-  console.log("⭐️ isBADMember ", isBADMember);
 
   useEffect(() => {
     // --------------------------------------------------------------------------------
@@ -87,7 +81,7 @@ const Video = ({ state, actions, libraries }) => {
       let isSagepay = queryParams.sagepay;
       setSagepay(isSagepay);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }, [isWindow]);
 
@@ -264,19 +258,12 @@ const Video = ({ state, actions, libraries }) => {
         getVimeoCover({ video_url: post.acf.video });
       }, []);
 
-      console.log("⭐️ 1 ", !videoStatus);
-      console.log("⭐️ 2 ", isMemberOnlyVideo && !isBADMember);
-      console.log("⭐️ 3 ", isUserOnlyVideo && !isActiveUser);
-      console.log("⭐️ 4 ", videoStatus === "locked");
-
       // merge all conditions to one
       const isLocked =
         !videoStatus ||
         (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
         (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
         videoStatus === "locked";
-
-      console.log("⭐️ isLocked ", isLocked);
 
       return (
         <div style={{ position: "relative" }}>
@@ -291,10 +278,7 @@ const Video = ({ state, actions, libraries }) => {
               color: "white",
             }}
           >
-            {!videoStatus ||
-            (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
-            (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
-            videoStatus === "locked" ? (
+            {isLocked ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
