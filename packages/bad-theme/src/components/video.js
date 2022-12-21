@@ -311,7 +311,7 @@ const Video = ({ state, actions, libraries }) => {
       const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
 
       const ServePrice = () => {
-        if (!isActiveUser && post?.acf?.private)
+        if (!isActiveUser && (post?.acf?.members || post?.acf?.private)) {
           return (
             <div>
               <div
@@ -327,6 +327,7 @@ const Video = ({ state, actions, libraries }) => {
               </div>
             </div>
           );
+        }
 
         if (videoStatus === "locked" && !isBADMember) {
           // ⚠️ show btn if price is returned & valid
