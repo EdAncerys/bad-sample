@@ -35,12 +35,15 @@ const BillingHistory = ({ state, actions, libraries }) => {
 
     if (dynamicsApps) {
       // get apps with billinghistory for payments
-      // get current year
       const currentYear = new Date().getFullYear();
       // get apps that billing ending year is not current year
-      const apps = dynamicsApps.subs.data.filter(
-        (app) => !app.core_endon.includes(currentYear)
-      );
+      const apps = dynamicsApps.subs.data.filter((app) => {
+        // --------------------------------------------------------------------------------
+        // 📌  Check if core_endon application date is current year or greater
+        // --------------------------------------------------------------------------------
+        const applicationDate = new Date(app.core_endon);
+        return applicationDate.getFullYear() >= currentYear;
+      });
 
       setAppHistory(apps);
     }

@@ -33,6 +33,18 @@
 
 ## README TBD
 
+UAT server end point
+
+```
+https://uatservices.bad.org.uk/dynamicsbridge
+```
+
+Production server end point
+
+```
+https://services.bad.org.uk/dynamicsbridge
+```
+
 ## ⬇️ SWITHC To Developemnt git repo
 
 git remote set-url origin https://github.com/SkylarkBAD/bad.org

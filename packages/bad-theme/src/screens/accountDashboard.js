@@ -127,13 +127,15 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // refetch subscriptions and apps data to update payment status
   // --------------------------------------------------------------------------------
   const onfocusHandler = async () => {
-    console.log("🐞 onfocusHandler");
+    // ⚠️ if no user return & don't trigger actions
+    if (!isActiveUser) return null;
+    console.log("🐞 onFocus handler");
 
     try {
       await getApplicationStatus({
         state,
         dispatch,
-        contactid: isActiveUser.contactid,
+        contactid: isActiveUser?.contactid,
       });
       // 👉 remove initiatedPayments on mount action
       state.data.initiatedPayments = [];
