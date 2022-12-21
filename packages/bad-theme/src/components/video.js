@@ -62,24 +62,23 @@ const Video = ({ state, actions, libraries }) => {
       // console.log("📌 B2C Login Hook. 📌"); // debug
       setWindow(window);
     }
-
-    // --------------------------------------------------------------------------------
-    // 📌  Conditional show checks
-    // --------------------------------------------------------------------------------
-    console.log("⭐️ conditional checks");
-    const isBADMember =
-      isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
-    console.log("⭐️ isBADMember ", isBADMember);
   }, []);
 
   useEffect(() => {
     if (!isWindow) return;
 
-    const queryParams = new Proxy(new URLSearchParams(window.location.search), {
-      get: (searchParams, prop) => searchParams.get(prop),
-    });
-    let isSagepay = queryParams.sagepay;
-    setSagepay(isSagepay);
+    try {
+      const queryParams = new Proxy(
+        new URLSearchParams(window.location.search),
+        {
+          get: (searchParams, prop) => searchParams.get(prop),
+        }
+      );
+      let isSagepay = queryParams.sagepay;
+      setSagepay(isSagepay);
+    } catch (error) {
+      console.log(error);
+    }
   }, [isWindow]);
 
   const handlePaymentModal = (url) => {
