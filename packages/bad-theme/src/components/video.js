@@ -37,6 +37,7 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+  const link = state.source.get(state.router.link);
   console.log("⭐️ post ", post);
   console.log("⭐️ data", data);
 
@@ -55,6 +56,10 @@ const Video = ({ state, actions, libraries }) => {
   console.log("⭐️ CF 👉 ", isMemberOnlyVideo && !isBADMember);
   console.log("⭐️ isMemberOnlyVideo ", isMemberOnlyVideo);
   console.log("⭐️ isBADMember ", isBADMember);
+
+  useEffect(() => {
+    console.log("⭐️ link ", link);
+  }, [link]);
 
   // await to get window object & setWindow to true
   useEffect(() => {
