@@ -58,6 +58,14 @@ const Video = ({ state, actions, libraries }) => {
       // console.log("📌 B2C Login Hook. 📌"); // debug
       setWindow(window);
     }
+
+    // --------------------------------------------------------------------------------
+    // 📌  Conditional show checks
+    // --------------------------------------------------------------------------------
+    console.log("⭐️ conditional checks");
+    const isBADMember =
+      isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+    console.log("⭐️ isBADMember ", isBADMember);
   }, []);
 
   useEffect(() => {
