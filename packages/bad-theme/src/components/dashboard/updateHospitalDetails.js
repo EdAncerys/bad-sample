@@ -583,14 +583,14 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           {isBADMember && isOtherQType && (
             <div className="flex-form-row">
               <div className="form-row">
-                <label>Please specify other Specialty Qualification</label>
+                <label>Qualification Type Other</label>
                 <input
                   name="formus_otherqualificationtype"
                   type="text"
                   value={formData?.formus_otherqualificationtype || ""}
                   onChange={handleInputChange}
                   className="form-control input"
-                  placeholder="Please specify other Specialty Qualification"
+                  placeholder="Qualification Type Other"
                 />
               </div>
               <div className="form-row" />
@@ -790,7 +790,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               {isOrdinaryApp && isOtherSpecialtyQ && (
                 <div className="flex-form-row">
                   <div className="form-row">
-                    <label>Please specify other main qualification type</label>
+                    <label>Main Specialty Qualification Other</label>
                     <input
                       name="formus_othermainspecialtyqualification"
                       type="text"
@@ -799,7 +799,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       }
                       onChange={handleInputChange}
                       className="form-control input"
-                      placeholder="Please specify other main qualification type"
+                      placeholder="Main Specialty Qualification Other"
                     />
                   </div>
                   <div className="form-row" />
@@ -841,7 +841,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
               {isTraineeApp && isOtherCCSTDates && (
                 <div className="flex-form-row">
                   <div className="form-row">
-                    <label>Other Reason for moving CCST date</label>
+                    <label>Reason for Moving CSST Date Other</label>
                     <input
                       name="formus_otherreasonformovingccstdate"
                       type="text"
@@ -850,7 +850,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       }
                       onChange={handleInputChange}
                       className="form-control input"
-                      placeholder="Other Reason for moving CCST date"
+                      placeholder="Reason for Moving CSST Date Other"
                     />
                   </div>
                   <div className="form-row" />
