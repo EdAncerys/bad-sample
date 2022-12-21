@@ -37,6 +37,20 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+  console.log("⭐️ post ", post);
+  console.log("⭐️ data", data);
+
+  const { lg } = muiQuery();
+  const dispatch = useAppDispatch();
+  const { isActiveUser } = useAppState();
+
+  // --------------------------------------------------------------------------------
+  // ⚠️ Show Buy Button option if user & user is not BAD member
+  // --------------------------------------------------------------------------------
+  const isBADMember =
+    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+  const isMemberOnlyVideo = post?.acf?.members;
+  const isUserOnlyVideo = post?.acf?.active_user;
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -66,10 +80,6 @@ const Video = ({ state, actions, libraries }) => {
       },
     });
   };
-  const { lg } = muiQuery();
-
-  const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
 
   useEffect(async () => {
     //Not the greatest idea to make useEffect async
@@ -246,7 +256,10 @@ const Video = ({ state, actions, libraries }) => {
               color: "white",
             }}
           >
-            {!videoStatus || videoStatus === "locked" ? (
+            {!videoStatus ||
+            (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
+            (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
+            videoStatus === "locked" ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
@@ -296,14 +309,18 @@ const Video = ({ state, actions, libraries }) => {
             </div>
           );
 
-        if (isActiveUser && post.acf.private && videoStatus === "locked")
+        if (videoStatus === "locked" && !isBADMember) {
+          // ⚠️ show btn if price is returned & valid
+          if (!post.acf.price) return null;
+
           return (
             <div className="blue-btn" onClick={handlePayment}>
               Buy for £{post.acf.price}
             </div>
           );
+        }
 
-        if (post.acf.private && videoStatus === "unlocked")
+        if (post.acf.private && videoStatus === "unlocked") {
           return (
             <div
               className="primary-title"
@@ -312,6 +329,7 @@ const Video = ({ state, actions, libraries }) => {
               You have access to this video
             </div>
           );
+        }
 
         return (
           <div

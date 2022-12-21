@@ -17,7 +17,7 @@ import {
   fetchDataHandler,
 } from "../context";
 
-const VideoArchive = ({ state, actions}) => {
+const VideoArchive = ({ state, actions }) => {
   const [postData, setPostData] = useState(null);
   const [heroBannerBlock, setHeroBannerBlock] = useState(null);
   const [userVideos, setUserVideos] = useState(null);
@@ -27,7 +27,7 @@ const VideoArchive = ({ state, actions}) => {
   const [eventGrades, setEventGrades] = useState(null);
 
   const { isActiveUser } = useAppState();
-  const { lg} = muiQuery();
+  const { lg } = muiQuery();
 
   const searchFilterRef = useRef("");
   const specialtyFilter = useRef("");
@@ -147,7 +147,11 @@ const VideoArchive = ({ state, actions}) => {
           >
             <option hidden>Grade Filters</option>
             {data.map((item, i) => {
-              return <option key={i} value={item.id}>{item.name}</option>;
+              return (
+                <option key={i} value={item.id}>
+                  {item.name}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -307,8 +311,17 @@ const VideoArchive = ({ state, actions}) => {
     );
   };
   const VideoArchivePost = ({ post }) => {
-    if (post.acf.members & !isActiveUser) return null;
-    // GET VIMEO COVER
+    // --------------------------------------------------------------------------------
+    // 📌  Show videos to active users only
+    // --------------------------------------------------------------------------------
+    if (post.acf.active_user && !isActiveUser) return null;
+
+    // --------------------------------------------------------------------------------
+    // ⚠️ Show video to BAD members only
+    // --------------------------------------------------------------------------------
+    const isBADMember =
+      isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+    if (post?.acf?.members && !isBADMember) return null;
 
     return (
       <Card
@@ -327,9 +340,17 @@ const VideoArchive = ({ state, actions}) => {
   };
 
   useEffect(async () => {
-    const videoList = await getVideosData({ state });
+    let videoList = await getVideosData({ state });
     const eventSpec = await getEventSpecialitys({ state });
     const eventGrades = await getEventGrades({ state });
+    console.log("vid ", videoList);
+
+    // --------------------------------------------------------------------------------
+    // 📌  Sort videos by date created
+    // --------------------------------------------------------------------------------
+    videoList = videoList.sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
 
     const fetchHeroBanner = async () => {
       const path = state.source.url + "/wp-json/wp/v2/pages/7051";
