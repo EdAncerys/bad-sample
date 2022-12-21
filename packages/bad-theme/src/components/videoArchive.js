@@ -343,7 +343,6 @@ const VideoArchive = ({ state, actions }) => {
     let videoList = await getVideosData({ state });
     const eventSpec = await getEventSpecialitys({ state });
     const eventGrades = await getEventGrades({ state });
-    console.log("vid ", videoList);
 
     // --------------------------------------------------------------------------------
     // 📌  Sort videos by date created

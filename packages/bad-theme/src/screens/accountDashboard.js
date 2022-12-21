@@ -126,7 +126,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   const onfocusHandler = async () => {
     // ⚠️ if no user return & don't trigger actions
     if (!isActiveUser) return null;
-    console.log("🐞 onFocus handler");
+    // console.log("🐞 onFocus handler");
 
     try {
       await getApplicationStatus({
@@ -137,7 +137,7 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       // 👉 remove initiatedPayments on mount action
       state.data.initiatedPayments = [];
     } catch (error) {
-      console.log("🐞 error", error);
+      // console.log("🐞 error", error);
     }
   };
 

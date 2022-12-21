@@ -37,8 +37,6 @@ const Video = ({ state, actions, libraries }) => {
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
-  console.log("⭐️ post ", post);
-  console.log("⭐️ data", data);
 
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
@@ -51,10 +49,6 @@ const Video = ({ state, actions, libraries }) => {
     isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
   const isMemberOnlyVideo = post?.acf?.members;
   const isUserOnlyVideo = post?.acf?.active_user;
-
-  console.log("⭐️ CF 👉 ", isMemberOnlyVideo && !isBADMember);
-  console.log("⭐️ isMemberOnlyVideo ", isMemberOnlyVideo);
-  console.log("⭐️ isBADMember ", isBADMember);
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -77,7 +71,7 @@ const Video = ({ state, actions, libraries }) => {
       let isSagepay = queryParams.sagepay;
       setSagepay(isSagepay);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }, [isWindow]);
 
