@@ -34,6 +34,7 @@ const Video = ({ state, actions, libraries }) => {
   const [relatedVideos, setRelatedVideos] = useState(null);
   const [isWindow, setWindow] = useState(null);
   const [isSagepay, setSagepay] = useState(null);
+  const [isBADMember, setBADMember] = useState(false);
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
@@ -48,8 +49,6 @@ const Video = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // ⚠️ Show Buy Button option if user & user is not BAD member
   // --------------------------------------------------------------------------------
-  const isBADMember =
-    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
   const isMemberOnlyVideo = post?.acf?.members;
   const isUserOnlyVideo = post?.acf?.active_user;
 
@@ -58,7 +57,12 @@ const Video = ({ state, actions, libraries }) => {
   console.log("⭐️ isBADMember ", isBADMember);
 
   useEffect(() => {
-    console.log("⭐️ link ", link);
+    // --------------------------------------------------------------------------------
+    // 📌  State update on page load/change to get current user status.
+    // --------------------------------------------------------------------------------
+    const isBADMember =
+      isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+    setBADMember(isBADMember); // 👈 state update
   }, [link]);
 
   // await to get window object & setWindow to true
