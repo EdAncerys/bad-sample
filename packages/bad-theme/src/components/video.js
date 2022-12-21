@@ -52,6 +52,10 @@ const Video = ({ state, actions, libraries }) => {
   const isMemberOnlyVideo = post?.acf?.members;
   const isUserOnlyVideo = post?.acf?.active_user;
 
+  console.log("⭐️ CF 👉 ", isMemberOnlyVideo && !isBADMember);
+  console.log("⭐️ isMemberOnlyVideo ", isMemberOnlyVideo);
+  console.log("⭐️ isBADMember ", isBADMember);
+
   // await to get window object & setWindow to true
   useEffect(() => {
     if (window) {
