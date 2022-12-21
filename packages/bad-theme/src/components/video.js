@@ -63,6 +63,7 @@ const Video = ({ state, actions, libraries }) => {
     const isBADMember =
       isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
     setBADMember(isBADMember); // 👈 state update
+    setLoadVideo(false); // 👈 reset state
   }, [link]);
 
   // await to get window object & setWindow to true
@@ -262,6 +263,20 @@ const Video = ({ state, actions, libraries }) => {
       useEffect(() => {
         getVimeoCover({ video_url: post.acf.video });
       }, []);
+
+      console.log("⭐️ 1 ", !videoStatus);
+      console.log("⭐️ 2 ", isMemberOnlyVideo && !isBADMember);
+      console.log("⭐️ 3 ", isUserOnlyVideo && !isActiveUser);
+      console.log("⭐️ 4 ", videoStatus === "locked");
+
+      // merge all conditions to one
+      const isLocked =
+        !videoStatus ||
+        (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
+        (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
+        videoStatus === "locked";
+
+      console.log("⭐️ isLocked ", isLocked);
 
       return (
         <div style={{ position: "relative" }}>
