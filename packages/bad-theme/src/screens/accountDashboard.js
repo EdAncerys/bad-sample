@@ -89,10 +89,13 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       contactid: isActiveUser.contactid,
     });
 
+    // 👇 set on focus handler
+    window.addEventListener("focus", onfocusHandler);
+
     return () => {
       useEffectRef.current = false; // clean up function
     };
-  }, []);
+  }, [isActiveUser]);
 
   // prevent dashboard actions to load before all server side mutations loaded
   // allow css to load
@@ -115,6 +118,26 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       }
     }
   }, [dynamicsApps]);
+
+  // --------------------------------------------------------------------------------
+  // ⚠️ on focus of page handler
+  // refetch subscriptions and apps data to update payment status
+  // --------------------------------------------------------------------------------
+  const onfocusHandler = async () => {
+    console.log("🐞 onfocusHandler");
+
+    try {
+      await getApplicationStatus({
+        state,
+        dispatch,
+        contactid: isActiveUser?.contactid,
+      });
+      // 👉 remove initiatedPayments on mount action
+      state.data.initiatedPayments = [];
+    } catch (error) {
+      console.log("🐞 error", error);
+    }
+  };
 
   if (!isReady) return null;
 
