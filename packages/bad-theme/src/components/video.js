@@ -311,7 +311,7 @@ const Video = ({ state, actions, libraries }) => {
       const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
 
       const ServePrice = () => {
-        if (!isActiveUser)
+        if (!isActiveUser && post?.acf?.private)
           return (
             <div>
               <div
@@ -339,7 +339,7 @@ const Video = ({ state, actions, libraries }) => {
           );
         }
 
-        if (post.acf.private && videoStatus === "unlocked") {
+        if (post?.acf?.private && videoStatus === "unlocked") {
           return (
             <div
               className="primary-title"
