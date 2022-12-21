@@ -4,23 +4,47 @@ import { connect, Global, css } from "frontity";
 import BlockWrapper from "../components/blockWrapper";
 import custom from "../css/custom.css";
 import CheckMark from "../img/svg/checkMark.svg";
+import Error from "../img/svg/error.svg";
 import Image from "@frontity/components/image";
-// --------------------------------------------------------------------------------
-import { getApplicationStatus, useAppDispatch, useAppState } from "../context";
 
 const PaymentConfirmation = ({ state }) => {
-  const [url, setUrl] = useState(null);
-  const dispatch = useAppDispatch();
-  const { isActiveUser } = useAppState();
+  const [data, setData] = useState(null);
+
+  // link is the current URL
+  const link = state.source.get(state.router.link);
 
   useEffect(() => {
     const queryParams = new Proxy(new URLSearchParams(window.location.search), {
       get: (searchParams, prop) => searchParams.get(prop),
     });
+    let backUrl = queryParams?.redirect;
+    let success = link?.query?.sagepay === "true";
 
-    let backurl = queryParams.redirect;
-    setUrl(backurl);
-  });
+    setData((prev) => ({
+      ...prev,
+      backUrl,
+      success,
+    }));
+  }, [link]);
+
+  const onClickHandler = () => {
+    // --------------------------------------------------------------------------------
+    // ⚠️ close current window to switch user back to prev screen
+    // --------------------------------------------------------------------------------
+    window.close();
+  };
+
+  // --------------------------------------------------------------------------------
+  // 📌  Component configuration.
+  // --------------------------------------------------------------------------------
+  let IMG = data?.success ? CheckMark : Error;
+  let TITLE = data?.success ? "PAYMENT CONFIRMED" : "PAYMENT ERROR";
+  let MESSAGE = data?.success
+    ? "Your payment has been confirmed. Thank you."
+    : "Your payment not been successful. Please try again.";
+
+  // ⚠️ await data to confirm object is not empty
+  if (!data) return <Loading />;
 
   return (
     <>
@@ -41,7 +65,7 @@ const PaymentConfirmation = ({ state }) => {
           }}
         >
           <Image
-            src={CheckMark}
+            src={IMG}
             alt="BAD Error Image"
             style={{
               width: "300px",
@@ -49,14 +73,13 @@ const PaymentConfirmation = ({ state }) => {
               marginBottom: "1em",
             }}
           />
-          <h3>PAYMENT CONFIRMED</h3>
+          <h3>{TITLE}</h3>
 
-          <div id="ask-to-close">
-            Your payment has been confirmed. Thank you.
-          </div>
+          <div id="ask-to-close">{MESSAGE}</div>
           <a
             style={{ marginTop: "1em" }}
-            href={url ? url : state.auth.APP_URL}
+            // href={data?.backUrl ? data?.backUrl : state.auth.APP_URL}
+            onClick={onClickHandler}
             className="blue-btn"
           >
             Go back
