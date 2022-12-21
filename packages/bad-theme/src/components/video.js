@@ -34,9 +34,11 @@ const Video = ({ state, actions, libraries }) => {
   const [relatedVideos, setRelatedVideos] = useState(null);
   const [isWindow, setWindow] = useState(null);
   const [isSagepay, setSagepay] = useState(null);
+  const [isBADMember, setBADMember] = useState(false);
 
   const data = state.source.get(state.router.link);
   const post = state.source[data.type][data.id];
+  const link = state.source.get(state.router.link);
 
   const { lg } = muiQuery();
   const dispatch = useAppDispatch();
@@ -45,10 +47,18 @@ const Video = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // ⚠️ Show Buy Button option if user & user is not BAD member
   // --------------------------------------------------------------------------------
-  const isBADMember =
-    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
   const isMemberOnlyVideo = post?.acf?.members;
   const isUserOnlyVideo = post?.acf?.active_user;
+
+  useEffect(() => {
+    // --------------------------------------------------------------------------------
+    // 📌  State update on page load/change to get current user status.
+    // --------------------------------------------------------------------------------
+    const isBADMember =
+      isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
+    setBADMember(isBADMember); // 👈 state update
+    setLoadVideo(false); // 👈 reset state
+  }, [link]);
 
   // await to get window object & setWindow to true
   useEffect(() => {
@@ -248,6 +258,13 @@ const Video = ({ state, actions, libraries }) => {
         getVimeoCover({ video_url: post.acf.video });
       }, []);
 
+      // merge all conditions to one
+      const isLocked =
+        !videoStatus ||
+        (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
+        (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
+        videoStatus === "locked";
+
       return (
         <div style={{ position: "relative" }}>
           <Image src={videoCover} alt="Submit" style={{ width: "100%" }} />
@@ -261,10 +278,7 @@ const Video = ({ state, actions, libraries }) => {
               color: "white",
             }}
           >
-            {!videoStatus ||
-            (isMemberOnlyVideo && !isBADMember) || // ⚠️to BAD members only
-            (isUserOnlyVideo && !isActiveUser) || // ⚠️ to active users only
-            videoStatus === "locked" ? (
+            {isLocked ? (
               <LockIcon sx={{ fontSize: 80 }} className="shadow" />
             ) : (
               <PlayCircleOutlineIcon
@@ -297,7 +311,7 @@ const Video = ({ state, actions, libraries }) => {
       const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
 
       const ServePrice = () => {
-        if (!isActiveUser)
+        if (!isActiveUser && (post?.acf?.members || post?.acf?.private)) {
           return (
             <div>
               <div
@@ -313,6 +327,7 @@ const Video = ({ state, actions, libraries }) => {
               </div>
             </div>
           );
+        }
 
         if (videoStatus === "locked" && !isBADMember) {
           // ⚠️ show btn if price is returned & valid
@@ -325,7 +340,7 @@ const Video = ({ state, actions, libraries }) => {
           );
         }
 
-        if (post.acf.private && videoStatus === "unlocked") {
+        if (post?.acf?.private && videoStatus === "unlocked") {
           return (
             <div
               className="primary-title"
