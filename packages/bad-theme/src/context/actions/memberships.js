@@ -54,6 +54,15 @@ export const validateMembershipFormAction = async ({
       membership.acf.category_types === type ||
       membership.acf.category_types.split(":")[1] === type;
 
+    // --------------------------------------------------------------------------------
+    // ⚠️ DermpathPRO application have discrepancy in naming type in store & application
+    // bad_categorytype = "DermpathPRO"
+    // category_types = "Full:DermpathPRO Trainee"
+    // --------------------------------------------------------------------------------
+    if (type === "DermpathPRO") {
+      appType = membership?.acf?.category_types?.includes(type);
+    }
+
     if (appType) {
       const applicationForm = membership.acf;
       Object.keys(applicationForm).map((keyName) => {
