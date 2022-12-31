@@ -168,10 +168,6 @@ const Applications = ({ state, actions }) => {
           appCatType = types?.[0]?.acf?.category_types;
           readPolicy = types?.[0]?.acf?.sig_readpolicydocument_url_email;
         }
-        console.log("⭐️ DEBUGGING SIGS");
-        console.log("⭐️ ", bad_organisedfor);
-        console.log("⭐️ types", types, types?.length);
-        console.log("⭐️ ", wpFilters);
 
         // --------------------------------------------------------------------------------
         // 📌  Update state with blob values for UI render

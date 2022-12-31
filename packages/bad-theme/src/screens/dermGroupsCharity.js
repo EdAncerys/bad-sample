@@ -80,7 +80,7 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
           stepThree: false,
           stepFour: false,
         },
-        path: "/membership/sig-questions/", // redirect to SIG form page
+        // path: "/membership/sig-questions/", // comment this out to use default path
       });
     } catch (error) {
       console.error(error);
