@@ -287,6 +287,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
               setGoToAction({ state, path: `/dashboard/`, actions })
             }
             className="blue-btn-reverse"
+            title="My Account"
           >
             My Account
           </div>
@@ -322,6 +323,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
             flexDirection: "column",
             alignItems: "center",
           }}
+          title="Login"
         >
           <Login />
           Login

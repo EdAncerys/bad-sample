@@ -955,7 +955,13 @@ const Applications = ({ state, actions }) => {
                 >
                   Save & Exit
                 </div>
-                <div className="blue-btn" onClick={nextHandler}>
+                <div
+                  className="blue-btn"
+                  onClick={nextHandler}
+                  title={
+                    isSIG || form?.step === 4 ? "Submit Application" : "Next"
+                  }
+                >
                   {(isSIG || form?.step === 4) && "Submit Application"}
                   {!isSIG && form?.step !== 4 && "Next"}
                 </div>
