@@ -161,13 +161,17 @@ const Applications = ({ state, actions }) => {
           });
         }
         // --------------------------------------------------------------------------------
-        // 📌  Aplly cat selected to SIG applications only
+        // 📌  Apply cat selected to SIG applications only
         // --------------------------------------------------------------------------------
         if (types?.length === 1 && bad_organisedfor === "SIG") {
           wpFilters = types?.[0]?.acf; // 👉 if only one application type is found, set wpFilters to that application type
           appCatType = types?.[0]?.acf?.category_types;
           readPolicy = types?.[0]?.acf?.sig_readpolicydocument_url_email;
         }
+        console.log("⭐️ DEBUGGING SIGS");
+        console.log("⭐️ ", bad_organisedfor);
+        console.log("⭐️ types", types, types?.length);
+        console.log("⭐️ ", wpFilters);
 
         // --------------------------------------------------------------------------------
         // 📌  Update state with blob values for UI render
