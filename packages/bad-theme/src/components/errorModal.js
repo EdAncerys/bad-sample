@@ -54,10 +54,11 @@ const ErrorModal = ({ state, actions, libraries }) => {
       return (
         <div
           className="blue-btn"
+          title={isError?.goToPath?.label}
           style={{ marginRight: "1em", fontSize: !lg ? null : 13 }}
           onClick={() => gotToActionHandler({ path: isError.goToPath.path })}
         >
-          {isError.goToPath.label}
+          {isError?.goToPath?.label}
         </div>
       );
     };
@@ -76,6 +77,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
                 <div
                   key={index}
                   className="blue-btn"
+                  title={action?.label}
                   style={{ marginRight: !lg ? "1em" : null }}
                   onClick={action.handler}
                 >
@@ -103,6 +105,7 @@ const ErrorModal = ({ state, actions, libraries }) => {
           <div
             className="blue-btn"
             onClick={actionHandler}
+            title="Modal close"
             onKeyPress={(e) => handleKeyPress(e)}
           >
             Close

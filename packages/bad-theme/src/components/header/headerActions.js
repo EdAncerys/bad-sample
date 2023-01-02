@@ -257,7 +257,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
     if (!lg)
       return (
         <div style={{ padding: `0 1em` }}>
-          <div className="blue-btn-reverse" onClick={handleLoginAction}>
+          <div
+            className="blue-btn-reverse"
+            title="Login"
+            onClick={handleLoginAction}
+          >
             Login
           </div>
         </div>
