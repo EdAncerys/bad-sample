@@ -421,7 +421,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
-        // console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
+        console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
       }
     });
 

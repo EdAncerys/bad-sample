@@ -7,9 +7,12 @@ export const getBADMembershipSubscriptionData = async ({
 }) => {
   // console.log("getBADMembershipSubscriptionData triggered");
 
-  const year = new Date().getFullYear(); // get current year
+  // --------------------------------------------------------------------------------
+  // ⚠️ All applications will be for 2022
+  // const year = new Date().getFullYear(); // get current year
+  // --------------------------------------------------------------------------------
+  const year = 2022; // 👉 hard code year to 2022 for all applications
   let sig_type = type;
-  if (type === "Full:DERMPATHPRO") sig_type = "Full:DermpathPRO"; // 📌 overwrite
   let path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
@@ -18,11 +21,11 @@ export const getBADMembershipSubscriptionData = async ({
       state.auth.APP_HOST +
       `/catalogue/lookup/membershiptype?search=${category}:${sig_type}:${year}`;
 
-  console.log("⭐️ ", path);
-  try {
-    const data = await fetchDataHandler({ path, state });
+  console.log("⭐️ url 👉 ", path);
 
-    const result = await data.json();
+  try {
+    let data = await fetchDataHandler({ path, state });
+    let result = await data.json();
 
     if (result.success) {
       const membershipData = result.data[0] ? result.data[0] : null;

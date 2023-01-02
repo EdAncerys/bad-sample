@@ -45,11 +45,21 @@ export const validateMembershipFormAction = async ({
 
   let type = applicationData[0].bad_categorytype;
   if (membershipTypeChange) type = membershipTypeChange; // apply for SIGs change of memberships
+
   membershipTypes.map((membership) => {
     // validate application type against store object for BAD & SIGs
     let appType =
       membership.acf.category_types === type ||
       membership.acf.category_types.split(":")[1] === type;
+
+    // --------------------------------------------------------------------------------
+    // ⚠️ DermpathPRO application have discrepancy in naming type in store & application
+    // bad_categorytype = "DermpathPRO"
+    // category_types = "Full:DermpathPRO Trainee"
+    // --------------------------------------------------------------------------------
+    if (type === "DermpathPRO") {
+      appType = membership?.acf?.category_types?.includes(type);
+    }
 
     if (appType) {
       const applicationForm = membership.acf;
