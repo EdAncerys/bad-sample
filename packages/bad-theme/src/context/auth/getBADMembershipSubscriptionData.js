@@ -22,9 +22,25 @@ export const getBADMembershipSubscriptionData = async ({
   console.log("⭐️ url 👉 ", path);
 
   try {
-    const data = await fetchDataHandler({ path, state });
+    let data = await fetchDataHandler({ path, state });
+    let result = await data.json();
 
-    const result = await data.json();
+    // --------------------------------------------------------------------------------
+    // ⚠️ If data returned from API replace application with last year application
+    // --------------------------------------------------------------------------------
+    if (result?.data?.length === 0) {
+      console.log("⭐️ No data returned from API. Fetch prev year application");
+      console.log("⭐️ ", result?.data);
+      let dateType = category === "SIG" ? ":" + year - 1 : "::" + year - 1; // date type for query with prefix of : or ::
+
+      const newPath =
+        state.auth.APP_HOST +
+        `/catalogue/lookup/membershiptype?search=${category}:${type}${dateType}`;
+      console.log("⭐️ newPath", newPath);
+
+      data = await fetchDataHandler({ newPath, state });
+      result = await data.json();
+    }
 
     if (result.success) {
       const membershipData = result.data[0] ? result.data[0] : null;
@@ -32,6 +48,6 @@ export const getBADMembershipSubscriptionData = async ({
       return membershipData;
     }
   } catch (error) {
-    // console.log("error", error);
+    console.log("error", error);
   }
 };
