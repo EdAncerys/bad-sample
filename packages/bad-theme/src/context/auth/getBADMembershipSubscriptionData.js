@@ -8,9 +8,12 @@ export const getBADMembershipSubscriptionData = async ({
 }) => {
   // console.log("getBADMembershipSubscriptionData triggered");
 
-  const year = new Date().getFullYear(); // get current year
+  // --------------------------------------------------------------------------------
+  // ⚠️ All applications will be for 2022
+  // const year = new Date().getFullYear(); // get current year
+  // --------------------------------------------------------------------------------
+  const year = 2022; // 👉 hard code year to 2022 for all applications
   let sig_type = type;
-  if (type === "Full:DERMPATHPRO") sig_type = "Full:DermpathPRO"; // 📌 overwrite
   let path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}::${year}`;
@@ -24,23 +27,6 @@ export const getBADMembershipSubscriptionData = async ({
   try {
     let data = await fetchDataHandler({ path, state });
     let result = await data.json();
-
-    // --------------------------------------------------------------------------------
-    // ⚠️ If data returned from API replace application with last year application
-    // --------------------------------------------------------------------------------
-    if (result?.data?.length === 0) {
-      console.log("⭐️ No data returned from API. Fetch prev year application");
-      console.log("⭐️ ", result?.data);
-      let dateType = category === "SIG" ? ":" + year - 1 : "::" + year - 1; // date type for query with prefix of : or ::
-
-      const newPath =
-        state.auth.APP_HOST +
-        `/catalogue/lookup/membershiptype?search=${category}:${type}${dateType}`;
-      console.log("⭐️ newPath", newPath);
-
-      data = await fetchDataHandler({ newPath, state });
-      result = await data.json();
-    }
 
     if (result.success) {
       const membershipData = result.data[0] ? result.data[0] : null;
