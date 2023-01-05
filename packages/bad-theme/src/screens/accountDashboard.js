@@ -128,8 +128,10 @@ const AccountDashboard = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   const onfocusHandler = async () => {
     // ⚠️ if no user return & don't trigger actions
-    if (!isActiveUser) return null;
-    // console.log("🐞 onFocus handler");
+    const isDashboardPath = state?.router?.link?.includes("dashboard"); // 👈 get current path
+
+    if (!isActiveUser || !isDashboardPath) return null;
+    console.log("🐞 onFocus handler");
 
     try {
       await getApplicationStatus({
