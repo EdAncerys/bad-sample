@@ -8,9 +8,13 @@ export const getBADMembershipSubscriptionData = async ({
   // console.log("getBADMembershipSubscriptionData triggered");
 
   // --------------------------------------------------------------------------------
-  // ⚠️ All applications will be for 2022
+  // ⚠️ All applications will be for 2022 in DEV & UAT STAGING
   // --------------------------------------------------------------------------------
   let year = new Date().getFullYear();
+
+  // --------------------------------------------------------------------------------
+  // ⚠️ TODO REMOVE in PRODUCTION ⚠️
+  // --------------------------------------------------------------------------------
   if (state.auth.ENVIRONMENT !== "PRODUCTION") year = 2022; // 👉 hard code year to 2022 if not production
 
   let sig_type = type;
