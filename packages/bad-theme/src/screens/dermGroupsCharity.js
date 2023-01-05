@@ -122,7 +122,8 @@ const DermGroupsCharity = ({ state, actions, libraries }) => {
           // ⚠️  Add prefix to SIG application type name
           // --------------------------------------------------------------------------------
           onClick={() => handleApply({ catType: "Full:" + catType })}
-          title="Apply"
+          // 👇 testing purposes attribute
+          data-type="apply"
         >
           <Parcer
             libraries={libraries}

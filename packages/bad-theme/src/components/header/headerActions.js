@@ -259,7 +259,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
         <div style={{ padding: `0 1em` }}>
           <div
             className="blue-btn-reverse"
-            title="Login"
+            // 👇 testing purposes attribute
+            data-type="login"
             onClick={handleLoginAction}
           >
             Login
@@ -291,7 +292,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
               setGoToAction({ state, path: `/dashboard/`, actions })
             }
             className="blue-btn-reverse"
-            title="My Account"
+            // 👇 testing purposes attribute
+            data-type="my-account"
           >
             My Account
           </div>
@@ -327,7 +329,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
             flexDirection: "column",
             alignItems: "center",
           }}
-          title="Login"
+          // 👇 testing purposes attribute
+          data-type="login"
         >
           <Login />
           Login

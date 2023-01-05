@@ -954,8 +954,9 @@ const Applications = ({ state, actions }) => {
                 <div
                   className="blue-btn"
                   onClick={nextHandler}
-                  title={
-                    isSIG || form?.step === 4 ? "Submit Application" : "Next"
+                  // 👇 testing purposes attribute
+                  data-type={
+                    isSIG || form?.step === 4 ? "submit-application" : "next"
                   }
                 >
                   {(isSIG || form?.step === 4) && "Submit Application"}

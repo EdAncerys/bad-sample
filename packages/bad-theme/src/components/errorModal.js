@@ -105,7 +105,8 @@ const ErrorModal = ({ state, actions, libraries }) => {
           <div
             className="blue-btn"
             onClick={actionHandler}
-            title="Modal close"
+            // 👇 testing purposes attribute
+            data-type="close-modal"
             onKeyPress={(e) => handleKeyPress(e)}
           >
             Close
