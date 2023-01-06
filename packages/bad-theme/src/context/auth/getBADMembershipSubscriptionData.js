@@ -12,11 +12,6 @@ export const getBADMembershipSubscriptionData = async ({
   // --------------------------------------------------------------------------------
   let year = new Date().getFullYear();
 
-  // --------------------------------------------------------------------------------
-  // ⚠️ TODO REMOVE in PRODUCTION ⚠️
-  // --------------------------------------------------------------------------------
-  if (state.auth.ENVIRONMENT !== "PRODUCTION") year = 2022; // 👉 hard code year to 2022 if not production
-
   let sig_type = type;
   let path =
     state.auth.APP_HOST +
