@@ -66,7 +66,7 @@ export const handleUpdateMembershipApplication = async ({
     }
 
     if (isSubmitted && isSubmitted.length > 0) {
-      const confirmationMsg = `You alteady submited you request for change of category. BAD category change pending approval.`;
+      const confirmationMsg = `You already submitted you request for change of category. BAD category change pending approval.`;
 
       setErrorAction({
         dispatch,
