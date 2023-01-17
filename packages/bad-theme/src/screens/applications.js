@@ -687,16 +687,13 @@ const Applications = ({ state, actions }) => {
         form?.dev_application_input_filter?.py3_email === 'Show & Required' ? 'py3_email' : '',
         form?.dev_application_input_filter?.py3_mobilephone === 'Show & Required' ? 'py3_mobilephone' : '',
         form?.dev_application_input_filter?.py3_address1ine1 === 'Show & Required' ? 'py3_address1ine1' : '',
+        form?.dev_application_input_filter?.py3_addressline2 === 'Show & Required' ? 'py3_addressline2' : '',
         // "py3_addressline2", // 👉 not mandatory
         // "py3_addresscountystate", // 👉 not mandatory
+        form?.dev_application_input_filter?.py3_addresscountystate === 'Show & Required' ? 'py3_addresscountystate' : '',
         form?.dev_application_input_filter?.py3_addresszippostalcode === 'Show & Required' ? 'py3_addresszippostalcode' : '',
         form?.dev_application_input_filter?.py3_addresscountry === 'Show & Required' ? 'py3_addresscountry' : '',
       ];
-<<<<<<< HEAD
-    if (form?.step === 3) MANUALLY_REQUIRED = requiredFieldHandler({ form });
-    if (form?.step === 4) MANUALLY_REQUIRED = requiredFieldHandler({ form });
-
-=======
       if (form?.step === 3)
       MANUALLY_REQUIRED = [
         form?.dev_application_input_filter?.formus_staffgroupcategory === 'Show & Required' ? 'formus_staffgroupcategory' : '',
@@ -704,17 +701,24 @@ const Applications = ({ state, actions }) => {
         form?.dev_application_input_filter?.py3_hospitalid === 'Show & Required' ? 'py3_hospitalid' : '',
         form?.dev_application_input_filter?.formus_professionalregistrationbody === 'Show & Required' ? 'formus_professionalregistrationbody' : '',
         form?.dev_application_input_filter?.formus_professionalregistrationstatus === 'Show & Required' ? 'formus_professionalregistrationstatus' : '',
-        // "formus_residencystatus", // 👉 not mandatory
-        // "formus_qualificationtype",  // 👉 not mandatory
+        form?.dev_application_input_filter?.formus_residencystatus === 'Show & Required' ? 'formus_residencystatus' : '',
+        form?.dev_application_input_filter?.formus_qualificationtype === 'Show & Required' ? 'formus_qualificationtype' : '',
+        // 👇 conditional fields
+        form?.dev_application_input_filter?.formus_otherqualificationtype === 'Show & Required' ? 'formus_otherqualificationtype' : '',
+        form?.dev_application_input_filter?.formus_otherreasonformovingccstdate === 'Show & Required' ? 'formus_otherreasonformovingccstdate' : '',
+        form?.dev_application_input_filter?.formus_mainspecialtyqualification === 'Show & Required' ? 'formus_mainspecialtyqualification' : '',
+        // 👆 conditional fields
+
         form?.["formus_qualificationtype"] === "810170007" && form?.dev_application_input_filter?.formus_mainspecialtyqualification === 'Show & Required' ? 'formus_mainspecialtyqualification' : '',
         form?.dev_application_input_filter?.formus_clinicalspecialtysofpractice === 'Show & Required' ? 'formus_clinicalspecialtysofpractice' : '', // 👈 multi picker
 
         form?.dev_application_input_filter?.formus_specialiseddermatologyareasofpractice === 'Show & Required' ? 'formus_specialiseddermatologyareasofpractice' : '',  // 👈 multi picker
         form?.dev_application_input_filter?.formus_typeofcontract === 'Show & Required' ? 'formus_typeofcontract' : '',
-        // "formus_fixedtermtemporaryreasonforemploymentcont",  // 👉 not mandatory
-        // "formus_typeofcontract",  // 👉 not mandatory
-        // "formus_rotapattern",  // 👉 not mandatory
-        // "formus_reasonformovingccstdate",  // 👉 not mandatory
+        form?.dev_application_input_filter?.formus_fixedtermtemporaryreasonforemploymentcont === 'Show & Required' ? 'formus_fixedtermtemporaryreasonforemploymentcont' : '',
+        form?.dev_application_input_filter?.formus_rotapattern === 'Show & Required' ? 'formus_rotapattern' : '',
+        form?.dev_application_input_filter?.formus_typeofpractice === 'Show & Required' ? 'formus_typeofpractice' : '',
+        form?.dev_application_input_filter?.formus_privatepracticeorganisation === 'Show & Required' ? 'formus_privatepracticeorganisation' : '',
+        form?.dev_application_input_filter?.formus_reasonformovingccstdate === 'Show & Required' ? 'formus_reasonformovingccstdate' : '',
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
         form?.["formus_typeofpractice"] !== "810170001" &&  form?.dev_application_input_filter?.formus_privatepracticeorganisation === 'Show & Required' ? 'formus_privatepracticeorganisation' : '', // if new hospital added, add new hospital name to required fields
@@ -722,15 +726,19 @@ const Applications = ({ state, actions }) => {
       ];
       if (form?.step === 4)
       MANUALLY_REQUIRED = [
+        form?.dev_application_input_filter?.py3_gmcnumber === 'Show & Required' ? 'py3_gmcnumber' : '',
+        form?.dev_application_input_filter?.bad_currentpost === 'Show & Required' ? 'bad_currentpost' : '',
         form?.dev_application_input_filter?.bad_proposer1 === 'Show & Required' ? 'bad_proposer1' : '',
         form?.dev_application_input_filter?.bad_proposer2 === 'Show & Required' ? 'bad_proposer2' : '',
-        // "bad_preferredmailingaddress",
-        // "sky_cvurl",
+        form?.dev_application_input_filter?.py3_currentgrade === 'Show & Required' ? 'py3_currentgrade' : '',
+        form?.dev_application_input_filter?.py3_ntnno === 'Show & Required' ? 'py3_ntnno' : '',
+        form?.dev_application_input_filter?.bad_preferredmailingaddress === 'Show & Required' ? 'bad_preferredmailingaddress' : '',
+        form?.dev_application_input_filter?.sky_cvurl === 'Show & Required' ? 'sky_cvurl' : '',
+
         form?.dev_application_input_filter?.bad_memberdirectory === 'Show & Required' ? 'bad_memberdirectory' : '',
         form?.dev_application_input_filter?.py3_constitutionagreement === 'Show & Required' ? 'py3_constitutionagreement' : '',
         form?.dev_application_input_filter?.bad_readpolicydocument === 'Show & Required' ? 'bad_readpolicydocument' : '',
       ];
->>>>>>> b-110
     const { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,
       application,
