@@ -59,9 +59,10 @@ const BADTheme = {
     },
     auth: {
       // 📌 app auth service secrets
+      // APP_HOST: 'https://uatservices.bad.org.uk/dynamicsbridge', // app server endpoint
       APP_HOST: process.env.APP_HOST, // app server endpoint
       B2C: process.env.B2C, // B2C auth logon service
-      // B2C: "https://britishaderm.b2clogin.com/BritishADerm.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signupsignin_prod&client_id=c0f5bfaa-713d-4e85-9579-55c1f2257b28&nonce=defaultNonce", // TESTING B2C auth logon service
+      // WP_HOST: 'https://controlpanel.bad.org.uk/', // wp backend endpoint
       WP_HOST: process.env.WP_HOST, // wp backend endpoint
       WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,

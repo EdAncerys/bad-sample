@@ -4,8 +4,10 @@ export const fetchHandler = async ({
   accept,
   body,
   disableCookies,
-  headers = {},
-}) => {
+  headers = {
+    "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+  },
+}) => { 
   try {
     if (!path) throw new Error("No path provided");
     // --------------------------------------------------------------------------------
@@ -30,7 +32,9 @@ export const fetchHandler = async ({
       method,
       // ⚠️ 🍪 add credentials to the request to included cookies in all fetch requests if disableCookies 🍪
       credentials: disableCookies ? "omit" : "include",
+     headers: {
       ...headers, // 📌 add custom headers
+     }, 
     };
 
     let isFormData = requestOptions?.headers?.["Content-Type"]?.includes(

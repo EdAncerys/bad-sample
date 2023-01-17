@@ -7,7 +7,9 @@ export const fetchDataHandler = async ({
   accept,
   body,
   options,
-  headers,
+  headers = {
+    "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+  },
   disableCookies,
   isCORSHeaders,
 }) => {
@@ -40,11 +42,8 @@ export const fetchDataHandler = async ({
   let headerOptions = {
     "Content-Type": "application/json",
     Accept: accept,
-    // add CORS headers
-    // ...(isCORSHeaders ? corsHeaders : {}),
-    // set cash control headers to 7 days if method is GET
-    // add custom headers if provided
-    ...(headers || {}),
+    "Cache-Control": method === "GET" ? "max-age=604800" : "no-cache",
+    ...headers,
   };
 
   // 📌 Options
@@ -68,6 +67,9 @@ export const fetchDataHandler = async ({
     requestOptions = {
       ...requestOptions,
       body: isFormData ? body : JSON.stringify(body),
+      headers: {
+        ...headers,
+      },
     };
   }
 

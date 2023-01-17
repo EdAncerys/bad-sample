@@ -49,6 +49,7 @@ const Applications = ({ state, actions }) => {
     form?.dev_application_input_filter
   );
   console.log('⭐️ APP', application);
+ 
 
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);

@@ -46,7 +46,7 @@ const PilGuidelineSearch = ({ state, actions, libraries, block }) => {
       // ⬇️ apply data filters for search
       const path =
         state.auth.WP_HOST +
-        `wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=10&_fields=title,link&orderby=title&order=ASC`;
+        `/wp-json/relevanssi/v1/search?keyword=${input}&type=guidelines_standards,pils&per_page=10&_fields=title,link&orderby=title&order=ASC`;
       let fetching = await fetchDataHandler({ path, state });
       let data = await fetching.json();
       setFetching(false);

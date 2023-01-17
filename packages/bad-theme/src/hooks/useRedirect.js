@@ -15,22 +15,27 @@ export const useRedirect = ({
   const useEffectRef = useRef(true);
 
   useEffect(async () => {
-    if (redirects) return null; // skip if redirects are already set
-    // ⬇️  get redirects path from wp
-    const path =
-      state.auth.WP_HOST + "wp-json/acf/v3/options/options/301_redirects";
-    // 📌  PRE-FETCH redirects from wp
-    const response = await fetchDataHandler({ path, state });
-    if (!response) return null;
+    try {
+      if (redirects) return null; // skip if redirects are already set
+      // ⬇️  get redirects path from wp
+      const path =
+        state.auth.WP_HOST + "wp-json/acf/v3/options/options/301_redirects";
+      // 📌  PRE-FETCH redirects from wp
+      const response = await fetchDataHandler({ path, state });
 
-    const data = await response.json();
-    if (!data["301_redirects"]) return;
-    // 📌  SET redirects to state
-    setRedirectAction({ dispatch, redirects: data["301_redirects"] });
+      if (!response) return null;
 
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
+      const data = await response.json();
+      if (!data["301_redirects"]) return;
+      // 📌  SET redirects to state
+      setRedirectAction({ dispatch, redirects: data["301_redirects"] });
+
+      return () => {
+        useEffectRef.current = false; // clean up function
+      };
+    } catch (error) {
+      console.log("error", error);
+    }
   }, []);
 
   useEffect(() => {

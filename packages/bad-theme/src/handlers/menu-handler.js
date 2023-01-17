@@ -9,6 +9,9 @@ const menuHandler = {
     // Fetch the menu data from the endpoint
     const response = await libraries.source.api.get({
       endpoint: `/menus/v1/menus/${slug}`,
+      headers: {
+        "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+      },
     });
 
     // Parse the JSON to get the object

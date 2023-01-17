@@ -27,12 +27,7 @@ export const getMembershipTypes = async ({ state }) => {
   let url =
     state.auth.WP_HOST + `/wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
 
-    // --------------------------------------------------------------------------------
-    // 📌  Additional headers to auth to WP back end
-    // --------------------------------------------------------------------------------
-    const headers = {
-      // "Authorization": "Basic ZGVtbzphc2RmZ2g=",
-    }
+ 
 
 
   try {

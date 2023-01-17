@@ -69,7 +69,7 @@ const SearchBar = ({ state, actions, libraries, block, search_type }) => {
 
     const path =
       state.auth.WP_HOST +
-      `wp-json/relevanssi/v1/search?keyword=${input}&type=${typeOfSearch[search_type]}&per_page=5&_fields=title,link&orderby=title&order=ASC`;
+      `/wp-json/relevanssi/v1/search?keyword=${input}&type=${typeOfSearch[search_type]}&per_page=5&_fields=title,link&orderby=title&order=ASC`;
     let fetching = await fetchDataHandler({ path, state });
     let data = await fetching.json();
     setDataLoading(false);
