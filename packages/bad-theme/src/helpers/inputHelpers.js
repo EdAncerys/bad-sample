@@ -27,6 +27,14 @@ export const getMembershipTypes = async ({ state }) => {
   let url =
     state.auth.WP_HOST + `/wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
 
+    // --------------------------------------------------------------------------------
+    // 📌  Additional headers to auth to WP back end
+    // --------------------------------------------------------------------------------
+    const headers = {
+      "Authorization": "Basic ZGVtbzphc2RmZ2g=",
+    }
+
+
   try {
     let data = [];
 
@@ -45,7 +53,7 @@ export const getMembershipTypes = async ({ state }) => {
 
       // 📌 break out of the loop if no more pages
       if (pageNo > +totalPages) break;
-      response = await fetchHandler({ path: url });
+      response = await fetchHandler({ path: url, headers });
     }
     return data;
   } catch (error) {
@@ -470,6 +478,14 @@ export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   // 📌  WP Application input filter
   // --------------------------------------------------------------------------------
 
+  // 📌 check if wp config have input set to true
+  if (typeof wpSelected === "string" && wpSelected === "Hide") {
+    isValid = false;
+  }
+  // 📌 if wp config dont include input & filter exists then return false
+  if (typeof wpSelected === "undefined" && form?.dev_application_input_filter) {
+    isValid = false;
+  }
   // ⚠️ ignore all WP validations for BAD application
   if (badApp) return true;
 

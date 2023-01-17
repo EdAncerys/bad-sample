@@ -117,7 +117,7 @@ const Form = ({
           const AttributeType =
             info?.AttributeType || FORM_CONFIG?.[name]?.AttributeType;
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
-          const Required = FORM_CONFIG?.[name]?.Required; // 👉 get required from config
+          const Required = form?.dev_application_input_filter?.name === 'Show & Required'; // 👉 get required from config
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
           const Link =
