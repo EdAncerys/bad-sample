@@ -610,7 +610,6 @@ export const formValidationHandler = ({
   let updatedForm = form;
   let isCategoryType = form?.["bad_categorytype"] !== undefined; // required to select matching application type
   const wpFilter = form?.dev_application_input_filter; // required to select matching application type
-
   console.log("⭐️ MANUAL_HANDLER", MANUALLY_REQUIRED);
 
   updatedApplication?.map((input, key) => {
