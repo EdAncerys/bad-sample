@@ -31,7 +31,7 @@ export const getMembershipTypes = async ({ state }) => {
     // 📌  Additional headers to auth to WP back end
     // --------------------------------------------------------------------------------
     const headers = {
-      "Authorization": "Basic ZGVtbzphc2RmZ2g=",
+      // "Authorization": "Basic ZGVtbzphc2RmZ2g=",
     }
 
 
@@ -53,7 +53,7 @@ export const getMembershipTypes = async ({ state }) => {
 
       // 📌 break out of the loop if no more pages
       if (pageNo > +totalPages) break;
-      response = await fetchHandler({ path: url, headers });
+      response = await fetchHandler({ path: url  });
     }
     return data;
   } catch (error) {
@@ -472,19 +472,12 @@ export const manualFilterHandler = ({ form, name, show }) => {
   return show;
 };
 
+
 export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   // --------------------------------------------------------------------------------
   // 📌  WP Application input filter
   // --------------------------------------------------------------------------------
 
-  // 📌 check if wp config have input set to true
-  if (typeof wpSelected === "string" && wpSelected === "Hide") {
-    isValid = false;
-  }
-  // 📌 if wp config dont include input & filter exists then return false
-  if (typeof wpSelected === "undefined" && form?.dev_application_input_filter) {
-    isValid = false;
-  }
   // ⚠️ ignore all WP validations for BAD application
   if (badApp) return true;
 
@@ -493,8 +486,8 @@ export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   if (Array.isArray(wpFilters)) wpFilters = wpFilters[0]; // ⚠️ if wpFilters is array provided the return first element
 
   // 📌 check if wpFilter object have input_with_prefix property & its boolean then return value
-  if (typeof wpFilters?.[input_with_prefix] === "boolean") {
-    return wpFilters?.[input_with_prefix];
+  if (typeof wpFilters?.[input_with_prefix] === "string") {
+    return wpFilters?.[input_with_prefix] !== "Hide" ;
   } else {
     return false; // ⚠️ don't show input in all other cases
   }

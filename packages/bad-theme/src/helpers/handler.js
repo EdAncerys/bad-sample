@@ -4,7 +4,7 @@ export const fetchHandler = async ({
   accept,
   body,
   disableCookies,
-  headers,
+  headers = {},
 }) => {
   try {
     if (!path) throw new Error("No path provided");
