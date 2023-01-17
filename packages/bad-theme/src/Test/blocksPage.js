@@ -16,7 +16,6 @@ import {
 // --------------------------------------------------------------------------------
 import {
   Parcer,
-  getMembershipTypes,
   useAppState,
   useAppDispatch,
   getUserStoreAction,
@@ -26,6 +25,7 @@ import {
   sendFileToS3Action,
   googleAutocomplete,
 } from "../context";
+import { getMembershipTypes } from "../helpers/inputHelpers";
 // --------------------------------------------------------------------------------
 import { Form } from "react-bootstrap";
 import ActionPlaceholder from "../components/actionPlaceholder";

@@ -210,9 +210,8 @@ export const getBADMembershipSubscriptionData = async ({
 }) => {
   // --------------------------------------------------------------------------------
   // ⚠️ All applications will be for 2022
-  // const year = new Date().getFullYear(); // get current year
   // --------------------------------------------------------------------------------
-  const year = 2022; // 👉 hard code year to 2022 for all applications
+  const year = new Date().getFullYear(); // get current year
   let dateType = category === "SIG" ? ":" + year : "::" + year; // date type for query with prefix of : or ::
 
   const path =
