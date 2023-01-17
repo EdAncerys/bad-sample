@@ -70,6 +70,7 @@ const App = ({ state, actions }) => {
   const data = state.source?.get(urlPath);
   const pageId = data?.id;
   console.log(`INDEX ${pageId}: `, data); // 👉 debug
+  console.log('⭐️ HOST', state.auth.WP_HOST);
 
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
@@ -169,6 +170,7 @@ const App = ({ state, actions }) => {
 
           <AccountDashboard when={urlPath === "/dashboard/" && isActiveUser} />
           <Contact when={urlPath === "/contact-us/"} />
+          {/* 👇 main application page for forms BAD & SIG apps */}
           <Applications when={urlPath === "/membership/applications/"} />
           <RegistrationStepOne
             when={urlPath === "/membership/step-1-the-process/"}

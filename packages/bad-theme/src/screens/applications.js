@@ -47,6 +47,7 @@ const Applications = ({ state, actions }) => {
     "⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️",
     form?.dev_application_input_filter
   );
+  console.log('⭐️ APP', application);
 
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);
@@ -625,51 +626,50 @@ const Applications = ({ state, actions }) => {
     if (form?.step === 1) MANUALLY_REQUIRED = ["bad_categorytype"];
     if (form?.step === 2)
       MANUALLY_REQUIRED = [
-        "py3_title",
-        "py3_firstname",
-        "py3_gender",
-        "py3_dateofbirth",
-        "py3_email",
-        "py3_mobilephone",
-        "py3_address1ine1",
+        form?.dev_application_input_filter?.py3_title === 'Show & Required' ? 'py3_title' : '',
+        form?.dev_application_input_filter?.py3_firstname === 'Show & Required' ? 'py3_firstname' : '',
+        form?.dev_application_input_filter?.py3_gender === 'Show & Required' ? 'py3_gender' : '',
+        form?.dev_application_input_filter?.py3_dateofbirth === 'Show & Required' ? 'py3_dateofbirth' : '',
+        form?.dev_application_input_filter?.py3_email === 'Show & Required' ? 'py3_email' : '',
+        form?.dev_application_input_filter?.py3_mobilephone === 'Show & Required' ? 'py3_mobilephone' : '',
+        form?.dev_application_input_filter?.py3_address1ine1 === 'Show & Required' ? 'py3_address1ine1' : '',
         // "py3_addressline2", // 👉 not mandatory
         // "py3_addresscountystate", // 👉 not mandatory
-        "py3_addresszippostalcode",
-        "py3_addresscountry",
+        form?.dev_application_input_filter?.py3_addresszippostalcode === 'Show & Required' ? 'py3_addresszippostalcode' : '',
+        form?.dev_application_input_filter?.py3_addresscountry === 'Show & Required' ? 'py3_addresscountry' : '',
       ];
-    if (form?.step === 3)
+      if (form?.step === 3)
       MANUALLY_REQUIRED = [
-        "formus_staffgroupcategory",
-        "formus_jobrole",
-        "py3_hospitalid",
-        "formus_professionalregistrationbody",
-        "formus_professionalregistrationstatus",
+        form?.dev_application_input_filter?.formus_staffgroupcategory === 'Show & Required' ? 'formus_staffgroupcategory' : '',
+        form?.dev_application_input_filter?.formus_jobrole === 'Show & Required' ? 'formus_jobrole' : '',
+        form?.dev_application_input_filter?.py3_hospitalid === 'Show & Required' ? 'py3_hospitalid' : '',
+        form?.dev_application_input_filter?.formus_professionalregistrationbody === 'Show & Required' ? 'formus_professionalregistrationbody' : '',
+        form?.dev_application_input_filter?.formus_professionalregistrationstatus === 'Show & Required' ? 'formus_professionalregistrationstatus' : '',
         // "formus_residencystatus", // 👉 not mandatory
         // "formus_qualificationtype",  // 👉 not mandatory
-        form?.["formus_qualificationtype"] === "810170007"
-          ? "formus_mainspecialtyqualification"
-          : "", // 👈 multi picker
-        "formus_clinicalspecialtysofpractice", // 👈 multi picker
-        "formus_specialiseddermatologyareasofpractice", // 👈 multi picker
-        "formus_typeofcontract",
+        form?.["formus_qualificationtype"] === "810170007" && form?.dev_application_input_filter?.formus_mainspecialtyqualification === 'Show & Required' ? 'formus_mainspecialtyqualification' : '',
+        form?.dev_application_input_filter?.formus_clinicalspecialtysofpractice === 'Show & Required' ? 'formus_clinicalspecialtysofpractice' : '', // 👈 multi picker
+
+        form?.dev_application_input_filter?.formus_specialiseddermatologyareasofpractice === 'Show & Required' ? 'formus_specialiseddermatologyareasofpractice' : '',  // 👈 multi picker
+        form?.dev_application_input_filter?.formus_typeofcontract === 'Show & Required' ? 'formus_typeofcontract' : '',
         // "formus_fixedtermtemporaryreasonforemploymentcont",  // 👉 not mandatory
         // "formus_typeofcontract",  // 👉 not mandatory
         // "formus_rotapattern",  // 👉 not mandatory
         // "formus_reasonformovingccstdate",  // 👉 not mandatory
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
-        form?.["formus_typeofpractice"] !== "810170001"
-          ? "formus_privatepracticeorganisation"
-          : "", // if private practice, add private practice organisation to required fields
+        form?.["formus_typeofpractice"] !== "810170001" &&  form?.dev_application_input_filter?.formus_privatepracticeorganisation === 'Show & Required' ? 'formus_privatepracticeorganisation' : '', // if new hospital added, add new hospital name to required fields
+        
       ];
-    if (form?.step === 4)
+      if (form?.step === 4)
       MANUALLY_REQUIRED = [
-        "bad_proposer1",
+        form?.dev_application_input_filter?.bad_proposer1 === 'Show & Required' ? 'bad_proposer1' : '',
+        form?.dev_application_input_filter?.bad_proposer2 === 'Show & Required' ? 'bad_proposer2' : '',
         // "bad_preferredmailingaddress",
         // "sky_cvurl",
-        "bad_memberdirectory",
-        "py3_constitutionagreement",
-        "bad_readpolicydocument",
+        form?.dev_application_input_filter?.bad_memberdirectory === 'Show & Required' ? 'bad_memberdirectory' : '',
+        form?.dev_application_input_filter?.py3_constitutionagreement === 'Show & Required' ? 'py3_constitutionagreement' : '',
+        form?.dev_application_input_filter?.bad_readpolicydocument === 'Show & Required' ? 'bad_readpolicydocument' : '',
       ];
     const { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,
