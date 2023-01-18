@@ -9,6 +9,14 @@ import menuHandler from "./handlers/menu-handler";
 import { getPILsDataAction, getGuidelinesDataAction } from "./context";
 import { handleSetCookie } from "./helpers/cookie";
 
+// --------------------------------------------------------------------------------
+// ⚠️  BAD THEME. MAIN CLIENT EXPORT FILE
+// --------------------------------------------------------------------------------
+
+const authHeaders = {
+  "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+};
+
 const BADTheme = {
   name: "bad-theme",
   roots: {
@@ -38,7 +46,8 @@ const BADTheme = {
         "According to our records your BAD Membership was frozen as you had not paid your annual subscription. Please go to the Billing tab to pay your subscription in order to reactivate your membership.",
       lapsedMembershipBody:
         "According to our records your BAD Membership was frozen as you had not paid your annual subscription. We have now moved into a new membership year and your BAD membership has now lapsed. If you would like to join us again, please complete a new application.",
-      menuUrl: "/menu/primary-menu",
+      // menuUrl: "/menu/primary-menu", // use with frontity fetch request
+      menuUrl: "wp-json/menus/v1/menus/primary-menu",
       menu: null,
       filter: null,
       pilFilter: null,
@@ -89,7 +98,7 @@ const BADTheme = {
   },
   actions: {
     theme: {
-      beforeCSR: async ({ state, actions }) => {
+      beforeCSR: async ({ state, actions, libraries }) => {
         // --------------------------------------------------------------------------------
         // ⚠️ Data prefetch before CSR
         // --------------------------------------------------------------------------------
@@ -143,6 +152,9 @@ const BADTheme = {
     source: {
       handlers: [menuHandler],
     },
+  },
+  options: {
+    headers: authHeaders,
   },
 };
 

@@ -69,7 +69,7 @@ export const useRedirect = ({
 function doURLsMatch(redirectFromUrl, redirectToUrl, hostname) {
   // check if meets criteria
   const isStartsWith =
-    redirectFromUrl.startsWith("www.") || redirectFromUrl.startsWith("http");
+    redirectFromUrl?.startsWith("www.") || redirectFromUrl?.startsWith("http");
 
   if (!redirectFromUrl || !redirectToUrl || !hostname || isStartsWith) {
     return false;

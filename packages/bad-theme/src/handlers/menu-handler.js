@@ -1,3 +1,11 @@
+// --------------------------------------------------------------------------------
+// ⚠️  BAD THEME. MAIN CLIENT EXPORT FILE
+// --------------------------------------------------------------------------------
+
+const authHeaders = {
+  "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+};
+
 const menuHandler = {
   name: "menus",
   priority: 10,
@@ -9,9 +17,7 @@ const menuHandler = {
     // Fetch the menu data from the endpoint
     const response = await libraries.source.api.get({
       endpoint: `/menus/v1/menus/${slug}`,
-      headers: {
-        "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
-      },
+      headers: authHeaders,
     });
 
     // Parse the JSON to get the object
@@ -27,6 +33,7 @@ const menuHandler = {
       isMenu: true,
     });
   },
+  headers: authHeaders,
 };
 
 export default menuHandler;

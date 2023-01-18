@@ -39,6 +39,7 @@ const BADTheme = {
       lapsedMembershipBody:
         "According to our records your BAD Membership was frozen as you had not paid your annual subscription. We have now moved into a new membership year and your BAD membership has now lapsed. If you would like to join us again, please complete a new application.",
       menuUrl: "/menu/primary-menu",
+      menuUrl: "/wp-json/menus/v1/menus/primary-menu",
       menu: null,
       filter: null,
       pilFilter: null,

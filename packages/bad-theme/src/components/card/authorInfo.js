@@ -24,7 +24,7 @@ const AuthorInfo = ({ state, actions, libraries, authorInfo }) => {
 
   // remove first / from string if its exist in the url
   const removeFirstSlash = (url) => {
-    if (url.startsWith("/")) {
+    if (url?.startsWith("/")) {
       return url.substring(1);
     }
     return url;

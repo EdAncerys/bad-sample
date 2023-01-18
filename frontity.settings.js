@@ -2,6 +2,16 @@ import { config } from "dotenv";
 // Launch dot-env.
 config();
 
+// --------------------------------------------------------------------------------
+// ⚠️  BAD THEME. MAIN SETTINGS CONFIG FILE
+// --------------------------------------------------------------------------------
+
+const authHeaders = {
+  "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+  'X-Custom-Header': 'MyCustomHeaderValue',
+  'X-Another-Header': 'AnotherHeaderValue',
+};
+
 const settings = {
   name: "bad-org",
   state: {
@@ -141,6 +151,11 @@ const settings = {
     "@frontity/html2react",
     "@frontity/head-tags", // 👈 package is designed to get automatically all the metadata
   ],
+  // 👇 Add custom headers to the fetch request (WP back end server authentication)
+  globalFetchOptions: {
+    headers: authHeaders,
+  },
+  headers: authHeaders,
 };
 
 export default settings;

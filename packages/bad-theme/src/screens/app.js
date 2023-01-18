@@ -59,6 +59,7 @@ import {
   authCookieActionAfterCSR,
   getWPMenu,
   setIdFilterAction,
+  fetchDataHandler,
 } from "../context";
 
 const App = ({ state, actions }) => {
@@ -108,7 +109,7 @@ const App = ({ state, actions }) => {
             },
           }
         );
-        const data = await res.json();
+        const data = await res?.json();
         const yoast = data?.yoast_head_json;
 
         setMeta(yoast);

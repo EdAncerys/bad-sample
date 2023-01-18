@@ -141,6 +141,27 @@ const HeaderActions = ({ state, actions, libraries }) => {
     console.log("⭐️ HOST", state.auth.APP_HOS);
   };
 
+  const handleApiRequest = async () => {
+    try {
+
+      let myHeaders = new Headers();
+      myHeaders.append("Authorization", "Basic ZGVtbzphc2RmZ2g=");
+  
+      let requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+  
+      const res = await fetch("https://badmainstagstg.wpengine.com/wp-json/wp/v2/memberships?_fields=id,date,slug,title,sog_groupe,acf", requestOptions)
+      console.log('res', res)
+      const data = await res.json()
+      console.log('data', data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
   const DevPanel = () => {
@@ -174,6 +195,13 @@ const HeaderActions = ({ state, actions, libraries }) => {
           onClick={appDataHandler}
         >
           host
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleApiRequest}
+        >
+          API req
         </div>
       </div>
     );
