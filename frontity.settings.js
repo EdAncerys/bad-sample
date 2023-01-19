@@ -7,9 +7,9 @@ config();
 // --------------------------------------------------------------------------------
 
 const authHeaders = {
-  "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
-  'X-Custom-Header': 'MyCustomHeaderValue',
-  'X-Another-Header': 'AnotherHeaderValue',
+  Authorization: "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+  "X-Custom-Header": "MyCustomHeaderValue",
+  "X-Another-Header": "AnotherHeaderValue",
 };
 
 const settings = {
@@ -152,9 +152,6 @@ const settings = {
     "@frontity/head-tags", // 👈 package is designed to get automatically all the metadata
   ],
   // 👇 Add custom headers to the fetch request (WP back end server authentication)
-  globalFetchOptions: {
-    headers: authHeaders,
-  },
   headers: authHeaders,
 };
 

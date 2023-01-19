@@ -8,7 +8,7 @@ export const fetchDataHandler = async ({
   body,
   options,
   headers = {
-    "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+    Authorization: "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
   },
   disableCookies,
   isCORSHeaders,
@@ -42,7 +42,6 @@ export const fetchDataHandler = async ({
   let headerOptions = {
     "Content-Type": "application/json",
     Accept: accept,
-    "Cache-Control": method === "GET" ? "max-age=604800" : "no-cache",
     ...headers,
   };
 

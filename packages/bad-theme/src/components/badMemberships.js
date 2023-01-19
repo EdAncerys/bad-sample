@@ -26,8 +26,8 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
     // pre fetch membership data
     let memberships = await getMembershipData({ state });
     // 📌 filter out bad memberships only
-    memberships = memberships.filter(
-      (membership) => membership.acf.bad_or_sig === "bad"
+    memberships = memberships?.filter(
+      (membership) => membership?.acf?.bad_or_sig === "bad"
     );
     // ⬇️ sort memberships by bad_order accenting & if no value push to end
     memberships.sort((a, b) => {

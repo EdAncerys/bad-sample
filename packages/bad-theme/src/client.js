@@ -14,7 +14,7 @@ import { handleSetCookie } from "./helpers/cookie";
 // --------------------------------------------------------------------------------
 
 const authHeaders = {
-  "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+  Authorization: "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
 };
 
 const BADTheme = {
@@ -46,8 +46,8 @@ const BADTheme = {
         "According to our records your BAD Membership was frozen as you had not paid your annual subscription. Please go to the Billing tab to pay your subscription in order to reactivate your membership.",
       lapsedMembershipBody:
         "According to our records your BAD Membership was frozen as you had not paid your annual subscription. We have now moved into a new membership year and your BAD membership has now lapsed. If you would like to join us again, please complete a new application.",
-      // menuUrl: "/menu/primary-menu", // use with frontity fetch request
-      menuUrl: "wp-json/menus/v1/menus/primary-menu",
+      menuUrl: "/menu/primary-menu", // use with frontity fetch request
+      // menuUrl: "wp-json/menus/v1/menus/primary-menu",
       menu: null,
       filter: null,
       pilFilter: null,
@@ -60,7 +60,7 @@ const BADTheme = {
       marginVertical: 40, // px units
       notification: false,
       perPageLimit: 50, // number of posts to fetch per page
-      // POSSIBLE TUYPES: Full | Limited
+      // POSSIBLE TYPES: Full | Limited
       serviceAccess: "Full", // Full access BAD members
       frozenMembership: "Freeze", // members with late payments
       lapsedMembership: "Completed", // members with lapsed payments over a year ago
@@ -68,10 +68,8 @@ const BADTheme = {
     },
     auth: {
       // 📌 app auth service secrets
-      // APP_HOST: 'https://uatservices.bad.org.uk/dynamicsbridge', // app server endpoint
       APP_HOST: process.env.APP_HOST, // app server endpoint
       B2C: process.env.B2C, // B2C auth logon service
-      // WP_HOST: 'https://controlpanel.bad.org.uk/', // wp backend endpoint
       WP_HOST: process.env.WP_HOST, // wp backend endpoint
       WP_HOST_CONTENT: process.env.WP_HOST_CONTENT,
       GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,

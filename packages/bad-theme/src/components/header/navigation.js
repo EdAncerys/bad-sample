@@ -49,7 +49,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
           menuData = JSON.parse(menu);
         }
-        const menuLength = menuData.length;
+        const menuLength = menuData?.length;
         const wpMainMenu = menuData.slice(0, MAIN_NAV_LENGTH);
         const wpMoreMenu = menuData.slice(MAIN_NAV_LENGTH, menuLength);
 
@@ -64,7 +64,7 @@ const Navigation = ({ state, actions, libraries }) => {
         setWpMoreMenu(wpMoreMenu); // more menu into dropdown
 
         let taxonomyList = await getMediaCategories({ state });
-        if (taxonomyList.length > 0) {
+        if (taxonomyList?.length > 0) {
           // sort catList by name in alphabetical order
           taxonomyList.sort((a, b) => {
             if (a.name < b.name) return -1;
@@ -81,7 +81,7 @@ const Navigation = ({ state, actions, libraries }) => {
     })();
   }, [state.theme.menu]);
 
-  if (!wpMoreMenu.length || !wpMainMenu.length)
+  if (!wpMoreMenu?.length || !wpMainMenu?.length)
     return <div style={{ height: 60 }} />;
 
   // HANDLERS ----------------------------------------------------
@@ -168,7 +168,7 @@ const Navigation = ({ state, actions, libraries }) => {
   // SERVERS -----------------------------------------------------
   const ServeNewsMediaSubMenu = ({ parent }) => {
     // 📌 serve submenu for news & media only
-    if (parent.db_id !== 292 || newsMedia.length === 0) return null;
+    if (parent.db_id !== 292 || newsMedia?.length === 0) return null;
 
     return (
       <div style={{ paddingRight: `2em` }}>

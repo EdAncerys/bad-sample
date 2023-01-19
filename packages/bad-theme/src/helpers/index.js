@@ -114,20 +114,9 @@ export const getWPMenu = async ({ state, actions }) => {
   if (!menu) {
     try {
       // pre-fetch wp menu
-      // await actions.source.fetch(`${state.theme.menuUrl}`, {
-      //   headers: {
-      //     "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
-      //   },
-      // });
-      // const badMenu = await state.source.data["/menu/primary-menu/"].items;
-      const menu = await fetch(state.auth.WP_HOST + state.theme.menuUrl, {
-        headers: {
-             headers: {
-          "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
-          },
-        },
-      });
-      const badMenu = menu?.items;
+      await actions.source.fetch(`${state.theme.menuUrl}`);
+      const badMenu = await state.source.data["/menu/primary-menu/"].items;
+
       sessionStorage.setItem("badMenu", JSON.stringify(badMenu)); // saving menu to session storage
       state.theme.menu = badMenu; // replacing menu stored in sessions with state var
     } catch (error) {

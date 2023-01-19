@@ -71,8 +71,8 @@ const App = ({ state, actions }) => {
   const data = state.source?.get(urlPath);
   const pageId = data?.id;
   console.log(`INDEX ${pageId}: `, data); // 👉 debug
-  console.log('⭐️ ', state.auth.WP_HOST);
-  console.log('⭐️ ', state.auth.APP_HOST);
+  console.log("⭐️ ", state.auth.WP_HOST);
+  console.log("⭐️ ", state.auth.APP_HOST);
 
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
@@ -103,11 +103,7 @@ const App = ({ state, actions }) => {
       try {
         const res = await fetch(
           state.auth.WP_HOST +
-            `wp-json/wp/v2/pages/${pageId || 22}?_fields=id,yoast_head_json`, {
-            headers: {
-              "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
-            },
-          }
+            `wp-json/wp/v2/pages/${pageId || 22}?_fields=id,yoast_head_json`
         );
         const data = await res?.json();
         const yoast = data?.yoast_head_json;

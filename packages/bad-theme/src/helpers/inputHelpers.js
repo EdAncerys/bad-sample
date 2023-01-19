@@ -25,10 +25,7 @@ export const getMembershipTypes = async ({ state }) => {
   let pageNo = 1;
   const params = `per_page=10&_fields=id,slug,acf`;
   let url =
-    state.auth.WP_HOST + `/wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
-
- 
-
+    state.auth.WP_HOST + `wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
 
   try {
     let data = [];
@@ -44,11 +41,11 @@ export const getMembershipTypes = async ({ state }) => {
       pageNo++;
       url =
         state.auth.WP_HOST +
-        `/wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
+        `wp-json/wp/v2/memberships?${params}&page=${pageNo}`;
 
       // 📌 break out of the loop if no more pages
       if (pageNo > +totalPages) break;
-      response = await fetchHandler({ path: url  });
+      response = await fetchHandler({ path: url });
     }
     return data;
   } catch (error) {
@@ -467,7 +464,6 @@ export const manualFilterHandler = ({ form, name, show }) => {
   return show;
 };
 
-
 export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
   // --------------------------------------------------------------------------------
   // 📌  WP Application input filter
@@ -482,7 +478,7 @@ export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
 
   // 📌 check if wpFilter object have input_with_prefix property & its boolean then return value
   if (typeof wpFilters?.[input_with_prefix] === "string") {
-    return wpFilters?.[input_with_prefix] !== "Hide" ;
+    return wpFilters?.[input_with_prefix] !== "Hide";
   } else {
     return false; // ⚠️ don't show input in all other cases
   }
