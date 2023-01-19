@@ -9,7 +9,7 @@ import {
 } from "../config/form";
 import {
   inputShowHandler,
-  sigAppWPFilterHandler,
+  wpAppFilterHandler,
   dataExtractor,
 } from "../helpers/inputHelpers";
 
@@ -88,7 +88,7 @@ const Form = ({
           // 📌  WP input validation based on client config
           // 👇 uncomment bellows to apply filtering
           // --------------------------------------------------------------------------------
-          if (!sigAppWPFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
+          if (!wpAppFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
           if (!inputShowHandler({ form, name, badApp })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------
@@ -112,12 +112,25 @@ const Form = ({
           // *Lookup (has variables)
 
           if (cargo) return null; // skip cargo blob
+          const nameWithPrefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig
 
           Label = FORM_CONFIG?.[name]?.Label; // get label from config
           const AttributeType =
             info?.AttributeType || FORM_CONFIG?.[name]?.AttributeType;
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
-          const Required = form?.dev_application_input_filter?.name === 'Show & Required'; // 👉 get required from config
+          const Required =
+            form?.dev_application_input_filter?.[nameWithPrefix] ===
+            "Show & Required"; // 👉 get required from config
+          if (
+            form?.dev_application_input_filter?.[nameWithPrefix] ===
+            "Show & Required"
+          )
+            console.log(
+              "⭐️ ",
+              form?.dev_application_input_filter?.[nameWithPrefix] ===
+                "Show & Required",
+              nameWithPrefix
+            );
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
           const Link =
@@ -126,8 +139,7 @@ const Form = ({
             FORM_CONFIG?.[name]?.Link ||
             null;
 
-          const labelClass =
-            Required === "None" ? "form-label" : "form-label required";
+          const labelClass = Required ? "form-label required" : "form-label"; // 👈 add required class if required
 
           if (name === "sky_cvurl") {
             return (

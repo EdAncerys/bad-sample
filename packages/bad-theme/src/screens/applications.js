@@ -44,13 +44,6 @@ const Applications = ({ state, actions }) => {
   const [memberships, setMemberships] = useState([]);
   const isSIG = application?.[0]?.bad_organisedfor === "SIG";
   const hasError = form?.dev_selected_application_types?.length === 0;
-  console.log(
-    "⭐️⭐️🐞 COMPONENT RERENDER ⭐️⭐️",
-    form?.dev_application_input_filter
-  );
-  console.log('⭐️ APP', application);
- 
-
   const documentRef = useRef(null);
   const profilePictureRef = useRef(null);
   const hospitalSearchRef = useRef("");
@@ -477,6 +470,7 @@ const Applications = ({ state, actions }) => {
       form,
       application,
       FORM_CONFIG,
+      isSIG,
       MANUALLY_REQUIRED: isSIG ? undefined : [], // if SIG, don't manually require any fields
     });
 
@@ -681,69 +675,194 @@ const Applications = ({ state, actions }) => {
     if (form?.step === 1) MANUALLY_REQUIRED = ["bad_categorytype"];
     if (form?.step === 2)
       MANUALLY_REQUIRED = [
-        form?.dev_application_input_filter?.py3_title === 'Show & Required' ? 'py3_title' : '',
-        form?.dev_application_input_filter?.py3_firstname === 'Show & Required' ? 'py3_firstname' : '',
-        form?.dev_application_input_filter?.py3_gender === 'Show & Required' ? 'py3_gender' : '',
-        form?.dev_application_input_filter?.py3_dateofbirth === 'Show & Required' ? 'py3_dateofbirth' : '',
-        form?.dev_application_input_filter?.py3_email === 'Show & Required' ? 'py3_email' : '',
-        form?.dev_application_input_filter?.py3_mobilephone === 'Show & Required' ? 'py3_mobilephone' : '',
-        form?.dev_application_input_filter?.py3_address1ine1 === 'Show & Required' ? 'py3_address1ine1' : '',
-        form?.dev_application_input_filter?.py3_addressline2 === 'Show & Required' ? 'py3_addressline2' : '',
+        form?.dev_application_input_filter?.bad_py3_title === "Show & Required"
+          ? "py3_title"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_firstname ===
+        "Show & Required"
+          ? "py3_firstname"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_gender === "Show & Required"
+          ? "py3_gender"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_dateofbirth ===
+        "Show & Required"
+          ? "py3_dateofbirth"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_email === "Show & Required"
+          ? "py3_email"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_mobilephone ===
+        "Show & Required"
+          ? "py3_mobilephone"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_address1ine1 ===
+        "Show & Required"
+          ? "py3_address1ine1"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_addressline2 ===
+        "Show & Required"
+          ? "py3_addressline2"
+          : "",
         // "py3_addressline2", // 👉 not mandatory
         // "py3_addresscountystate", // 👉 not mandatory
-        form?.dev_application_input_filter?.py3_addresscountystate === 'Show & Required' ? 'py3_addresscountystate' : '',
-        form?.dev_application_input_filter?.py3_addresszippostalcode === 'Show & Required' ? 'py3_addresszippostalcode' : '',
-        form?.dev_application_input_filter?.py3_addresscountry === 'Show & Required' ? 'py3_addresscountry' : '',
+        form?.dev_application_input_filter?.bad_py3_addresscountystate ===
+        "Show & Required"
+          ? "py3_addresscountystate"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_addresszippostalcode ===
+        "Show & Required"
+          ? "py3_addresszippostalcode"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_addresscountry ===
+        "Show & Required"
+          ? "py3_addresscountry"
+          : "",
       ];
-      if (form?.step === 3)
+    if (form?.step === 3)
       MANUALLY_REQUIRED = [
-        form?.dev_application_input_filter?.formus_staffgroupcategory === 'Show & Required' ? 'formus_staffgroupcategory' : '',
-        form?.dev_application_input_filter?.formus_jobrole === 'Show & Required' ? 'formus_jobrole' : '',
-        form?.dev_application_input_filter?.py3_hospitalid === 'Show & Required' ? 'py3_hospitalid' : '',
-        form?.dev_application_input_filter?.formus_professionalregistrationbody === 'Show & Required' ? 'formus_professionalregistrationbody' : '',
-        form?.dev_application_input_filter?.formus_professionalregistrationstatus === 'Show & Required' ? 'formus_professionalregistrationstatus' : '',
-        form?.dev_application_input_filter?.formus_residencystatus === 'Show & Required' ? 'formus_residencystatus' : '',
-        form?.dev_application_input_filter?.formus_qualificationtype === 'Show & Required' ? 'formus_qualificationtype' : '',
+        form?.dev_application_input_filter?.bad_formus_staffgroupcategory ===
+        "Show & Required"
+          ? "formus_staffgroupcategory"
+          : "",
+        form?.dev_application_input_filter?.bad_formus_jobrole ===
+        "Show & Required"
+          ? "formus_jobrole"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_hospitalid ===
+        "Show & Required"
+          ? "py3_hospitalid"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_professionalregistrationbody === "Show & Required"
+          ? "formus_professionalregistrationbody"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_professionalregistrationstatus === "Show & Required"
+          ? "formus_professionalregistrationstatus"
+          : "",
+        form?.dev_application_input_filter?.bad_formus_residencystatus ===
+        "Show & Required"
+          ? "formus_residencystatus"
+          : "",
+        form?.dev_application_input_filter?.bad_formus_qualificationtype ===
+        "Show & Required"
+          ? "formus_qualificationtype"
+          : "",
         // 👇 conditional fields
-        form?.dev_application_input_filter?.formus_otherqualificationtype === 'Show & Required' ? 'formus_otherqualificationtype' : '',
-        form?.dev_application_input_filter?.formus_otherreasonformovingccstdate === 'Show & Required' ? 'formus_otherreasonformovingccstdate' : '',
-        form?.dev_application_input_filter?.formus_mainspecialtyqualification === 'Show & Required' ? 'formus_mainspecialtyqualification' : '',
+        form?.dev_application_input_filter
+          ?.bad_formus_otherqualificationtype === "Show & Required"
+          ? "formus_otherqualificationtype"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_otherreasonformovingccstdate === "Show & Required"
+          ? "formus_otherreasonformovingccstdate"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_mainspecialtyqualification === "Show & Required"
+          ? "formus_mainspecialtyqualification"
+          : "",
         // 👆 conditional fields
 
-        form?.["formus_qualificationtype"] === "810170007" && form?.dev_application_input_filter?.formus_mainspecialtyqualification === 'Show & Required' ? 'formus_mainspecialtyqualification' : '',
-        form?.dev_application_input_filter?.formus_clinicalspecialtysofpractice === 'Show & Required' ? 'formus_clinicalspecialtysofpractice' : '', // 👈 multi picker
+        form?.["formus_qualificationtype"] === "810170007" &&
+        form?.dev_application_input_filter
+          ?.bad_formus_mainspecialtyqualification === "Show & Required"
+          ? "formus_mainspecialtyqualification"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_clinicalspecialtysofpractice === "Show & Required"
+          ? "formus_clinicalspecialtysofpractice"
+          : "", // 👈 multi picker
 
-        form?.dev_application_input_filter?.formus_specialiseddermatologyareasofpractice === 'Show & Required' ? 'formus_specialiseddermatologyareasofpractice' : '',  // 👈 multi picker
-        form?.dev_application_input_filter?.formus_typeofcontract === 'Show & Required' ? 'formus_typeofcontract' : '',
-        form?.dev_application_input_filter?.formus_fixedtermtemporaryreasonforemploymentcont === 'Show & Required' ? 'formus_fixedtermtemporaryreasonforemploymentcont' : '',
-        form?.dev_application_input_filter?.formus_rotapattern === 'Show & Required' ? 'formus_rotapattern' : '',
-        form?.dev_application_input_filter?.formus_typeofpractice === 'Show & Required' ? 'formus_typeofpractice' : '',
-        form?.dev_application_input_filter?.formus_privatepracticeorganisation === 'Show & Required' ? 'formus_privatepracticeorganisation' : '',
-        form?.dev_application_input_filter?.formus_reasonformovingccstdate === 'Show & Required' ? 'formus_reasonformovingccstdate' : '',
+        form?.dev_application_input_filter
+          ?.bad_formus_specialiseddermatologyareasofpractice ===
+        "Show & Required"
+          ? "formus_specialiseddermatologyareasofpractice"
+          : "", // 👈 multi picker
+        form?.dev_application_input_filter?.bad_formus_typeofcontract ===
+        "Show & Required"
+          ? "formus_typeofcontract"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_fixedtermtemporaryreasonforemploymentcont ===
+        "Show & Required"
+          ? "formus_fixedtermtemporaryreasonforemploymentcont"
+          : "",
+        form?.dev_application_input_filter?.bad_formus_rotapattern ===
+        "Show & Required"
+          ? "formus_rotapattern"
+          : "",
+        form?.dev_application_input_filter?.bad_formus_typeofpractice ===
+        "Show & Required"
+          ? "formus_typeofpractice"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_privatepracticeorganisation === "Show & Required"
+          ? "formus_privatepracticeorganisation"
+          : "",
+        form?.dev_application_input_filter
+          ?.bad_formus_reasonformovingccstdate === "Show & Required"
+          ? "formus_reasonformovingccstdate"
+          : "",
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
-        form?.["formus_typeofpractice"] !== "810170001" &&  form?.dev_application_input_filter?.formus_privatepracticeorganisation === 'Show & Required' ? 'formus_privatepracticeorganisation' : '', // if new hospital added, add new hospital name to required fields
-        
+        form?.["formus_typeofpractice"] !== "810170001" &&
+        form?.dev_application_input_filter
+          ?.bad_formus_privatepracticeorganisation === "Show & Required"
+          ? "formus_privatepracticeorganisation"
+          : "", // if new hospital added, add new hospital name to required fields
       ];
-      if (form?.step === 4)
+    if (form?.step === 4)
       MANUALLY_REQUIRED = [
-        form?.dev_application_input_filter?.py3_gmcnumber === 'Show & Required' ? 'py3_gmcnumber' : '',
-        form?.dev_application_input_filter?.bad_currentpost === 'Show & Required' ? 'bad_currentpost' : '',
-        form?.dev_application_input_filter?.bad_proposer1 === 'Show & Required' ? 'bad_proposer1' : '',
-        form?.dev_application_input_filter?.bad_proposer2 === 'Show & Required' ? 'bad_proposer2' : '',
-        form?.dev_application_input_filter?.py3_currentgrade === 'Show & Required' ? 'py3_currentgrade' : '',
-        form?.dev_application_input_filter?.py3_ntnno === 'Show & Required' ? 'py3_ntnno' : '',
-        form?.dev_application_input_filter?.bad_preferredmailingaddress === 'Show & Required' ? 'bad_preferredmailingaddress' : '',
-        form?.dev_application_input_filter?.sky_cvurl === 'Show & Required' ? 'sky_cvurl' : '',
+        form?.dev_application_input_filter?.bad_py3_gmcnumber ===
+        "Show & Required"
+          ? "py3_gmcnumber"
+          : "",
+        form?.dev_application_input_filter?.bad_bad_currentpost ===
+        "Show & Required"
+          ? "bad_currentpost"
+          : "",
+        form?.dev_application_input_filter?.bad_bad_proposer1 ===
+        "Show & Required"
+          ? "bad_proposer1"
+          : "",
+        form?.dev_application_input_filter?.bad_bad_proposer2 ===
+        "Show & Required"
+          ? "bad_proposer2"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_currentgrade ===
+        "Show & Required"
+          ? "py3_currentgrade"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_ntnno === "Show & Required"
+          ? "py3_ntnno"
+          : "",
+        form?.dev_application_input_filter?.bad_bad_preferredmailingaddress ===
+        "Show & Required"
+          ? "bad_preferredmailingaddress"
+          : "",
+        form?.dev_application_input_filter?.bad_sky_cvurl === "Show & Required"
+          ? "sky_cvurl"
+          : "",
 
-        form?.dev_application_input_filter?.bad_memberdirectory === 'Show & Required' ? 'bad_memberdirectory' : '',
-        form?.dev_application_input_filter?.py3_constitutionagreement === 'Show & Required' ? 'py3_constitutionagreement' : '',
-        form?.dev_application_input_filter?.bad_readpolicydocument === 'Show & Required' ? 'bad_readpolicydocument' : '',
+        form?.dev_application_input_filter?.bad_bad_memberdirectory ===
+        "Show & Required"
+          ? "bad_memberdirectory"
+          : "",
+        form?.dev_application_input_filter?.bad_py3_constitutionagreement ===
+        "Show & Required"
+          ? "py3_constitutionagreement"
+          : "",
+        form?.dev_application_input_filter?.bad_bad_readpolicydocument ===
+        "Show & Required"
+          ? "bad_readpolicydocument"
+          : "",
       ];
     const { isValid, updatedApplication, updatedForm } = formValidationHandler({
       form,
       application,
       FORM_CONFIG,
+      isSIG,
       MANUALLY_REQUIRED: isSIG ? undefined : MANUALLY_REQUIRED,
     });
 
@@ -807,6 +926,8 @@ const Applications = ({ state, actions }) => {
   const stepThree = form?.step === 2 && badApp;
   const stepFour = form?.step === 3 && badApp;
   const stepFive = form?.step === 4 && badApp;
+  const isProfilePic =
+    form?.dev_application_input_filter?.bad_sky_profilepicture !== "Hide";
 
   const ServeNoApplicationData = () => {
     return (
@@ -933,13 +1054,18 @@ const Applications = ({ state, actions }) => {
             )}
 
             <div className="flex form-outer-wrapper">
-              {stepThree && (
+              {stepThree && isProfilePic && (
                 <div className="form-img-input-wrapper">
                   <ProfileInput
                     form={form}
                     name="sky_profilepicture"
                     profilePictureRef={profilePictureRef}
-                    labelClass="form-label"
+                    labelClass={
+                      form?.dev_application_input_filter
+                        ?.bad_sky_profilepicture === "Show & Required"
+                        ? "form-label required"
+                        : "form-label"
+                    }
                     Label={FORM_CONFIG?.["sky_profilepicture"]?.Label}
                     handleDocUploadChange={handleDocUploadChange}
                   />
@@ -949,7 +1075,7 @@ const Applications = ({ state, actions }) => {
               {!stepOne && (
                 <div
                   className={
-                    form?.step === 2
+                    form?.step === 2 && isProfilePic
                       ? "form-contenmt-wrapper-narrow"
                       : "form-contenmt-wrapper"
                   }

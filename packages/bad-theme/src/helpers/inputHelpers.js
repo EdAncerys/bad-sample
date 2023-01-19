@@ -464,13 +464,13 @@ export const manualFilterHandler = ({ form, name, show }) => {
   return show;
 };
 
-export const sigAppWPFilterHandler = ({ form, name, badApp }) => {
+export const wpAppFilterHandler = ({ form, name, badApp }) => {
   // --------------------------------------------------------------------------------
   // 📌  WP Application input filter
   // --------------------------------------------------------------------------------
 
   // ⚠️ ignore all WP validations for BAD application
-  if (badApp) return true;
+  // if (badApp) return true;
 
   const input_with_prefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig 👉 badApp ? "bad_" + name : "sig_" + name
   let wpFilters = form?.dev_application_input_filter; // wp config
@@ -589,6 +589,7 @@ export const formValidationHandler = ({
   form,
   application,
   FORM_CONFIG,
+  isSIG,
   MANUALLY_REQUIRED,
 }) => {
   // --------------------------------------------------------------------------------
@@ -605,8 +606,9 @@ export const formValidationHandler = ({
 
   updatedApplication?.map((input, key) => {
     let { name, value, cargo } = input;
+    const input_with_prefix = isSIG ? "sig_" + name : "bad_" + name; // prefix for bad/sig 👉 badApp ? "bad_" + name : "sig_" + name
     if (name === "core_membershipapplicationid") return; // if name is not defined | core_membership_id, skip
-    let required = FORM_CONFIG?.[name]?.Required !== "None"; // check if field is required |  info?.Required !== 'None'
+    let required = wpFilter?.[input_with_prefix] === "Show & Required"; // FORM_CONFIG?.[name]?.Required !== "None"; // check if field is required |  info?.Required !== 'None'
     if (!!MANUALLY_REQUIRED) required = MANUALLY_REQUIRED?.includes(name); // if MANUALLY_REQUIRED array provided check if value is name is in array
 
     if (form?.[name] !== undefined) {
