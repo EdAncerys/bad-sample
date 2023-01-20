@@ -1207,9 +1207,13 @@ export const BAD_STEP_FOUR_FORM_CONFIG = {
   formus_otherqualificationtype: {}, // 👉 conditional field
   formus_othermainspecialtyqualification: {}, // 👉 conditional field
   formus_otherreasonformovingccstdate: {}, // 👉 conditional field (Trainee only)
+  // --------------------------------------------------------------------------------
+  // 📌  Multi Pickers
+  // --------------------------------------------------------------------------------
   formus_mainspecialtyqualification: {}, // 👈  multi picker
   formus_clinicalspecialtysofpractice: {}, // 👈 multi picker
   formus_specialiseddermatologyareasofpractice: {}, // 👈 multi picker
+  // --------------------------------------------------------------------------------
   formus_typeofcontract: {},
   formus_fixedtermtemporaryreasonforemploymentcont: {},
   formus_rotapattern: {},
@@ -1400,6 +1404,7 @@ export const group_810170007 = [
 ];
 
 // --------------------------------------------------------------------------------
+// ⚠️ LEGACY FILTERS
 // 📌  Manual applicatin input filters
 // --------------------------------------------------------------------------------
 export const retiredTypeFilters = [

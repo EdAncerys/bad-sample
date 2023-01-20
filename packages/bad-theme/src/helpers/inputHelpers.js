@@ -325,7 +325,7 @@ export const submitUserApplication = async ({
   }
 };
 
-export const inputShowHandler = ({ form, name, badApp }) => {
+export const conditionalShowHandler = ({ form, name, badApp }) => {
   let show = true;
 
   // --------------------------------------------------------------------------------
@@ -349,25 +349,6 @@ export const inputShowHandler = ({ form, name, badApp }) => {
     if (
       form?.["formus_typeofpractice"] &&
       form?.["formus_typeofpractice"] === "810170001"
-    )
-      show = false;
-  }
-
-  // --------------------------------------------------------------------------------
-  // 📌  Handle conditional input show/hide logic for other qualification input
-  // --------------------------------------------------------------------------------
-  if (name === "formus_otherqualificationtype") {
-    if (form?.["formus_qualificationtype"] !== "810170007") show = false;
-  }
-  if (name === "formus_othermainspecialtyqualification") {
-    if (!form?.["formus_mainspecialtyqualification"]?.includes("810170008"))
-      show = false;
-  }
-  // 👉 trainee application only input
-  if (name === "formus_otherreasonformovingccstdate") {
-    if (
-      form?.["formus_qualificationtype"] !== "810170007" ||
-      form?.["bad_categorytype"] !== "Trainee"
     )
       show = false;
   }
@@ -468,7 +449,7 @@ export const wpAppFilterHandler = ({ form, name, badApp }) => {
   // --------------------------------------------------------------------------------
   // 📌  WP Application input filter
   // --------------------------------------------------------------------------------
-
+  let isShow = true;
   // ⚠️ ignore all WP validations for BAD application
   // if (badApp) return true;
 
@@ -478,10 +459,63 @@ export const wpAppFilterHandler = ({ form, name, badApp }) => {
 
   // 📌 check if wpFilter object have input_with_prefix property & its boolean then return value
   if (typeof wpFilters?.[input_with_prefix] === "string") {
-    return wpFilters?.[input_with_prefix] !== "Hide";
+    isShow = wpFilters?.[input_with_prefix] !== "Hide";
   } else {
-    return false; // ⚠️ don't show input in all other cases
+    isShow = false; // ⚠️ don't show input in all other cases
   }
+
+  // --------------------------------------------------------------------------------
+  // 📌 Handle conditional input show/hide logic for other qualification input
+  // ⚠️ WP input show/hide logic handling
+  // --------------------------------------------------------------------------------
+  const mainSpecQ =
+    form?.dev_application_input_filter?.main_specialty_qualification_handler;
+  if (mainSpecQ) {
+    mainSpecQ?.map((filter) => {
+      const showInputName = filter?.show_input; // 👈 input name to show
+      const isSleeted =
+        typeof form?.["formus_mainspecialtyqualification"] === "string" &&
+        form?.["formus_mainspecialtyqualification"]?.includes(
+          filter?.multi_select_value
+        ); // 👈 multi select value to check
+
+      if (isSleeted && showInputName === name) isShow = true; // 👈 show input if multi select value is selected
+    });
+  }
+
+  const clinicalSpecPr =
+    form?.dev_application_input_filter?.clinicalspecialtysofpractice_handler;
+  if (clinicalSpecPr) {
+    clinicalSpecPr?.map((filter) => {
+      const showInputName = filter?.show_input; // 👈 input name to show
+      const isSleeted =
+        typeof form?.["formus_clinicalspecialtysofpractice"] === "string" &&
+        form?.["formus_clinicalspecialtysofpractice"]?.includes(
+          filter?.multi_select_value
+        ); // 👈 multi select value to check
+
+      if (isSleeted && showInputName === name) isShow = true; // 👈 show input if multi select value is selected
+    });
+  }
+
+  const specialDermPr =
+    form?.dev_application_input_filter
+      ?.specialiseddermatologyareasofpractice_handler;
+  if (specialDermPr) {
+    specialDermPr?.map((filter) => {
+      const showInputName = filter?.show_input; // 👈 input name to show
+      const isSleeted =
+        typeof form?.["formus_specialiseddermatologyareasofpractice"] ===
+          "string" &&
+        form?.["formus_specialiseddermatologyareasofpractice"]?.includes(
+          filter?.multi_select_value
+        ); // 👈 multi select value to check
+
+      if (isSleeted && showInputName === name) isShow = true; // 👈 show input if multi select value is selected
+    });
+  }
+
+  return isShow;
 };
 
 export const requiredFieldHandler = ({ form }) => {

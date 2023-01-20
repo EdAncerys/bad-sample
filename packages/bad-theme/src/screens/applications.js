@@ -48,6 +48,11 @@ const Applications = ({ state, actions }) => {
   const profilePictureRef = useRef(null);
   const hospitalSearchRef = useRef("");
   const address1Line1Ref = useRef("");
+  console.log(
+    "⭐️ filters ",
+    form?.dev_application_input_filter?.main_specialty_qualification_handler
+  );
+  console.log("⭐️ QT ", form?.["formus_qualificationtype"]);
 
   useEffect(() => {
     if (!isActiveUser) return; // return if no user data is available

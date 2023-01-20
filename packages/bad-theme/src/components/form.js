@@ -8,7 +8,7 @@ import {
   BAD_STEP_FIVE_FORM_CONFIG,
 } from "../config/form";
 import {
-  inputShowHandler,
+  conditionalShowHandler,
   wpAppFilterHandler,
   dataExtractor,
 } from "../helpers/inputHelpers";
@@ -89,7 +89,7 @@ const Form = ({
           // 👇 uncomment bellows to apply filtering
           // --------------------------------------------------------------------------------
           if (!wpAppFilterHandler({ form, name, badApp })) return null; // if input is not in filter return null
-          if (!inputShowHandler({ form, name, badApp })) return null; // additional filter logic for inputs
+          if (!conditionalShowHandler({ form, name, badApp })) return null; // additional filter logic for inputs
 
           // --------------------------------------------------------------------------------
           // 📌  Form BAD application screen input config. Apply all allowed input types below
