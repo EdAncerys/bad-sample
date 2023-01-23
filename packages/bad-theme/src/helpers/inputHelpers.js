@@ -515,6 +515,13 @@ export const wpAppFilterHandler = ({ form, name, badApp }) => {
     });
   }
 
+  // --------------------------------------------------------------------------------
+  // ⚠️ WP config overwrite for Qualification input
+  // --------------------------------------------------------------------------------
+  if (name === "formus_otherqualificationtype") {
+    if (form?.formus_qualificationtype === "810170007") isShow = true;
+  }
+
   return isShow;
 };
 
