@@ -25,6 +25,7 @@ import {
   group_810170006,
   group_810170007,
 } from "../../config/form";
+import { applicationTypeHandler } from "../../helpers/workforceHelpers";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const { lg } = muiQuery();
@@ -39,68 +40,12 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     bad_ntnno: "",
     bad_otherregulatorybodyreference: "",
     formus_jobrole: "",
+    type: "", // 👈  user type of application. Determines which form to show
+    isBADMember: false,
   });
   console.log("⭐️ FORM ", formData);
-  console.log(
-    "⭐️ FORM DATA: ",
-    formData?.["_formus_clinicalspecialtysofpractice"]
-  );
-  console.log(
-    "⭐️ FORM DATA: ",
-    formData?.["dev_multi_select__formus_clinicalspecialtysofpractice"]
-  );
-
-  // --------------------------------------------------------------------------------
-  //  ⚠️ User application types & Job Roles updates ⚠️
-  // --------------------------------------------------------------------------------
-  let isBADMember =
-    isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess;
-  let isStudentApp =
-    formData?.dev_subs?.filter(
-      (app) =>
-        app?.core_name?.includes("Student") &&
-        app?.statecode === "Active" &&
-        app?.bad_organisedfor === "BAD"
-    )?.length > 0;
-  // --------------------------------------------------------------------------------
-  // 📌  Ordinary / Honorary UI logic are the same
-  // --------------------------------------------------------------------------------
-  let isOrdinaryApp =
-    formData?.dev_subs?.filter(
-      (app) =>
-        (app?.core_name?.includes("Ordinary") ||
-          app?.core_name?.includes("Honorary")) &&
-        app?.statecode === "Active" &&
-        app?.bad_organisedfor === "BAD"
-    )?.length > 0;
-  let isTraineeApp =
-    formData?.dev_subs?.filter(
-      (app) =>
-        app?.core_name?.includes("Trainee") &&
-        app?.statecode === "Active" &&
-        app?.bad_organisedfor === "BAD"
-    )?.length > 0;
-  let isOverseasApp =
-    formData?.dev_subs?.filter(
-      (app) =>
-        app?.core_name?.includes("Overseas") &&
-        app?.statecode === "Active" &&
-        app?.bad_organisedfor === "BAD"
-    )?.length > 0;
-  let isAssociateOverseasApp =
-    formData?.dev_subs?.filter(
-      (app) =>
-        app?.core_name?.includes("Associate Overseas") &&
-        app?.statecode === "Active" &&
-        app?.bad_organisedfor === "BAD"
-    )?.length > 0;
-  let isJuniorApp =
-    formData?.dev_subs?.filter(
-      (app) =>
-        app?.core_name?.includes("Junior") &&
-        app?.statecode === "Active" &&
-        app?.bad_organisedfor === "BAD"
-    )?.length > 0;
+  console.log("⭐️ type ", formData?.type);
+  console.log("⭐️ isBADMember ", formData?.isBADMember);
 
   // --------------------------------------------------------------------------------
   // 📌  Additional show field conditional logic
@@ -118,13 +63,47 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // ⚠️ TESTING OVERWRITES
   // --------------------------------------------------------------------------------
-  // isBADMember = true;
-  // isStudentApp = true; // ✅ tested
-  // isOrdinaryApp = true; // ✅ tested
-  // isTraineeApp = true; // ✅ tested
-  // isOverseasApp = true; // ✅ tested
-  // isAssociateOverseasApp = true; // ✅ tested
-  // isJuniorApp = true;
+  const ServerDevTesting = () => {
+    if (state.auth.ENVIRONMENT !== "DEV") return null;
+
+    return (
+      <div>
+        <h3>ServerDevTesting</h3>
+        <select
+          name="apps"
+          value={formData?.type || ""}
+          onChange={typeChangeHandler}
+        >
+          <option value="Student">Student</option>
+          <option value="Ordinary">Ordinary</option>
+          <option value="Honorary">Honorary</option>
+          <option value="Trainee">Trainee</option>
+          <option value="Overseas">Overseas</option>
+          <option value="Associate Overseas">Associate Overseas</option>
+          <option value="Junior">Junior</option>
+          <option value="Associate">Associate</option>
+          <option value="">Blank</option>
+        </select>
+        <select
+          name="bad"
+          value={formData?.isBADMember ? "true" : "false"}
+          onChange={badChangeHandler}
+        >
+          <option value="true">isBADMember</option>
+          <option value="false">not BAD Member</option>
+        </select>
+      </div>
+    );
+  };
+
+  const typeChangeHandler = (e) => {
+    const { value } = e.target;
+    setForm({ ...formData, type: value });
+  };
+  const badChangeHandler = (e) => {
+    const { value } = e.target;
+    setForm({ ...formData, isBADMember: value === "true" ? true : false });
+  };
 
   // --------------------------------------------------------------------------------
   // 📌  Apply job filters on groupe cat changes
@@ -156,7 +135,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   if (formData?._formus_staffgroupcategory?.toString() === "810170000") {
     _JOBS = _JOBS?.filter((job) => group_810170000.includes(job?.Label));
   }
-
   console.log("⭐️ _JOBS", _JOBS);
 
   useEffect(() => {
@@ -167,8 +145,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         // --------------------------------------------------------------------------------
         // 📌  fetch promises all for all the data
         // --------------------------------------------------------------------------------
-
         let dev_subs = [];
+        let type = "";
+
         const appData = await getApplicationStatus({
           state,
           dispatch,
@@ -177,12 +156,20 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         dev_subs = appData?.subs?.data || []; // 👉 add subs to form
 
         // --------------------------------------------------------------------------------
+        // 📌  Find user application type to determine which form to show
+        // --------------------------------------------------------------------------------
+        type = applicationTypeHandler({ subs: dev_subs });
+
+        // --------------------------------------------------------------------------------
         // 📌  UPDATE FORM DATA
         // --------------------------------------------------------------------------------
         setForm((prev) => ({
           ...prev,
           ...isActiveUser,
           dev_subs,
+          type,
+          isBADMember:
+            isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess,
         }));
       } catch (error) {
         console.log("error", error);
@@ -223,7 +210,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     // 📌  Multi select dropdown cleaner
     // 📌  onClick event listener. Close all formus multiselect fields if DOM element clicked
     // --------------------------------------------------------------------------------
-    console.log("⭐️ list ", e.target.classList);
+    // console.log("⭐️ list ", e.target.classList);
 
     if (
       e.target.classList.contains("flex-col") ||
@@ -372,8 +359,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           formData?.formus_otherqualificationtype?.toString(), // 👈  multi picker
       }
     );
-
-    console.log("⭐️ DATA FEED to UPDATE", data);
+    // console.log("⭐️ DATA FEED to UPDATE", data);
 
     try {
       const response = await updateProfileAction({
@@ -405,8 +391,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   const multiSelectHandler = ({ title, value, name }) => {
     let currentValues = formData?.[name] || "";
     let currentTitles = "";
-    console.log("⭐️ START BASE", currentValues);
-    console.log("⭐️ START value", value);
 
     if (!currentValues?.includes(value)) {
       // 👉 if value is already selected, add to it by comma separated
@@ -448,7 +432,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   };
 
   const multiSelectDropDownHandler = ({ name, value }) => {
-    console.log("🐞 name: ", name);
     let handler = {
       ["dev_selected_" + name]: !formData?.["dev_selected_" + name],
     };
@@ -512,6 +495,8 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
   return (
     <div style={{ position: "relative" }}>
+      <ServerDevTesting />
+
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
         className="shadow flex-form-col"
@@ -522,7 +507,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         </div>
         <div className="flex-form-col">
           {/* 👉 APPLICABLE TO ALL APPS APART FROM 👉 STUDENT */}
-          {!isStudentApp && (
+          {formData?.type !== "Student" && (
             <div className="flex-form-row">
               <div className="form-row">
                 <label>
@@ -552,7 +537,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           )}
 
           {/* 👉 APPLICABLE TO STUDENT APPS ONLY */}
-          {isBADMember && isStudentApp && (
+          {formData?.isBADMember && formData?.type === "Student" && (
             <div className="flex-form-row">
               <div className="form-row">
                 <label>Residency Status</label>
@@ -580,7 +565,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           )}
 
-          {isBADMember && isOtherQType && (
+          {formData?.isBADMember && isOtherQType && (
             <div className="flex-form-row">
               <div className="form-row">
                 <label>Qualification Type Other</label>
@@ -624,7 +609,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             </div>
           </div>
 
-          {isBADMember && !isStudentApp && (
+          {formData?.isBADMember && formData?.type !== "Student" && (
             <div className="flex-form-col">
               <div className="flex-form-row">
                 <div className="form-row">
@@ -659,7 +644,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               </div>
 
-              {!isAssociateOverseasApp && (
+              {formData?.type !== "Associate Overseas" && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Type of Contract</label>
@@ -691,7 +676,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {!isAssociateOverseasApp && (
+              {formData?.type !== "Associate Overseas" && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>
@@ -728,7 +713,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {!isAssociateOverseasApp && isPrivatePractice && (
+              {formData?.type !== "Associate Overseas" && isPrivatePractice && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Private Practice Organisation</label>
@@ -751,7 +736,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {isOrdinaryApp && (
+              {formData?.type === "Ordinary" && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Main Specialty Qualification</label>
@@ -787,7 +772,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {isOrdinaryApp && isOtherSpecialtyQ && (
+              {formData?.type === "Ordinary" && isOtherSpecialtyQ && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Main Specialty Qualification Other</label>
@@ -806,7 +791,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {isTraineeApp && (
+              {formData?.type === "Trainee" && (
                 <div className="flex-form-row">
                   <div className="flex-form-row">
                     <div className="form-row">
@@ -838,7 +823,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {isTraineeApp && isOtherCCSTDates && (
+              {formData?.type === "Trainee" && isOtherCCSTDates && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Reason for Moving CSST Date Other</label>
@@ -857,7 +842,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
-              {!isAssociateOverseasApp && (
+              {formData?.type !== "Associate Overseas" && (
                 <div className="flex-form-row">
                   <div className="form-row">
                     <label>Residency Status</label>
