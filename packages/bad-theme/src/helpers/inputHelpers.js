@@ -521,6 +521,9 @@ export const wpAppFilterHandler = ({ form, name, badApp }) => {
   if (name === "formus_otherqualificationtype") {
     if (form?.formus_qualificationtype === "810170007") isShow = true;
   }
+  if (name === "formus_otherreasonformovingccstdate") {
+    if (form?.formus_reasonformovingccstdate === "810170005") isShow = true;
+  }
 
   return isShow;
 };

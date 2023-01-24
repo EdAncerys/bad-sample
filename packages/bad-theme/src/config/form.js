@@ -832,7 +832,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 200,
     Required: "None",
-    order: -55,
+    order: -46,
     hidden: false,
     width: "100%",
     caption: "",
@@ -1166,7 +1166,7 @@ export const FORM_CONFIG = {
     ],
   },
   formus_otherqualificationtype: {
-    Label: "Please specify other Specialty Qualification", // Old Label: "Other Qualification Type"
+    Label: "Please specify other qualification type", // Old Label: "Other Qualification Type"
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
