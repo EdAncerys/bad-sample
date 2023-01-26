@@ -27,7 +27,9 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
     let memberships = await getMembershipData({ state });
     // 📌 filter out bad memberships only
     memberships = memberships?.filter(
-      (membership) => membership?.acf?.bad_or_sig === "bad"
+      (membership) =>
+        membership?.acf?.bad_or_sig === "bad" &&
+        membership?.acf?.application_status !== "Hide"
     );
     // ⬇️ sort memberships by bad_order accenting & if no value push to end
     memberships.sort((a, b) => {
@@ -50,7 +52,6 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   }, []);
 
   if (!block || !membershipTypes) return <Loading />;
-  console.log("🐞 membershipTypes", membershipTypes);
 
   // RETURN ---------------------------------------------------
   return (

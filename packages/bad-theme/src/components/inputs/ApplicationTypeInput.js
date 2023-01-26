@@ -56,6 +56,11 @@ const ApplicationTypeInput = ({ form, onChange }) => {
           typeName = typeName.replace("Associate Trainee", "Trainee");
 
           // --------------------------------------------------------------------------------
+          // ⚠️ Dont show hidden memberships. WP config: Hide
+          // --------------------------------------------------------------------------------
+          if (acf?.application_status === "Hide") return null;
+
+          // --------------------------------------------------------------------------------
           // ⚠️ don't show "Retired" applications in UI
           // --------------------------------------------------------------------------------
           if (typeName === "Retired" || typeName === "Retired No Journal")

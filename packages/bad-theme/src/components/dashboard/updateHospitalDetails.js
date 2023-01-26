@@ -172,13 +172,12 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             m?.core_endon?.includes(new Date().getFullYear().toString()) // 👉 current year only
         );
         let membershipType = activeMembership?.[0]?.acf?.bad_categorytype;
-        console.log("⭐️ FOUND ", activeMembership);
-        membershipType = "Honorary Working";
+        console.log("⭐️ FOUND activeMembership", activeMembership);
+
         if (membershipType)
           membership = membership?.filter(
             (m) => m?.acf?.category_types === membershipType
           );
-        console.log("⭐️ filtered membershipType ", membership);
 
         // --------------------------------------------------------------------------------
         // 📌  UPDATE FORM DATA
