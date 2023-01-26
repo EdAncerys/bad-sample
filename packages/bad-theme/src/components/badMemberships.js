@@ -50,6 +50,7 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   }, []);
 
   if (!block || !membershipTypes) return <Loading />;
+  console.log("🐞 membershipTypes", membershipTypes);
 
   // RETURN ---------------------------------------------------
   return (

@@ -42,6 +42,16 @@
   width: 100%;
 }
 
+.form-row-50 {
+  width: calc(50% - 0.5em);
+}
+
+.workforce-container {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
 /* media query's */
 @media screen and (max-width: 992px) {
   .applications-actions {
@@ -55,5 +65,9 @@
 
   .flex-form-col {
     padding: 1em;
+  }
+
+  .form-row-50 {
+    width: 100%;
   }
 }

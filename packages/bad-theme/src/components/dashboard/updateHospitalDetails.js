@@ -25,6 +25,7 @@ import {
   group_810170006,
   group_810170007,
 } from "../../config/form";
+import { getMembershipTypes } from "../../helpers/inputHelpers";
 import { applicationTypeHandler } from "../../helpers/workforceHelpers";
 
 const UpdateHospitalDetails = ({ state, actions, libraries }) => {
@@ -161,6 +162,25 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         type = applicationTypeHandler({ subs: dev_subs });
 
         // --------------------------------------------------------------------------------
+        // 📌  Get Application list & config from wp
+        // --------------------------------------------------------------------------------
+        let membership = await getMembershipTypes({ state });
+        let activeMembership = dev_subs?.filter(
+          (m) =>
+            m?.acf?.statecode === "Active" && // 👉 active membership only
+            m?.acf?.bad_organisedfor === "BAD" && // 👉 BAD membership only
+            m?.core_endon?.includes(new Date().getFullYear().toString()) // 👉 current year only
+        );
+        let membershipType = activeMembership?.[0]?.acf?.bad_categorytype;
+        console.log("⭐️ FOUND ", activeMembership);
+        membershipType = "Honorary Working";
+        if (membershipType)
+          membership = membership?.filter(
+            (m) => m?.acf?.category_types === membershipType
+          );
+        console.log("⭐️ filtered membershipType ", membership);
+
+        // --------------------------------------------------------------------------------
         // 📌  UPDATE FORM DATA
         // --------------------------------------------------------------------------------
         setForm((prev) => ({
@@ -168,6 +188,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           ...isActiveUser,
           dev_subs,
           type,
+          appFilters: membership?.[0]?.acf,
           isBADMember:
             isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess,
         }));
@@ -218,7 +239,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       e.target.classList.contains("flex-form-col") ||
       e.target.classList.contains("form-select") ||
       e.target.classList.contains("blue-btn") ||
-      e.target.classList.contains("form-row") ||
+      e.target.classList.contains("form-row-50") ||
       e.target.classList.contains("form-control")
     ) {
       setForm((prev) => ({
@@ -477,6 +498,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         style={{
           justifyContent: !lg ? "flex-end" : "center",
           padding: `2em 0 0`,
+          width: "100%",
         }}
       >
         <div
@@ -499,75 +521,89 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
 
       <ActionPlaceholder isFetching={isFetching} background="transparent" />
       <div
-        className="shadow flex-form-col"
+        className="shadow flex-form-col flex-wrap"
         style={{ marginBottom: `${marginVertical}px`, padding: "2em 4em" }}
       >
-        <div className="primary-title" style={{ fontSize: 20 }}>
+        <div className="primary-title" style={{ fontSize: 20, widht: "100%" }}>
           Workforce Details:
         </div>
-        <div className="flex-form-col">
+        <div className="workforce-container">
           {/* 👉 APPLICABLE TO ALL APPS APART FROM 👉 STUDENT */}
           {formData?.type !== "Student" && (
-            <div className="flex-form-row">
-              <div className="form-row">
-                <label>
-                  Main Hospital / Place of Work / Medical School details
-                </label>
-                <input
-                  name="bad_py3_hospitalid"
-                  value={isActiveUser?.["_parentcustomerid_value"] || ""}
-                  onChange={handleInputChange}
-                  className="form-control input"
-                  placeholder="Main Hospital / Place of Work / Medical School details"
-                  disabled
-                />
-              </div>
-              <div className="form-row">
-                <label>Qualification Type</label>
-                <PickListInput
-                  form={formData}
-                  name="_formus_qualificationtype"
-                  value={formData?._formus_qualificationtype || ""}
-                  onChange={handleInputChange}
-                  Choices={[...FORM_CONFIG?.formus_qualificationtype?.Choices]}
-                  labelClass="form-label"
-                />
-              </div>
-            </div>
+            <>
+              {formData?.appFilters?.bad_py3_hospitalid !== "Hide" && (
+                <div className="form-row-50">
+                  <label>
+                    Main Hospital / Place of Work / Medical School details
+                  </label>
+                  <input
+                    name="bad_py3_hospitalid"
+                    value={isActiveUser?.["_parentcustomerid_value"] || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Main Hospital / Place of Work / Medical School details"
+                    disabled
+                  />
+                </div>
+              )}
+              {formData?.appFilters?.bad_formus_qualificationtype !==
+                "Hide" && (
+                <div className="form-row-50">
+                  <label>Qualification Type</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_qualificationtype"
+                    value={formData?._formus_qualificationtype || ""}
+                    onChange={handleInputChange}
+                    Choices={[
+                      ...FORM_CONFIG?.formus_qualificationtype?.Choices,
+                    ]}
+                    labelClass="form-label"
+                  />
+                </div>
+              )}
+            </>
           )}
 
           {/* 👉 APPLICABLE TO STUDENT APPS ONLY */}
           {formData?.isBADMember && formData?.type === "Student" && (
-            <div className="flex-form-row">
-              <div className="form-row">
-                <label>Residency Status</label>
-                <PickListInput
-                  form={formData}
-                  name="_formus_residencystatus"
-                  value={formData?._formus_residencystatus || ""}
-                  onChange={handleInputChange}
-                  Choices={[...FORM_CONFIG?.formus_residencystatus?.Choices]}
-                  labelClass="form-label"
-                />
-              </div>
+            <>
+              {formData?.appFilters?.bad_formus_residencystatus !== "Hide" && (
+                <div className="form-row-50">
+                  <label>Residency Status</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_residencystatus"
+                    value={formData?._formus_residencystatus || ""}
+                    onChange={handleInputChange}
+                    Choices={[...FORM_CONFIG?.formus_residencystatus?.Choices]}
+                    labelClass="form-label"
+                  />
+                </div>
+              )}
 
-              <div className="form-row">
-                <label>Qualification Type</label>
-                <PickListInput
-                  form={formData}
-                  name="_formus_qualificationtype"
-                  value={formData?._formus_qualificationtype || ""}
-                  onChange={handleInputChange}
-                  Choices={[...FORM_CONFIG?.formus_qualificationtype?.Choices]}
-                  labelClass="form-label"
-                />
-              </div>
-            </div>
+              {formData?.appFilters?.bad_formus_qualificationtype !==
+                "Hide" && (
+                <div className="form-row-50">
+                  <label>Qualification Type</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_qualificationtype"
+                    value={formData?._formus_qualificationtype || ""}
+                    onChange={handleInputChange}
+                    Choices={[
+                      ...FORM_CONFIG?.formus_qualificationtype?.Choices,
+                    ]}
+                    labelClass="form-label"
+                  />
+                </div>
+              )}
+            </>
           )}
 
           {formData?.isBADMember && isOtherQType && (
-            <div className="flex-form-row">
-              <div className="form-row">
+            <>
+              <div className="form-row-50">
                 <label>Qualification Type Other</label>
                 <input
                   name="formus_otherqualificationtype"
@@ -578,13 +614,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   placeholder="Qualification Type Other"
                 />
               </div>
-              <div className="form-row" />
-            </div>
+              <div className="form-row-50" />
+            </>
           )}
 
           {/* 👉 APPLICABLE TO ALL APPS */}
-          <div className="flex-form-row">
-            <div className="form-row">
+          {formData?.appFilters?.bad_formus_staffgroupcategory !== "Hide" && (
+            <div className="form-row-50">
               <label>Staff Group Category</label>
               <PickListInput
                 form={formData}
@@ -595,7 +631,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 labelClass="form-label"
               />
             </div>
-            <div className="form-row">
+          )}
+          {formData?.appFilters?.bad_formus_jobrole !== "Hide" && (
+            <div className="form-row-50">
               <label>Job Role</label>
               <PickListInput
                 form={formData}
@@ -607,12 +645,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 dashboardWidget="Job Role"
               />
             </div>
-          </div>
+          )}
 
           {formData?.isBADMember && formData?.type !== "Student" && (
-            <div className="flex-form-col">
-              <div className="flex-form-row">
-                <div className="form-row">
+            <>
+              {formData?.appFilters?.bad_formus_professionalregistrationbody !==
+                "Hide" && (
+                <div className="form-row-50">
                   <label>Professional Registration Body</label>
                   <PickListInput
                     form={formData}
@@ -626,7 +665,10 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     labelClass="form-label"
                   />
                 </div>
-                <div className="form-row">
+              )}
+              {formData?.appFilters
+                ?.bad_formus_professionalregistrationstatus !== "Hide" && (
+                <div className="form-row-50">
                   <label>Professional Registration Status</label>
                   <PickListInput
                     form={formData}
@@ -642,159 +684,174 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     labelClass="form-label"
                   />
                 </div>
-              </div>
-
-              {formData?.type !== "Associate Overseas" && (
-                <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>Type of Contract</label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_typeofcontract"
-                      value={formData?._formus_typeofcontract || ""}
-                      onChange={handleInputChange}
-                      Choices={[...FORM_CONFIG?.formus_typeofcontract?.Choices]}
-                      labelClass="form-label"
-                    />
-                  </div>
-
-                  <div className="form-row">
-                    <label>Clinical Specialty(s) of practice</label>
-                    <MultiCheckboxInput
-                      form={formData}
-                      name="_formus_clinicalspecialtysofpractice"
-                      labelClass="form-label"
-                      Choices={[
-                        ...FORM_CONFIG?.formus_clinicalspecialtysofpractice
-                          ?.Choices,
-                      ]}
-                      multiSelectHandler={multiSelectHandler}
-                      multiSelectDropDownHandler={multiSelectDropDownHandler}
-                      dashboardWidget="formus_clinicalspecialtysofpractice"
-                    />
-                  </div>
-                </div>
               )}
 
               {formData?.type !== "Associate Overseas" && (
-                <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>
-                      Fixed term/temporary reason for employment contract
-                    </label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_fixedtermtemporaryreasonforemploymentcont"
-                      value={
-                        formData?._formus_fixedtermtemporaryreasonforemploymentcont ||
-                        ""
-                      }
-                      onChange={handleInputChange}
-                      Choices={[
-                        ...FORM_CONFIG
-                          ?.formus_fixedtermtemporaryreasonforemploymentcont
-                          ?.Choices,
-                      ]}
-                      labelClass="form-label"
-                    />
-                  </div>
+                <>
+                  {formData?.appFilters?.bad_formus_typeofcontract !==
+                    "Hide" && (
+                    <div className="form-row-50">
+                      <label>Type of Contract</label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_typeofcontract"
+                        value={formData?._formus_typeofcontract || ""}
+                        onChange={handleInputChange}
+                        Choices={[
+                          ...FORM_CONFIG?.formus_typeofcontract?.Choices,
+                        ]}
+                        labelClass="form-label"
+                      />
+                    </div>
+                  )}
 
-                  <div className="form-row">
-                    <label>Type of Practice</label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_typeofpractice"
-                      value={formData?._formus_typeofpractice || ""}
-                      onChange={handleInputChange}
-                      Choices={[...FORM_CONFIG?.formus_typeofpractice?.Choices]}
-                      labelClass="form-label"
-                    />
-                  </div>
-                </div>
+                  {formData?.appFilters
+                    ?.bad_formus_clinicalspecialtysofpractice !== "Hide" && (
+                    <div className="form-row-50">
+                      <label>Clinical Specialty(s) of practice</label>
+                      <MultiCheckboxInput
+                        form={formData}
+                        name="_formus_clinicalspecialtysofpractice"
+                        labelClass="form-label"
+                        Choices={[
+                          ...FORM_CONFIG?.formus_clinicalspecialtysofpractice
+                            ?.Choices,
+                        ]}
+                        multiSelectHandler={multiSelectHandler}
+                        multiSelectDropDownHandler={multiSelectDropDownHandler}
+                        dashboardWidget="formus_clinicalspecialtysofpractice"
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+
+              {formData?.type !== "Associate Overseas" && (
+                <>
+                  {formData?.appFilters
+                    ?.bad_formus_fixedtermtemporaryreasonforemploymentcont !==
+                    "Hide" && (
+                    <div className="form-row-50">
+                      <label>
+                        Fixed term/temporary reason for employment contract
+                      </label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_fixedtermtemporaryreasonforemploymentcont"
+                        value={
+                          formData?._formus_fixedtermtemporaryreasonforemploymentcont ||
+                          ""
+                        }
+                        onChange={handleInputChange}
+                        Choices={[
+                          ...FORM_CONFIG
+                            ?.formus_fixedtermtemporaryreasonforemploymentcont
+                            ?.Choices,
+                        ]}
+                        labelClass="form-label"
+                      />
+                    </div>
+                  )}
+
+                  {formData?.appFilters?.bad_formus_typeofpractice !==
+                    "Hide" && (
+                    <div className="form-row-50">
+                      <label>Type of Practice</label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_typeofpractice"
+                        value={formData?._formus_typeofpractice || ""}
+                        onChange={handleInputChange}
+                        Choices={[
+                          ...FORM_CONFIG?.formus_typeofpractice?.Choices,
+                        ]}
+                        labelClass="form-label"
+                      />
+                    </div>
+                  )}
+                </>
               )}
 
               {formData?.type !== "Associate Overseas" && isPrivatePractice && (
-                <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>Private Practice Organisation</label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_privatepracticeorganisation"
-                      value={
-                        formData?._formus_privatepracticeorganisation || ""
-                      }
-                      onChange={handleInputChange}
-                      Choices={[
-                        ...FORM_CONFIG?.formus_privatepracticeorganisation
-                          ?.Choices,
-                      ]}
-                      labelClass="form-label"
-                    />
-                  </div>
-
-                  <div className="form-row" />
+                <div className="form-row-50">
+                  <label>Private Practice Organisation</label>
+                  <PickListInput
+                    form={formData}
+                    name="_formus_privatepracticeorganisation"
+                    value={formData?._formus_privatepracticeorganisation || ""}
+                    onChange={handleInputChange}
+                    Choices={[
+                      ...FORM_CONFIG?.formus_privatepracticeorganisation
+                        ?.Choices,
+                    ]}
+                    labelClass="form-label"
+                  />
                 </div>
               )}
 
               {formData?.type === "Ordinary" && (
-                <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>Main Specialty Qualification</label>
-                    <MultiCheckboxInput
-                      form={formData}
-                      name="_formus_mainspecialtyqualification"
-                      labelClass="form-label"
-                      Choices={[
-                        ...FORM_CONFIG?.formus_mainspecialtyqualification
-                          ?.Choices,
-                      ]}
-                      multiSelectHandler={multiSelectHandler}
-                      multiSelectDropDownHandler={multiSelectDropDownHandler}
-                      dashboardWidget="formus_mainspecialtyqualification"
-                    />
-                  </div>
-                  <div className="form-row">
-                    <label>Specialized Dermatology Areas of practice</label>
-                    <MultiCheckboxInput
-                      form={formData}
-                      name="_formus_specialiseddermatologyareasofpractice"
-                      labelClass="form-label"
-                      Choices={[
-                        ...FORM_CONFIG
-                          ?.formus_specialiseddermatologyareasofpractice
-                          ?.Choices,
-                      ]}
-                      multiSelectHandler={multiSelectHandler}
-                      multiSelectDropDownHandler={multiSelectDropDownHandler}
-                      dashboardWidget="formus_specialiseddermatologyareasofpractice"
-                    />
-                  </div>
-                </div>
+                <>
+                  {formData?.appFilters
+                    ?.bad_formus_mainspecialtyqualification !== "Hide" && (
+                    <div className="form-row-50">
+                      <label>Main Specialty Qualification</label>
+                      <MultiCheckboxInput
+                        form={formData}
+                        name="_formus_mainspecialtyqualification"
+                        labelClass="form-label"
+                        Choices={[
+                          ...FORM_CONFIG?.formus_mainspecialtyqualification
+                            ?.Choices,
+                        ]}
+                        multiSelectHandler={multiSelectHandler}
+                        multiSelectDropDownHandler={multiSelectDropDownHandler}
+                        dashboardWidget="formus_mainspecialtyqualification"
+                      />
+                    </div>
+                  )}
+                  {formData?.appFilters
+                    ?.bad_formus_specialiseddermatologyareasofpractice !==
+                    "Hide" && (
+                    <div className="form-row-50">
+                      <label>Specialized Dermatology Areas of practice</label>
+                      <MultiCheckboxInput
+                        form={formData}
+                        name="_formus_specialiseddermatologyareasofpractice"
+                        labelClass="form-label"
+                        Choices={[
+                          ...FORM_CONFIG
+                            ?.formus_specialiseddermatologyareasofpractice
+                            ?.Choices,
+                        ]}
+                        multiSelectHandler={multiSelectHandler}
+                        multiSelectDropDownHandler={multiSelectDropDownHandler}
+                        dashboardWidget="formus_specialiseddermatologyareasofpractice"
+                      />
+                    </div>
+                  )}
+                </>
               )}
 
               {formData?.type === "Ordinary" && isOtherSpecialtyQ && (
-                <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>Main Specialty Qualification Other</label>
-                    <input
-                      name="formus_othermainspecialtyqualification"
-                      type="text"
-                      value={
-                        formData?.formus_othermainspecialtyqualification || ""
-                      }
-                      onChange={handleInputChange}
-                      className="form-control input"
-                      placeholder="Main Specialty Qualification Other"
-                    />
-                  </div>
-                  <div className="form-row" />
+                <div className="form-row-50">
+                  <label>Main Specialty Qualification Other</label>
+                  <input
+                    name="formus_othermainspecialtyqualification"
+                    type="text"
+                    value={
+                      formData?.formus_othermainspecialtyqualification || ""
+                    }
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Main Specialty Qualification Other"
+                  />
                 </div>
               )}
 
               {formData?.type === "Trainee" && (
-                <div className="flex-form-row">
-                  <div className="flex-form-row">
-                    <div className="form-row">
+                <>
+                  {formData?.appFilters?.bad_py3_ntnno !== "Hide" && (
+                    <div className="form-row-50">
                       <label>NTN Number</label>
                       <input
                         name="bad_ntnno"
@@ -805,7 +862,10 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                         placeholder="NTN Number"
                       />
                     </div>
-                    <div className="form-row">
+                  )}
+                  {formData?.appFilters?.bad_formus_reasonformovingccstdate !==
+                    "Hide" && (
+                    <div className="form-row-50">
                       <label>Reason for moving CCST date</label>
                       <PickListInput
                         form={formData}
@@ -819,13 +879,13 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                         labelClass="form-label"
                       />
                     </div>
-                  </div>
-                </div>
+                  )}
+                </>
               )}
 
               {formData?.type === "Trainee" && isOtherCCSTDates && (
-                <div className="flex-form-row">
-                  <div className="form-row">
+                <>
+                  <div className="form-row-50">
                     <label>Reason for Moving CSST Date Other</label>
                     <input
                       name="formus_otherreasonformovingccstdate"
@@ -838,40 +898,45 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                       placeholder="Reason for Moving CSST Date Other"
                     />
                   </div>
-                  <div className="form-row" />
-                </div>
+                  <div className="form-row-50" />
+                </>
               )}
 
               {formData?.type !== "Associate Overseas" && (
-                <div className="flex-form-row">
-                  <div className="form-row">
-                    <label>Residency Status</label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_residencystatus"
-                      value={formData?._formus_residencystatus || ""}
-                      onChange={handleInputChange}
-                      Choices={[
-                        ...FORM_CONFIG?.formus_residencystatus?.Choices,
-                      ]}
-                      labelClass="form-label"
-                    />
-                  </div>
+                <>
+                  {formData?.appFilters?.bad_formus_residencystatus !==
+                    "Hide" && (
+                    <div className="form-row-50">
+                      <label>Residency Status</label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_residencystatus"
+                        value={formData?._formus_residencystatus || ""}
+                        onChange={handleInputChange}
+                        Choices={[
+                          ...FORM_CONFIG?.formus_residencystatus?.Choices,
+                        ]}
+                        labelClass="form-label"
+                      />
+                    </div>
+                  )}
 
-                  <div className="form-row">
-                    <label>Rota Pattern</label>
-                    <PickListInput
-                      form={formData}
-                      name="_formus_rotapattern"
-                      value={formData?._formus_rotapattern || ""}
-                      onChange={handleInputChange}
-                      Choices={[...FORM_CONFIG?.formus_rotapattern?.Choices]}
-                      labelClass="form-label"
-                    />
-                  </div>
-                </div>
+                  {formData?.appFilters?.bad_formus_rotapattern !== "Hide" && (
+                    <div className="form-row-50">
+                      <label>Rota Pattern</label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_rotapattern"
+                        value={formData?._formus_rotapattern || ""}
+                        onChange={handleInputChange}
+                        Choices={[...FORM_CONFIG?.formus_rotapattern?.Choices]}
+                        labelClass="form-label"
+                      />
+                    </div>
+                  )}
+                </>
               )}
-            </div>
+            </>
           )}
         </div>
 
