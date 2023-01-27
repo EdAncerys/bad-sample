@@ -29,6 +29,21 @@ const PickListInput = ({
     cssOverrides = form?.[name];
   }
 
+  // --------------------------------------------------------------------------------
+  // 📌 Sort formus_jobrole Choices. Put "Other/Not Listed" at the end of the list
+  // --------------------------------------------------------------------------------
+  if (name === "formus_jobrole") {
+    Choices = Choices.sort((a, b) => {
+      if (a.Label === "Other/Not Listed") {
+        return 1;
+      }
+      if (b.Label === "Other/Not Listed") {
+        return -1;
+      }
+      return 0;
+    });
+  }
+
   return (
     <div style={{ order: FORM_CONFIG?.[name]?.order, position: "relative" }}>
       {Label && <label className={labelClass}>{Label}</label>}

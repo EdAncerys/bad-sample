@@ -525,6 +525,11 @@ export const wpAppFilterHandler = ({ form, name, badApp }) => {
     if (form?.formus_reasonformovingccstdate === "810170005") isShow = true;
   }
 
+  // 👉 JOB ROLE FREE TEXT FIELD
+  if (name === "formus_jobrolefreetext") {
+    if (form?.formus_jobrole === "810170097") isShow = true;
+  }
+
   return isShow;
 };
 

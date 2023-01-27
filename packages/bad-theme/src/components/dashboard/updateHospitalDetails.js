@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "frontity";
 import ActionPlaceholder from "../actionPlaceholder";
+import Loading from "../loading";
 
 // CONTEXT ----------------------------------------------------------------
 import {
@@ -43,6 +44,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     formus_jobrole: "",
     type: "", // 👈  user type of application. Determines which form to show
     isBADMember: false,
+    fetching: true,
   });
   console.log("⭐️ FORM ", formData);
   console.log("⭐️ type ", formData?.type);
@@ -190,6 +192,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           appFilters: membership?.[0]?.acf,
           isBADMember:
             isActiveUser?.bad_selfserviceaccess === state.theme.serviceAccess,
+          fetching: false,
         }));
       } catch (error) {
         console.log("error", error);
@@ -513,6 +516,11 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       </div>
     );
   };
+
+  // --------------------------------------------------------------------------------
+  // 📌  Load indicator to await async calls
+  // --------------------------------------------------------------------------------
+  if (formData?.fetching) return <Loading />;
 
   return (
     <div style={{ position: "relative" }}>

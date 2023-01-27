@@ -1297,6 +1297,7 @@ export const group_810170000 = [
   "Trust Grade Doctor - Foundation Level",
   "Trust Grade Doctor - Specialty Registrar",
   "Internal Medical Trainee",
+  "Other/Not Listed", // 👈  Allow user to input selection manually | 810170097 [Other]
 ];
 
 export const group_810170001 = [
@@ -1304,6 +1305,7 @@ export const group_810170001 = [
   "Student Physiotherapist",
   "Student Practice Nurse",
   "Student Psychotherapist",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
 ];
 
 export const group_810170002 = [
@@ -1319,6 +1321,7 @@ export const group_810170002 = [
   "Practice Research Nurse",
   "Sister/Charge Nurse",
   "Trainee Advanced Practitioner",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
 ];
 
 export const group_810170003 = [
@@ -1336,6 +1339,7 @@ export const group_810170003 = [
   "Prosthetist Consultant",
   "Prosthetist Manager",
   "Prosthetist Specialist Practitioner",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
 ];
 
 export const group_810170004 = [
@@ -1360,6 +1364,7 @@ export const group_810170004 = [
   "Trainee Health Psychologist",
   "Trainee High Intensity Therapist",
   "Trainee Other Applied Psychologist",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
 ];
 
 export const group_810170005 = [
@@ -1387,9 +1392,14 @@ export const group_810170005 = [
   "Trainee Practitioner",
   "Trainee Psychological Wellbeing Practitioner",
   "Trainee Scientist",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
 ];
 
-export const group_810170006 = ["GPwER", "GPwSI"];
+export const group_810170006 = [
+  "GPwER",
+  "GPwSI",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
+];
 
 export const group_810170007 = [
   "Clinical Doctoral Researcher",
@@ -1401,6 +1411,7 @@ export const group_810170007 = [
   "Research Professor",
   "Senior Clinical Lecturer",
   "Senior Research Fellow",
+  "Other/Not Listed", // 👈  Allow user to input selection manually
 ];
 
 // --------------------------------------------------------------------------------
