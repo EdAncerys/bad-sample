@@ -149,7 +149,13 @@ export const FORM_CONFIG = {
   },
   py3_speciality: {
     Label: "Specialist Interest",
-    AttributeType: "Memo",
+    // AttributeType: "Memo",
+    AttributeType: "Picklist",
+    Choices: [
+      { value: "Hair", Label: "Hair" },
+      { value: "Nails", Label: "Nails" },
+      { value: "Both", Label: "Both" },
+    ],
     MaxLength: 2000,
     Required: "None",
     order: 0,

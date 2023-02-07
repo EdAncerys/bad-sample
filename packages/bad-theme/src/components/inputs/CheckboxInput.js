@@ -14,13 +14,13 @@ const CheckboxInput = ({
   onChange,
   Handler, // 📌 handler for custom logic
   Link, // 📌 link to redirect page
+  badApp, // 📌 isBadApp
 }) => {
   let inputLabel = Label;
   if (name === "bad_readpolicydocument" && form?.bad_categorytype) {
     let appName =
       form?.bad_categorytype.split(":")[1] || form?.bad_categorytype;
-    // ⚠️ overwrite all policies with BAD policy name
-    appName = "BAD`S";
+    if (badApp) appName = "BAD`S"; // ⚠️ overwrite all policies with BAD policy name
 
     // ⚠️ DermpathPRO policy name overwrite
     if (form?.bad_categorytype === "Full:DermpathPRO Trainee") {

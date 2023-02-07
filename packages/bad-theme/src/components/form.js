@@ -115,8 +115,16 @@ const Form = ({
           const nameWithPrefix = badApp ? "bad_" + name : "sig_" + name; // prefix for bad/sig
 
           Label = FORM_CONFIG?.[name]?.Label; // get label from config
-          const AttributeType =
+          let AttributeType =
             info?.AttributeType || FORM_CONFIG?.[name]?.AttributeType;
+
+          // --------------------------------------------------------------------------------
+          // ⚠️ Data type overwrite for py3_speciality input type
+          // --------------------------------------------------------------------------------
+          if (name === "py3_speciality") {
+            AttributeType = "Picklist";
+          }
+
           const MaxLength = info?.MaxLength || FORM_CONFIG?.[name]?.MaxLength;
           const Required =
             form?.dev_application_input_filter?.[nameWithPrefix] ===
@@ -324,6 +332,7 @@ const Form = ({
                   onChange={onChange}
                   Handler={Handler}
                   Link={Link}
+                  badApp={badApp}
                 />
               </div>
             );
