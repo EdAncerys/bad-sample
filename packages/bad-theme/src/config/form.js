@@ -51,7 +51,7 @@ export const FORM_CONFIG = {
   },
   py3_otherregulatorybodyreference: {
     Label: "Regulatory body registration number",
-    AttributeType: "",
+    AttributeType: "String",
     MaxLength: 100,
     Required: "None",
     order: -60,

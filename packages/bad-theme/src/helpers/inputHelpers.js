@@ -333,7 +333,7 @@ export const conditionalShowHandler = ({ form, name, badApp }) => {
   // 👇 comment out to disable manual input show/hide logic
   // 👉 place first not to overwrite other logic below
   // --------------------------------------------------------------------------------
-  if (badApp) show = manualFilterHandler({ form, name, show });
+  // if (badApp) show = manualFilterHandler({ form, name, show });
 
   if (form?.bad_organisedfor === "810170001") {
     // --------------------------------------------------------------------------------

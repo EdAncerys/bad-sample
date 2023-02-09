@@ -129,16 +129,6 @@ const Form = ({
           const Required =
             form?.dev_application_input_filter?.[nameWithPrefix] ===
             "Show & Required"; // 👉 get required from config
-          if (
-            form?.dev_application_input_filter?.[nameWithPrefix] ===
-            "Show & Required"
-          )
-            console.log(
-              "⭐️ ",
-              form?.dev_application_input_filter?.[nameWithPrefix] ===
-                "Show & Required",
-              nameWithPrefix
-            );
           const Choices = info?.Choices || FORM_CONFIG?.[name]?.Choices || [];
           const Handler = FORM_CONFIG?.[name]?.Handler || null;
           const Link =
