@@ -54,7 +54,7 @@ export const FORM_CONFIG = {
     AttributeType: "String",
     MaxLength: 100,
     Required: "None",
-    order: -60,
+    order: -58,
     hidden: false,
     width: "100%",
     caption: "",
