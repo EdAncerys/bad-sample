@@ -48,11 +48,6 @@ const Applications = ({ state, actions }) => {
   const profilePictureRef = useRef(null);
   const hospitalSearchRef = useRef("");
   const address1Line1Ref = useRef("");
-  console.log(
-    "⭐️ filters ",
-    form?.dev_application_input_filter?.main_specialty_qualification_handler
-  );
-  console.log("⭐️ QT ", form?.["formus_qualificationtype"]);
 
   useEffect(() => {
     if (!isActiveUser) return; // return if no user data is available
@@ -809,6 +804,10 @@ const Applications = ({ state, actions }) => {
           ?.bad_formus_reasonformovingccstdate === "Show & Required"
           ? "formus_reasonformovingccstdate"
           : "",
+        form?.dev_application_input_filter?.bad_formus_regbodynumber ===
+        "Show & Required"
+          ? "formus_regbodynumber" // 👈 new updated field mapping
+          : "",
         form?.bad_newhospitaladded ? "sky_newhospitalname" : "", // if new hospital added, add new hospital name to required fields
         form?.bad_newhospitaladded ? "sky_newhospitaltype" : "", // if new hospital added, add new hospital name to required fields
         form?.["formus_typeofpractice"] !== "810170001" &&
@@ -849,7 +848,6 @@ const Applications = ({ state, actions }) => {
         form?.dev_application_input_filter?.bad_sky_cvurl === "Show & Required"
           ? "sky_cvurl"
           : "",
-
         form?.dev_application_input_filter?.bad_bad_memberdirectory ===
         "Show & Required"
           ? "bad_memberdirectory"
