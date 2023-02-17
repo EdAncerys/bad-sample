@@ -18,37 +18,41 @@ const BADMemberships = ({ state, actions, libraries, block }) => {
   let marginVertical = state.theme.marginVertical;
   if (disable_vertical_padding) marginVertical = 0;
 
-  const useEffectRef = useRef(null);
   const { lg } = muiQuery();
 
   // DATA pre FETCH ----------------------------------------------------------------
-  useEffect(async () => {
-    // pre fetch membership data
-    let memberships = await getMembershipData({ state });
-    // 📌 filter out bad memberships only
-    memberships = memberships?.filter(
-      (membership) =>
-        membership?.acf?.bad_or_sig === "bad" &&
-        membership?.acf?.application_status !== "Hide"
-    );
-    // ⬇️ sort memberships by bad_order accenting & if no value push to end
-    memberships.sort((a, b) => {
-      if (a.acf.bad_order && b.acf.bad_order) {
-        return a.acf.bad_order - b.acf.bad_order;
-      } else if (a.acf.bad_order) {
-        return -1;
-      } else if (b.acf.bad_order) {
-        return 1;
-      } else {
-        return 0;
+  useEffect(() => {
+    (async () => {
+      const url = `${state.auth.WP_HOST}/wp-json/wp/v2/memberships?&per_page=100&page=1&_fields=id,type,link,title,sig_group,acf&order=asc`;
+
+      try {
+        let res = await fetch(url); // get the data from the memberships CPT
+        let memberships = await res?.json();
+
+        // 📌 filter out bad memberships only
+        memberships = memberships?.filter(
+          (membership) =>
+            membership?.acf?.bad_or_sig === "bad" &&
+            membership?.acf?.application_status !== "Hide"
+        );
+        // ⬇️ sort memberships by bad_order accenting & if no value push to end
+        memberships.sort((a, b) => {
+          if (a.acf.bad_order && b.acf.bad_order) {
+            return a.acf.bad_order - b.acf.bad_order;
+          } else if (a.acf.bad_order) {
+            return -1;
+          } else if (b.acf.bad_order) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        setMembershipTypes(memberships);
+      } catch (error) {
+        console.log("error", error);
       }
-    });
-
-    setMembershipTypes(memberships);
-
-    return () => {
-      useEffectRef.current = false; // clean up function
-    };
+    })();
   }, []);
 
   if (!block || !membershipTypes) return <Loading />;

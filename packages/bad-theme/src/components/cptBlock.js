@@ -64,68 +64,72 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   if (!block) return <Loading />;
   // DATA pre FETCH ----------------------------------------------------------------
-  useEffect(async () => {
-    let cptTaxonomy = null;
-    if (isCovid_19)
-      cptTaxonomy = await getCPTTaxonomy({ state, type: guidanceFilter }); // set additional filter option to COVID-19
-    let cptData = await getCPTData({ state, type: postPath });
-    let cptTypes = await getCPTTaxonomy({ state, type: typeFilter });
+  useEffect(() => {
+    (async () => {
+      try {
+        if (isCovid_19) await getCPTTaxonomy({ state, type: guidanceFilter }); // set additional filter option to COVID-19
+        let cptData = await getCPTData({ state, type: postPath });
+        let cptTypes = await getCPTTaxonomy({ state, type: typeFilter });
 
-    // set post lit values from filter value in app context
-    if (cptBlockFilter) {
-      cptData = cptData.filter((item) => {
-        let isCatList = null;
-        let isIncludes = null;
-        if (item[guidanceFilter])
-          isCatList = Object.values(item[guidanceFilter]);
-        // check data includes selected category
-        if (isCatList) isIncludes = isCatList.includes(Number(cptBlockFilter));
+        // set post lit values from filter value in app context
+        if (cptBlockFilter) {
+          cptData = cptData?.filter((item) => {
+            let isCatList = null;
+            let isIncludes = null;
+            if (item[guidanceFilter])
+              isCatList = Object.values(item[guidanceFilter]);
+            // check data includes selected category
+            if (isCatList)
+              isIncludes = isCatList.includes(Number(cptBlockFilter));
 
-        return isIncludes;
-      });
-    }
-    // clear filter value in app context
-    setCPTBlockAction({ dispatch, cptBlockFilter: "" });
-    setGroupeType(cptTypes);
+            return isIncludes;
+          });
+        }
+        // clear filter value in app context
+        setCPTBlockAction({ dispatch, cptBlockFilter: "" });
+        setGroupeType(cptTypes);
 
-    if (postPath === `derm_groups_charity`) {
-      // sort groupe data by title in alphabetical order
-      cptData = cptData.sort((a, b) => {
-        // break if no title
-        if (!a.title || !b.title) return 0;
-        let tile = a.title.rendered.toLowerCase();
-        let tile2 = b.title.rendered.toLowerCase();
+        if (postPath === `derm_groups_charity`) {
+          // sort groupe data by title in alphabetical order
+          cptData = cptData.sort((a, b) => {
+            // break if no title
+            if (!a.title || !b.title) return 0;
+            let tile = a.title.rendered.toLowerCase();
+            let tile2 = b.title.rendered.toLowerCase();
 
-        if (tile < tile2) return -1;
-        if (tile > tile2) return 1;
-        return 0;
-      });
-    }
+            if (tile < tile2) return -1;
+            if (tile > tile2) return 1;
+            return 0;
+          });
+        }
 
-    let dataChunk = cptData.slice(0, Number(chunkRef.current));
-    setPostFilter(dataChunk);
-    setPostListData(cptData); // apply limit on posts
+        let dataChunk = cptData.slice(0, Number(chunkRef.current));
+        setPostFilter(dataChunk);
+        setPostListData(cptData); // apply limit on posts
 
-    // if SIG is selected, filter by SIG type
-    if (cptBlockTypeFilter) {
-      // for SIGs apps get type id that represents the SIG type filter & apply
-      let interestGroupsId = null;
-      const sigApp = cptTypes.filter((item) => {
-        return item.name
-          .toLowerCase()
-          .includes("Special Interest".toLowerCase());
-      });
-      if (sigApp.length > 0) {
-        interestGroupsId = sigApp[0].id;
+        // if SIG is selected, filter by SIG type
+        if (cptBlockTypeFilter) {
+          // for SIGs apps get type id that represents the SIG type filter & apply
+          let interestGroupsId = null;
+          const sigApp = cptTypes?.filter((item) => {
+            return item.name
+              .toLowerCase()
+              .includes("Special Interest".toLowerCase());
+          });
+          if (sigApp.length > 0) {
+            interestGroupsId = sigApp[0].id;
+          }
+          // get if from  groupeType filter where name includes Special Interest Group
+          typeFilterRef.current = interestGroupsId;
+          setCPTBlockTypeAction({
+            dispatch,
+            cptBlockTypeFilter: interestGroupsId,
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-      // get if from  groupeType filter where name includes Special Interest Group
-      typeFilterRef.current = interestGroupsId;
-      setCPTBlockTypeAction({ dispatch, cptBlockTypeFilter: interestGroupsId });
-    }
-
-    return () => {
-      searchFilterRef.current = false; // clean up function
-    };
+    })();
   }, []);
 
   // if serach queries are set, filter the full data set
