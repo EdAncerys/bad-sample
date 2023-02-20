@@ -31,7 +31,7 @@ export const getMembershipTypes = async ({ state }) => {
     let data = [];
 
     // ⬇️ fetch data via wp API page by page
-    let response = await fetchHandler({ path: url });
+    let response = await fetch(url);
     let totalPages = response?.headers.get("X-WP-TotalPages") ?? 0;
 
     while (response?.status === 200) {
@@ -45,7 +45,7 @@ export const getMembershipTypes = async ({ state }) => {
 
       // 📌 break out of the loop if no more pages
       if (pageNo > +totalPages) break;
-      response = await fetchHandler({ path: url });
+      response = await fetch(url);
     }
     return data;
   } catch (error) {

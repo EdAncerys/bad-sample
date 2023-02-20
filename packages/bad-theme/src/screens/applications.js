@@ -84,6 +84,8 @@ const Applications = ({ state, actions }) => {
           }
           // TODO update context
         }
+        console.log("⭐️ memberships ", memberships);
+        console.log("⭐️ application ", application);
 
         // --------------------------------------------------------------------------------
         // 📌  Check if user have hospital id set in Dynamics. If not, set hospitalId to null
