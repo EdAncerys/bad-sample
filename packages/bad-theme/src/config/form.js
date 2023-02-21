@@ -617,7 +617,7 @@ export const FORM_CONFIG = {
     AttributeType: "Picklist",
     MaxLength: 100,
     Required: "None",
-    order: 0,
+    order: -771,
     hidden: false,
     width: "100%",
     caption: "",
