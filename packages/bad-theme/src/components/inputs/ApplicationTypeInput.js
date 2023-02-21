@@ -12,7 +12,7 @@ const ApplicationTypeInput = ({ form, onChange }) => {
   return (
     <div
       style={{
-        order: -99,
+        order: -999,
         position: "relative",
         width: "100%",
         marginTop: `1em`,
