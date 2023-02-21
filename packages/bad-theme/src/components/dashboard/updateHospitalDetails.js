@@ -697,6 +697,18 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                 </div>
               )}
 
+              <div className="form-row-50">
+                <label>Regulatory body registration number</label>
+                <input
+                  name="formus_regbodynumber"
+                  type="text"
+                  value={formData?.formus_regbodynumber || ""}
+                  onChange={handleInputChange}
+                  className="form-control input"
+                  placeholder="Regulatory body registration number"
+                />
+              </div>
+
               {formData?.type !== "Associate Overseas" && (
                 <>
                   {formData?.appFilters?.bad_formus_typeofcontract !==
@@ -947,21 +959,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   )}
                 </>
               )}
-
-              <>
-                <div className="form-row-50">
-                  <label>Regulatory body registration number</label>
-                  <input
-                    name="formus_regbodynumber"
-                    type="text"
-                    value={formData?.formus_regbodynumber || ""}
-                    onChange={handleInputChange}
-                    className="form-control input"
-                    placeholder="Regulatory body registration number"
-                  />
-                </div>
-                <div className="form-row-50" />
-              </>
             </>
           )}
         </div>
