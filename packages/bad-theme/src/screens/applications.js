@@ -49,6 +49,8 @@ const Applications = ({ state, actions }) => {
   const hospitalSearchRef = useRef("");
   const address1Line1Ref = useRef("");
 
+  console.log("⭐️ FORM ", form);
+
   useEffect(() => {
     if (!isActiveUser) return; // return if no user data is available
 
@@ -84,8 +86,6 @@ const Applications = ({ state, actions }) => {
           }
           // TODO update context
         }
-        console.log("⭐️ memberships ", memberships);
-        console.log("⭐️ application ", application);
 
         // --------------------------------------------------------------------------------
         // 📌  Check if user have hospital id set in Dynamics. If not, set hospitalId to null

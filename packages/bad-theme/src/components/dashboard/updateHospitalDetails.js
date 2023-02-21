@@ -305,6 +305,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       formData?._formus_specialiseddermatologyareasofpractice;
     const formus_reasonformovingccstdate =
       formData?._formus_reasonformovingccstdate;
+    const formus_regbodynumber = formData?.formus_regbodynumber;
 
     const data = Object.assign(
       {}, // add empty object
@@ -317,6 +318,9 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
       {
         bad_otherregulatorybodyreference:
           bad_otherregulatorybodyreference?.toString(),
+      },
+      {
+        formus_regbodynumber: formus_regbodynumber?.toString(), // add reg body number
       },
       formus_rotapattern && {
         formus_rotapattern: formus_rotapattern?.toString(),
@@ -943,6 +947,21 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                   )}
                 </>
               )}
+
+              <>
+                <div className="form-row-50">
+                  <label>Regulatory body registration number</label>
+                  <input
+                    name="formus_regbodynumber"
+                    type="text"
+                    value={formData?.formus_regbodynumber || ""}
+                    onChange={handleInputChange}
+                    className="form-control input"
+                    placeholder="Regulatory body registration number"
+                  />
+                </div>
+                <div className="form-row-50" />
+              </>
             </>
           )}
         </div>
