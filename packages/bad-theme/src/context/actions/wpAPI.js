@@ -492,7 +492,6 @@ export const getCPTData = async ({ state, page, postsPerPage, type }) => {
 
     let response = await fetch(url);
     let totalPages = response.headers.get("X-WP-TotalPages");
-    console.log("⭐️ ", totalPages);
 
     // fetch events data from WP & while respone is not 200 (bad request) keep fetching
     while (response.status === 200) {

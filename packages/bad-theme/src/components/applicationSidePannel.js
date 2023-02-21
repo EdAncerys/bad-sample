@@ -26,8 +26,6 @@ const ApplicationSidePannel = ({ state, actions, form, step }) => {
     },
   ];
 
-  console.log("🐞 props ", step);
-
   return (
     <div className="applications-side-pannel">
       <div className="primary-title application-panel-title">

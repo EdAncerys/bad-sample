@@ -19,7 +19,7 @@ const Home = ({ state, actions, libraries }) => {
         // console.log("home data: ", home); // debug
         setWpBlocks(home?.acf?.blocks);
       } catch (error) {
-        console.log("error", error);
+        // console.log("error", error);
       }
     })();
   }, []);

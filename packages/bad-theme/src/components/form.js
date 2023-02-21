@@ -60,7 +60,6 @@ const Form = ({
   if (application?.length <= 1) return null;
   // dataExtractor({ application }); // 🚫  Don't render until we have the application data
   // get length of the object FORM_CONFIG
-  console.log("⭐️ FORM_CONFIG LENGTH ⭐️", Object.keys(FORM_CONFIG).length);
 
   return (
     <div style={{ width: "100%" }}>

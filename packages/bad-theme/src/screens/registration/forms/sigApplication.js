@@ -169,7 +169,6 @@ const SIGApplication = ({ state, actions, libraries }) => {
     if (!membershipData) return null; // if no membership data is found, return null
 
     membershipData = Object.values(membershipData);
-    console.log("🐞 membershipData", membershipData);
 
     const handleSetFormData = ({ data, name }) => {
       let value = data.value;
@@ -421,7 +420,7 @@ const SIGApplication = ({ state, actions, libraries }) => {
       if (!formData[input] && inputValidator[inputValue]) {
         errorHandler({ id: `form-error-${input}`, time: 5000 });
         isValid = false;
-        console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
+        // console.log("🐞 FAILED AUTH", input, formData[input]); // failed input validation debugger
       }
     });
 

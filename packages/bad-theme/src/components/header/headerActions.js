@@ -136,31 +136,28 @@ const HeaderActions = ({ state, actions, libraries }) => {
       category: "BAD", // SIG or BAD
       type: "Trainee", // Junior or Senior
     });
-
-    console.log("⭐️ ", data);
-    console.log("⭐️ HOST", state.auth.APP_HOS);
   };
 
   const handleApiRequest = async () => {
     try {
-
       let myHeaders = new Headers();
       myHeaders.append("Authorization", "Basic ZGVtbzphc2RmZ2g=");
-  
+
       let requestOptions = {
-        method: 'GET',
+        method: "GET",
         headers: myHeaders,
-        redirect: 'follow'
+        redirect: "follow",
       };
-  
-      const res = await fetch("https://badmainstagstg.wpengine.com/wp-json/wp/v2/memberships?_fields=id,date,slug,title,sog_groupe,acf", requestOptions)
-      console.log('res', res)
-      const data = await res.json()
-      console.log('data', data)
+
+      const res = await fetch(
+        "https://badmainstagstg.wpengine.com/wp-json/wp/v2/memberships?_fields=id,date,slug,title,sog_groupe,acf",
+        requestOptions
+      );
+      const data = await res.json();
     } catch (error) {
-      console.log(error)
+      // console.log(error);
     }
-  }
+  };
 
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 
@@ -216,15 +213,11 @@ const HeaderActions = ({ state, actions, libraries }) => {
     let data = "not found";
     if (response && response.ok) {
       data = await response.json();
-      console.log("🐞 Auth level ", data.data.level);
-      console.log("🐞 data ", data.data);
     }
   };
 
   const handleAboutInfo = async () => {
     handleSetCookie({ name: "BAD-cookie-popup", deleteCookie: true });
-    console.log("⭐️ ", isActiveUser);
-    console.log("⭐️ ", applicationData);
   };
   // 🚀 🚀 🚀  TESTING 🚀 🚀 🚀
 

@@ -70,9 +70,6 @@ const App = ({ state, actions }) => {
   let urlPath = state.router?.link;
   const data = state.source?.get(urlPath);
   const pageId = data?.id;
-  console.log(`INDEX ${pageId}: `, data); // 👉 debug
-  console.log("⭐️ ", state.auth.WP_HOST);
-  console.log("⭐️ ", state.auth.APP_HOST);
 
   // --------------------------------------------------------------------------------
   // 📌  B2C login handler.
@@ -109,9 +106,8 @@ const App = ({ state, actions }) => {
         const yoast = data?.yoast_head_json;
 
         setMeta(yoast);
-        console.log("⭐️ yoast data", yoast);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     })();
   }, [pageId]);
@@ -137,7 +133,7 @@ const App = ({ state, actions }) => {
         // animation handler
         AOS.init();
       } catch (error) {
-        console.log("error", error);
+        // console.log("error", error);
       }
     })();
   }, []);

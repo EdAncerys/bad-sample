@@ -34,7 +34,7 @@ export const useRedirect = ({
         useEffectRef.current = false; // clean up function
       };
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     }
   }, []);
 

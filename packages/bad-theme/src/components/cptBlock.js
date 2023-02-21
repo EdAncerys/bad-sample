@@ -127,7 +127,7 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
           });
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     })();
   }, []);

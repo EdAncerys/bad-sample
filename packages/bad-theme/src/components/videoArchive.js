@@ -36,9 +36,6 @@ const VideoArchive = ({ state, actions }) => {
   const showOnlyMyVids = useRef(false);
   const marginVertical = state.theme.marginVertical;
 
-  console.log("⭐️ videosList", videosList);
-  console.log("⭐️ postData", postData);
-
   const handleFilters = () => {
     if (specialtyFilter.current === "all") {
       setPostData(videosList);

@@ -21,7 +21,6 @@ const PickListInput = ({
   // --------------------------------------------------------------------------------
 
   if (name === "formus_staffgroupcategory" || name === "formus_jobrole") {
-    console.log("⭐️ Choices ", Choices);
   }
   // ⚠️ css bug fix for formus_staffgroupcategory pick list
   let cssOverrides;

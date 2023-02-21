@@ -76,7 +76,7 @@ const Navigation = ({ state, actions, libraries }) => {
           setNewsMedia(taxonomyList);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     })();
   }, [state.theme.menu]);

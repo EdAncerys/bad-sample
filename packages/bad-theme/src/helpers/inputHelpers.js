@@ -49,7 +49,7 @@ export const getMembershipTypes = async ({ state }) => {
     }
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -66,7 +66,7 @@ export const getUserStoreAction = async ({ state, id }) => {
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -87,7 +87,7 @@ export const loginHandler = async () => {
     window.location.href = "https://" + "www.google.com";
     // window.location.href = process.env.NEXT_PUBLIC_B2C as string;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -102,11 +102,10 @@ export const checkB2CStatus = async ({ state }) => {
     const response = await fetchHandler({ path });
     const json = await response?.json();
     const data = json?.data;
-    console.log("🐞 res: ", data);
 
     return data;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };
 
@@ -120,7 +119,7 @@ export const getHospitalsAction = async ({ state, input }) => {
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -176,7 +175,7 @@ export const sendFileToS3Action = async ({ state, attachments }) => {
       return data.data;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -191,7 +190,7 @@ export const getHospitalNameAction = async ({ state, id }) => {
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -209,16 +208,14 @@ export const getBADMembershipSubscriptionData = async ({
   const path =
     state.auth.APP_HOST +
     `/catalogue/lookup/membershiptype?search=${category}:${type}${dateType}`;
-  console.log("⭐️ ", path);
 
   try {
     const response = await fetchHandler({ path });
     const { data } = await response?.json();
-    console.log("⭐️ ", data);
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -289,7 +286,7 @@ export const updateDynamicsApplicationAction = async ({
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -321,7 +318,7 @@ export const submitUserApplication = async ({
 
     return data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };
 
@@ -397,9 +394,6 @@ export const dataExtractor = ({ application }) => {
       },
     };
   });
-
-  console.log("🐞 blob", JSON.stringify(blob));
-  console.log("🐞 virtual", JSON.stringify(virtual));
 };
 
 export const manualFilterHandler = ({ form, name, show }) => {
@@ -651,7 +645,6 @@ export const formValidationHandler = ({
   let updatedForm = form;
   let isCategoryType = form?.["bad_categorytype"] !== undefined; // required to select matching application type
   const wpFilter = form?.dev_application_input_filter; // required to select matching application type
-  console.log("⭐️ MANUAL_HANDLER", MANUALLY_REQUIRED);
 
   updatedApplication?.map((input, key) => {
     let { name, value, cargo } = input;
@@ -667,8 +660,6 @@ export const formValidationHandler = ({
       // ⚠️ update application with new value
       // --------------------------------------------------------------------------------
       updatedApplication[key] = { ...input, value };
-      // console.log('🐞 inner value', value);
-      // console.log('🐞 name: ', name, form?.[name]);
     }
 
     // --------------------------------------------------------------------------------
@@ -682,7 +673,6 @@ export const formValidationHandler = ({
       const isSIG = application?.[0]?.bad_organisedfor === "SIG";
       if (!MANUALLY_REQUIRED?.includes("bad_categorytype") && !isSIG) return;
 
-      console.log("🐞 ⭐️⭐️ FAILS CATEGORY: ⭐️⭐️", name, value);
       updatedForm["bad_categorytype"] = undefined;
       updatedForm["error_bad_categorytype"] = true;
       isValid = false;
@@ -712,7 +702,6 @@ export const formValidationHandler = ({
       if (!badApp && wpFilter && !wpFilter?.[nameWithPrefix]) return; // ⚠️ do not validate input if inputs that not allowed to show in UI (wpFilter)
 
       isValid = false; // ⚠️  if required field is empty, set isValid to false
-      console.log("🐞 ⭐️⭐️ FAILS ON: ⭐️⭐️", name, value);
       updatedForm["error_" + name] = true;
     }
 

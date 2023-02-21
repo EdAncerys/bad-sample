@@ -49,8 +49,6 @@ const Applications = ({ state, actions }) => {
   const hospitalSearchRef = useRef("");
   const address1Line1Ref = useRef("");
 
-  console.log("⭐️ FORM ", form);
-
   useEffect(() => {
     if (!isActiveUser) return; // return if no user data is available
 
@@ -128,8 +126,6 @@ const Applications = ({ state, actions }) => {
         const bad_organisedfor = application?.[0]?.bad_organisedfor;
         const _bad_sigid_value = application?.[0]?._bad_sigid_value;
 
-        console.log("🐞 appBlob", bad_categorytype, bad_organisedfor);
-
         // --------------------------------------------------------------------------------
         // 📌 find all applications that match the user's category type selections
         // --------------------------------------------------------------------------------
@@ -196,10 +192,8 @@ const Applications = ({ state, actions }) => {
         });
         setApplication(application); // ⚠️ update application with new application fields
         setMemberships(memberships);
-        console.log("🐞 memberships", memberships);
-        console.log("🐞 application", application);
       } catch (error) {
-        console.log("🐞 error", error);
+        // console.log("🐞 error", error);
       } finally {
         setFetching(false);
       }
@@ -217,7 +211,6 @@ const Applications = ({ state, actions }) => {
     // 📌  Multi select dropdown cleaner
     // 📌  onClick event listener. Close all formus multiselect fields if DOM element clicked
     // --------------------------------------------------------------------------------
-    console.log("⭐️ list ", e.target.classList);
 
     if (
       e.target.classList.contains("applications-side-panel") ||
@@ -255,7 +248,6 @@ const Applications = ({ state, actions }) => {
     if (countryCode === "UK")
       countryCode = "United Kingdom of Great Britain and Northern Ireland";
 
-    console.log("⭐️ object", address, countryCode, cityName);
     // update formData with values
     setForm((form) => ({
       ...form,
@@ -336,7 +328,7 @@ const Applications = ({ state, actions }) => {
       let dev_name = name === "sky_cvurl" ? "dev_new_cv" : "dev_new_doc";
       setForm({ ...form, [name]: url, [dev_name]: fileName });
     } catch (error) {
-      console.log("🤖 error", error);
+      // console.log("🤖 error", error);
     } finally {
       setFetching(false);
     }
@@ -373,7 +365,7 @@ const Applications = ({ state, actions }) => {
         target: { name: "dev_hospital_data", value: hospitalData },
       });
     } catch (error) {
-      console.log("error: ", error);
+      // console.log("error: ", error);
     }
   };
 
@@ -400,7 +392,7 @@ const Applications = ({ state, actions }) => {
         target: { name: "dev_address_data", value: addressData },
       });
     } catch (error) {
-      console.log("error: ", error);
+      // console.log("error: ", error);
     }
   };
 
@@ -409,7 +401,6 @@ const Applications = ({ state, actions }) => {
     // ⭐️  Handle input change for all inputs ⭐️
     // --------------------------------------------------------------------------------
     const { name, value, type, checked } = target;
-    console.log("🐞 name: ", name, value);
 
     // --------------------------------------------------------------------------------
     // 📌  if filed bad_categorytype is changed, add to state application from fields from WP
@@ -450,7 +441,6 @@ const Applications = ({ state, actions }) => {
   };
 
   const handleSelectHospital = ({ item }) => {
-    console.log("🐞 item", item);
     setForm((form) => ({
       ...form,
       dev_hospital_lookup: "",
@@ -480,7 +470,6 @@ const Applications = ({ state, actions }) => {
       setFetching(true);
 
       if (!isValid) {
-        console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
         setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
         setApplication(application); // ⚠️ update application with new application fields
 
@@ -521,10 +510,7 @@ const Applications = ({ state, actions }) => {
         application: updatedApplication,
       });
 
-      console.log("🐞 submitRes: ", submitRes);
       if (!submitRes?.success) {
-        console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
-
         setErrorAction({
           dispatch,
           isError: {
@@ -555,7 +541,7 @@ const Applications = ({ state, actions }) => {
         setGoToAction({ state, path, actions }); // go to dashboard
       }
     } catch (error) {
-      console.log("🐞 error: ", error);
+      // console.log("🐞 error: ", error);
     } finally {
       setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
       setApplication(application); // ⚠️ update application with new application fields
@@ -565,8 +551,6 @@ const Applications = ({ state, actions }) => {
 
   // --------------------------------------------------------------------------------
   const goBackHandler = () => {
-    console.log("goBackHandler");
-
     if (hasError || isSIG || (!isSIG && form?.step === 0)) {
       setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
       return;
@@ -606,21 +590,19 @@ const Applications = ({ state, actions }) => {
         contactid: isActiveUser?.contactid || "",
         application: updatedApplication,
       });
-      console.log("🐞 Update application record response: ", response);
 
       if (response?.success && saveAndExit) {
         setGoToAction({ state, path: `/dashboard/`, actions }); // go to dashboard
         return response;
       }
     } catch (error) {
-      console.log("🐞 error: ", error);
+      // console.log("🐞 error: ", error);
     } finally {
       if (!submit) setFetching(false);
     }
   };
 
   const multiSelectDropDownHandler = ({ name, value }) => {
-    console.log("🐞 name: ", name);
     let handler = { ["dev_selected_" + name]: !form?.["dev_selected_" + name] };
     // 📌 conditional dropdown closing based on selection
     if (name === "formus_mainspecialtyqualification") {
@@ -872,7 +854,6 @@ const Applications = ({ state, actions }) => {
     });
 
     if (!isValid) {
-      console.log("🐞 ⭐️⭐️ ERROR MODAL ⭐️⭐️");
       setForm((form) => ({ ...form, ...updatedForm })); // ⚠️ update formData with new application fields
       setApplication(application); // ⚠️ update application with new application fields
 
@@ -904,7 +885,7 @@ const Applications = ({ state, actions }) => {
       });
       await saveApplicationRecord({ updatedApplication }); // save application record before moving to next step
     } catch (error) {
-      console.log("🐞 error: ", error);
+      // console.log("🐞 error: ", error);
     } finally {
       setFetching(false);
     }
@@ -913,7 +894,6 @@ const Applications = ({ state, actions }) => {
   const redirectHandler = async () => {
     let path = "/membership/categories-of-membership/";
     if (form?.step === 1) path = "/membership/";
-    console.log("🐞 ", path);
 
     setGoToAction({
       state,

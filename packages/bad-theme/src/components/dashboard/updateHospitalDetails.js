@@ -46,9 +46,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
     isBADMember: false,
     fetching: true,
   });
-  console.log("⭐️ FORM ", formData);
-  console.log("⭐️ type ", formData?.type);
-  console.log("⭐️ isBADMember ", formData?.isBADMember);
 
   // --------------------------------------------------------------------------------
   // 📌  Additional show field conditional logic
@@ -174,7 +171,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
             m?.core_endon?.includes(new Date().getFullYear().toString()) // 👉 current year only
         );
         let membershipType = activeMembership?.[0]?.acf?.bad_categorytype;
-        console.log("⭐️ FOUND activeMembership", activeMembership);
 
         if (membershipType)
           membership = membership?.filter(
@@ -195,7 +191,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
           fetching: false,
         }));
       } catch (error) {
-        console.log("error", error);
+        // console.log("error", error);
       }
     })();
 
@@ -209,7 +205,6 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    console.log("⭐️ name & value", name, value);
 
     // 👉 if Stuff category is changed, reset job roles
     if (name === "_formus_staffgroupcategory") {
@@ -402,7 +397,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
         isError: { message: `Professional information updated successfully` },
       });
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
       setErrorAction({
         dispatch,
         isError: {

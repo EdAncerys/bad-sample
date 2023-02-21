@@ -65,7 +65,7 @@ export const dataExtractor = ({ appBlob }) => {
     // console.log("🐞 ", appBlob);
   });
 
-  console.log("🐞 blob", JSON.stringify(blob));
+  // console.log("🐞 blob", JSON.stringify(blob));
 };
 
 export const ServeApplicationTypeInput = ({

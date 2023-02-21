@@ -96,15 +96,10 @@ const BlocksPage = ({ state, libraries }) => {
           if (hospitalData) hospitalName = hospitalData.name;
         }
 
-        console.log("wpAppStore: ", wpAppStore);
-        console.log("userApp: ", userApp);
-
         const bad_categorytype = userApp?.[0]?.bad_categorytype
           ?.toLowerCase()
           ?.replace(/\s/g, "");
         const bad_organisedfor = userApp?.[0]?.bad_organisedfor;
-
-        console.log("🐞 appBlob", bad_categorytype, bad_organisedfor);
 
         // --------------------------------------------------------------------------------
         // 📌 find all applications that match the user's category type selections
@@ -131,7 +126,7 @@ const BlocksPage = ({ state, libraries }) => {
           sky_profilepicture: profilePicture, // set profilePicture to form
         });
       } catch (error) {
-        console.log("error: ", error);
+        // console.log("error: ", error);
       }
     })();
   }, [isActiveUser]);
@@ -142,7 +137,6 @@ const BlocksPage = ({ state, libraries }) => {
     // 📌  Handle input change for all inputs
     // --------------------------------------------------------------------------------
     const { name, value, type, checked } = target;
-    console.log("🐞 ", name, value, type, checked);
 
     setForm({
       ...form,
@@ -151,7 +145,6 @@ const BlocksPage = ({ state, libraries }) => {
   };
 
   const handleSelectHospital = ({ item }) => {
-    console.log("🐞 item", item);
     setForm((form) => ({
       ...form,
       dev_hospital_lookup: "",
@@ -242,7 +235,7 @@ const BlocksPage = ({ state, libraries }) => {
         target: { name: "dev_hospital_data", value: hospitalData },
       });
     } catch (error) {
-      console.log("error: ", error);
+      // console.log("error: ", error);
     }
   };
 

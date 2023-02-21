@@ -45,7 +45,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
       try {
         const id = isActiveUser?.contactid || "";
         const dynamicsApplication = await getUserStoreAction({ state, id });
-        console.log("🐞 APP UPDATE", dynamicsApplication);
 
         if (dynamicsApplication.success) {
           setApplicationDataAction({
@@ -68,7 +67,7 @@ const ProfileProgress = ({ state, actions, libraries }) => {
         setStep(progressName);
         setAppData(dynamicsApplication);
       } catch (error) {
-        console.log("🐞 error", error);
+        // console.log("🐞 error", error);
       }
     })();
   }, []);
@@ -209,8 +208,6 @@ const ProfileProgress = ({ state, actions, libraries }) => {
 
   // 👉 if no applicationData is typof string, return null
   if (typeof applicationData === "string" || !applicationData) return null;
-
-  console.log("🐞e⭐️ applicationData", applicationData);
 
   // get application name & type & concat in string
   const appData = applicationData[0]; // application info data

@@ -5,9 +5,9 @@ export const fetchHandler = async ({
   body,
   disableCookies,
   headers = {
-    "Authorization": "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
+    Authorization: "Basic ZGVtbzphc2RmZ2g=", // 👈 ⚠️ Add custom headers to the fetch request (WP back end server authentication)
   },
-}) => { 
+}) => {
   try {
     if (!path) throw new Error("No path provided");
     // --------------------------------------------------------------------------------
@@ -32,9 +32,9 @@ export const fetchHandler = async ({
       method,
       // ⚠️ 🍪 add credentials to the request to included cookies in all fetch requests if disableCookies 🍪
       credentials: disableCookies ? "omit" : "include",
-     headers: {
-      ...headers, // 📌 add custom headers
-     }, 
+      headers: {
+        ...headers, // 📌 add custom headers
+      },
     };
 
     let isFormData = requestOptions?.headers?.["Content-Type"]?.includes(
@@ -61,11 +61,11 @@ export const fetchHandler = async ({
     const timeTaken = (new Date().getTime() - timeNow.getTime()) / 1000;
 
     // ⏰ fetch request timing info
-    console.log(`⏰ ${time} Fetch time: ${timeTaken}s`);
+    // console.log(`⏰ ${time} Fetch time: ${timeTaken}s`);
     // console.log('🐞 res: ', response);
 
     return response;
   } catch (error) {
-    console.log("🐞 ", error);
+    // console.log("🐞 ", error);
   }
 };

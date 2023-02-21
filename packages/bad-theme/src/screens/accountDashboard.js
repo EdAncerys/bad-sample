@@ -38,7 +38,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
 
   const dispatch = useAppDispatch();
   const { isActiveUser, dynamicsApps, applicationData } = useAppState();
-  console.log("⭐️ 👉 isActiveUser", isActiveUser);
 
   const data = state.source.get(state.router.link);
   const page = state.source[data.type][data.id];
@@ -131,7 +130,6 @@ const AccountDashboard = ({ state, actions, libraries }) => {
     const isDashboardPath = state?.router?.link?.includes("dashboard"); // 👈 get current path
 
     if (!isActiveUser || !isDashboardPath) return null;
-    console.log("🐞 onFocus handler");
 
     try {
       await getApplicationStatus({

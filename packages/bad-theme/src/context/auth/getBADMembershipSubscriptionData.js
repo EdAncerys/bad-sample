@@ -21,8 +21,6 @@ export const getBADMembershipSubscriptionData = async ({
       state.auth.APP_HOST +
       `/catalogue/lookup/membershiptype?search=${category}:${sig_type}:${year}`;
 
-  console.log("⭐️ url 👉 ", path);
-
   try {
     let data = await fetchDataHandler({ path, state });
     let result = await data.json();
@@ -33,6 +31,6 @@ export const getBADMembershipSubscriptionData = async ({
       return membershipData;
     }
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
   }
 };

@@ -66,7 +66,7 @@ export const useB2CLogin = ({ state, actions }) => {
       items[0] = JSON.parse(atob(items[0]));
       items[1] = JSON.parse(atob(items[1]));
       // console.log("🐞 hash", hash);
-      console.log("🐞 b2cTakenz", b2cTaken);
+      // console.log("🐞 b2cTakenz", b2cTaken);
 
       if (Array.isArray(items[1].emails)) {
         const email = items[1].emails[0];
