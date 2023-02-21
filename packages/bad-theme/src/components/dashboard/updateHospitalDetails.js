@@ -824,7 +824,7 @@ const UpdateHospitalDetails = ({ state, actions, libraries }) => {
                     ?.bad_formus_specialiseddermatologyareasofpractice !==
                     "Hide" && (
                     <div className="form-row-50">
-                      <label>Specialized Dermatology Areas of practice</label>
+                      <label>Specialised Dermatology Areas of practice</label>
                       <MultiCheckboxInput
                         form={formData}
                         name="_formus_specialiseddermatologyareasofpractice"

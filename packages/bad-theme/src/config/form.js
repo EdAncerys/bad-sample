@@ -982,7 +982,7 @@ export const FORM_CONFIG = {
     ],
   },
   formus_specialiseddermatologyareasofpractice: {
-    Label: "Specialized Dermatology Areas of practice",
+    Label: "Specialised Dermatology Areas of practice",
     AttributeType: "Virtual",
     MaxLength: 100,
     Required: "ApplicationRequired",
