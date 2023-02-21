@@ -6,8 +6,10 @@ import ErrorComponent from "./ErrorComponent";
 const ApplicationTypeInput = ({ form, onChange }) => {
   const isBAD = form?.bad_organisedfor === "810170000";
   // if bad_categorytype have ":" return all after ":" otherwise return
-  const categoryType =
+  let categoryType =
     form?.bad_categorytype?.split(":")[1] || form?.bad_categorytype;
+  if (categoryType === "Full")
+    categoryType = "Please select your membership category"; // ⚠️ if value include - Full replace with note to select type
 
   return (
     <div
