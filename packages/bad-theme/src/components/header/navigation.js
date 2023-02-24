@@ -55,7 +55,7 @@ const Navigation = ({ state, actions, libraries }) => {
 
         // 👉 prefetch menuFeatures CPT
         const menuFeatures = await fetch(
-          `${state.auth.WP_HOST}wp-json/wp/v2/menu_features?_fields=id,slug,type,link,title,acf&per_page=25`
+          `${state.auth.WP_HOST}wp-json/wp/v2/menu_features?_fields=id,slug,type,link,title,content,acf&per_page=25`
         );
         const menuFeaturesData = await menuFeatures?.json();
 
