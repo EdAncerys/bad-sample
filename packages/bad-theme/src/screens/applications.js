@@ -287,8 +287,9 @@ const Applications = ({ state, actions }) => {
       setForm((prev) => ({
         ...prev,
         py3_address1ine1: data?.Line1 || "",
+        py3_addressline2: data?.Line2 || "",
         py3_addresscountry: country,
-        py3_addressline2: data?.City || "",
+        py3_addresstowncity: data?.City || "",
         py3_addresszippostalcode: data?.PostalCode || "",
         dev_address_data: null,
       }));
@@ -418,6 +419,7 @@ const Applications = ({ state, actions }) => {
 
     try {
       if (input === "") {
+        await new Promise((resolve) => setTimeout(resolve, 1500)); // delay to clear async fetch requests
         setForm((prev) => ({ ...prev, dev_address_data: null }));
         return;
       }
