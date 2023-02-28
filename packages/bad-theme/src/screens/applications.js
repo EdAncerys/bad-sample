@@ -10,7 +10,6 @@ import {
   getMembershipTypes,
   getUserStoreAction,
   getHospitalsAction,
-  googleAutocomplete,
   sendFileToS3Action,
   getHospitalNameAction,
   getBADMembershipSubscriptionData,
@@ -25,6 +24,9 @@ import {
   setGoToAction,
   setErrorAction,
   setApplicationDataAction,
+  loqateAddressLookupService,
+  loqateContainerBlob,
+  loqateAddressBlob,
 } from "../context";
 
 const Applications = ({ state, actions }) => {
@@ -229,32 +231,70 @@ const Applications = ({ state, actions }) => {
   };
 
   const handleSelectAddress = async ({ item }) => {
-    // destructure item object & get country code & city name from link
-    const { link, title } = item;
-    let address = title;
-    let countryCode = "";
-    let cityName = "";
-    // if title consist of more than one comma, split it and get the forst item as address
-    if (title?.split(",").length > 1) {
-      address = title?.split(",")[0];
-    }
+    try {
+      const { terms } = item;
+      const blob = JSON.parse(terms);
+      let formattedAddresses = []; // convert addresses
 
-    if (link) {
-      // if link object opassed in define destructure address object
-      if (link.length >= 1) countryCode = link?.[link.length - 1]?.value;
-      if (link.length >= 2) cityName = link?.[link.length - 2]?.value;
-    }
-    // overwrite formData to match Dynamics fields
-    if (countryCode === "UK")
-      countryCode = "United Kingdom of Great Britain and Northern Ireland";
+      // --------------------------------------------------------------------------------
+      // 📌  if selected address Type !== Type refetch suggestions
+      // --------------------------------------------------------------------------------
+      if (blob?.Type !== "Address") {
+        const res2 = await loqateContainerBlob({
+          Id: blob?.Id,
+          input: blob?.Text,
+        });
+        const data2 = res2?.data;
 
-    // update formData with values
-    setForm((form) => ({
-      ...form,
-      py3_address1ine1: address,
-      py3_addresscountry: countryCode,
-      py3_addresscountystate: cityName,
-    }));
+        if (data2?.length > 0) {
+          data2.map((item) => {
+            formattedAddresses.push({
+              title: JSON.stringify(item?.Text + " " + item?.Description),
+              terms: JSON.stringify({
+                Id: item?.Id,
+                Text: item?.Text,
+                Description: item?.Description,
+                Type: item?.Type,
+              }),
+            });
+          });
+
+          setForm((prev) => ({
+            ...prev,
+            dev_address_data: formattedAddresses,
+          }));
+        } else {
+          setForm((prev) => ({ ...prev, dev_address_data: null }));
+        }
+        return;
+      }
+
+      // --------------------------------------------------------------------------------
+      // 📌  Get address details based on Id
+      // --------------------------------------------------------------------------------
+      const response = await loqateAddressBlob({ Id: blob?.Id });
+      const data = response?.data;
+
+      // --------------------------------------------------------------------------------
+      // 📌  overwrite country name to match API data discrepancies
+      // --------------------------------------------------------------------------------
+      let country = data?.CountryName || "";
+      if (country === "United Kingdom") {
+        country = "United Kingdom of Great Britain and Northern Ireland";
+      }
+
+      // 👇 update/populate address with data returned
+      setForm((prev) => ({
+        ...prev,
+        py3_address1ine1: data?.Line1 || "",
+        py3_addresscountry: country,
+        py3_addressline2: data?.City || "",
+        py3_addresszippostalcode: data?.PostalCode || "",
+        dev_address_data: null,
+      }));
+    } catch (error) {
+      // console.log("⭐️ ", error);
+    }
   };
 
   const handleClearHospital = () => {
@@ -276,6 +316,7 @@ const Applications = ({ state, actions }) => {
       py3_addresspostalcode: "",
       py3_addresszippostalcode: "",
       dev_address_data: "",
+      py3_addresstowncity: "",
     }));
   };
 
@@ -373,26 +414,38 @@ const Applications = ({ state, actions }) => {
     // --------------------------------------------------------------------------------
     // 📌  Handle address lookup
     // --------------------------------------------------------------------------------
-
     const input = address1Line1Ref.current.value;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // add delay to allow async to finish before running
-      let addressData = await googleAutocomplete({
-        input,
-      });
-      // refactor address data to match dropdown format
-      addressData = addressData?.map((address) => {
-        return {
-          title: address?.description,
-          link: address?.terms,
-        };
-      });
-      onChange({
-        target: { name: "dev_address_data", value: addressData },
-      });
+      if (input === "") {
+        setForm((prev) => ({ ...prev, dev_address_data: null }));
+        return;
+      }
+
+      let formattedAddresses = []; // convert addresses
+      const response = await loqateAddressLookupService({ input });
+      const data = response?.data;
+
+      // check for data returned form API
+      if (data?.length > 0) {
+        data.map((item) => {
+          formattedAddresses.push({
+            title: JSON.stringify(item?.Text + " " + item?.Description),
+            terms: JSON.stringify({
+              Id: item?.Id,
+              Text: item?.Text,
+              Description: item?.Description,
+              Type: item?.Type,
+            }),
+          });
+        });
+
+        setForm((prev) => ({ ...prev, dev_address_data: formattedAddresses }));
+      } else {
+        setForm((prev) => ({ ...prev, dev_address_data: null }));
+      }
     } catch (error) {
-      // console.log("error: ", error);
+      // console.log("error", error);
     }
   };
 
