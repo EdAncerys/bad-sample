@@ -21,6 +21,9 @@ import {
   muiQuery,
   getCountryList,
   googleAutocomplete,
+  loqateAddressLookupService,
+  loqateAddressBlob,
+  loqateContainerBlob,
 } from "../../context";
 
 const UpdateAddress = ({ state, actions, libraries }) => {
@@ -150,17 +153,25 @@ const UpdateAddress = ({ state, actions, libraries }) => {
 
     try {
       setIsFetchingAddress(true);
-      const data = await googleAutocomplete({ input });
+      let formattedAddresses = []; // convert addresses
+      const response = await loqateAddressLookupService({ input });
+      const data = response?.data;
 
       // check for data returned form API
-      if (data.length > 0) {
-        // covert data to address format
-        const dropDownFoprmat = [];
+      if (data?.length > 0) {
         data.map((item) => {
-          dropDownFoprmat.push({ title: item.description, terms: item.terms });
+          formattedAddresses.push({
+            title: JSON.stringify(item?.Text + " " + item?.Description),
+            terms: JSON.stringify({
+              Id: item?.Id,
+              Text: item?.Text,
+              Description: item?.Description,
+              Type: item?.Type,
+            }),
+          });
         });
 
-        setAddressData(dropDownFoprmat);
+        setAddressData(formattedAddresses);
       } else {
         setAddressData(null);
       }
@@ -172,27 +183,69 @@ const UpdateAddress = ({ state, actions, libraries }) => {
   };
 
   const handleSelectAddress = async ({ item }) => {
-    // destructure item object & get coutry code & city name from terms
-    const { terms, title } = item;
-    let countryCode = "";
-    let cityName = "";
+    try {
+      const { terms } = item;
+      const blob = JSON.parse(terms);
+      let formattedAddresses = []; // convert addresses
 
-    if (terms) {
-      // if terms define address components
-      if (terms.length >= 1) countryCode = terms[terms.length - 1].value;
-      if (terms.length >= 2) cityName = terms[terms.length - 2].value;
+      // --------------------------------------------------------------------------------
+      // 📌  if selected address Type !== Type refetch suggestions
+      // --------------------------------------------------------------------------------
+      if (blob?.Type !== "Address") {
+        setIsFetchingAddress(true);
+        const res2 = await loqateContainerBlob({
+          Id: blob?.Id,
+          input: blob?.Text,
+        });
+        const data2 = res2?.data;
+
+        if (data2?.length > 0) {
+          data2.map((item) => {
+            formattedAddresses.push({
+              title: JSON.stringify(item?.Text + " " + item?.Description),
+              terms: JSON.stringify({
+                Id: item?.Id,
+                Text: item?.Text,
+                Description: item?.Description,
+                Type: item?.Type,
+              }),
+            });
+          });
+
+          setAddressData(formattedAddresses);
+        } else {
+          setAddressData(null);
+        }
+        setIsFetchingAddress(false);
+        return;
+      }
+
+      // --------------------------------------------------------------------------------
+      // 📌  Get address details based on Id
+      // --------------------------------------------------------------------------------
+      const response = await loqateAddressBlob({ Id: blob?.Id });
+      const data = response?.data;
+
+      // --------------------------------------------------------------------------------
+      // 📌  overwrite country name to match API data discrepancies
+      // --------------------------------------------------------------------------------
+      let country = data?.CountryName || "";
+      if (country === "United Kingdom") {
+        country = "United Kingdom of Great Britain and Northern Ireland";
+      }
+
+      // 👇 update/populate address with data returned
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        address2_line1: data?.Line1 || "",
+        address2_country: country,
+        address2_city: data?.City || "",
+        address2_postalcode: data?.PostalCode || "",
+      }));
+      setAddressData(null);
+    } catch (error) {
+      // console.log("⭐️ ", error);
     }
-    // overwrite formData to match Dynamics fields
-    if (countryCode === "UK")
-      countryCode = "United Kingdom of Great Britain and Northern Ireland";
-
-    // update formData with values
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      address2_line1: title,
-      address2_country: countryCode,
-      address2_city: cityName,
-    }));
   };
 
   const handleClearAction = () => {

@@ -5,7 +5,12 @@ import { setAuthenticationCookieAction } from "../helpers/setAuthenticationCooki
 import { AppProvider, useAppDispatch, useAppState } from "./context";
 import { handleSetCookie, handleGetCookie } from "../helpers/cookie";
 import { handleUpdateMembershipApplication } from "../helpers/handleUpdateMembershipApplication";
-import { googleAutocomplete } from "../helpers/googleAutocomplete";
+import {
+  googleAutocomplete,
+  loqateAddressLookupService,
+  loqateAddressBlob,
+  loqateContainerBlob,
+} from "../helpers/googleAutocomplete";
 import { Parcer } from "../helpers/parcer";
 // --------------------------------------------------------------------------------
 import { useRemoveScript } from "../hooks/useRemoveScript";
@@ -262,6 +267,9 @@ export {
   handleGetCookie,
   handleUpdateMembershipApplication,
   googleAutocomplete,
+  loqateAddressLookupService,
+  loqateContainerBlob,
+  loqateAddressBlob,
   hasPermisionLevel,
   getGenderAction,
   getCountryList,
