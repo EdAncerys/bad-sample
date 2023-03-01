@@ -31,7 +31,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   };
 
   const onClickLinkHandler = async ({ title, url }) => {
-    const isWileys = title.includes("Journal") && !title.includes("SHD");
+    const isMembersOnly = title.includes("Journal");
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
@@ -46,7 +46,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     };
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
-    if (isWileys && isActiveUser) {
+    if (isMembersOnly && isActiveUser) {
       authLink = await getWileyAction({
         state,
         dispatch,
@@ -56,16 +56,19 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       });
     }
 
-    if (isWileys && !isActiveUser) {
+    if (isMembersOnly && !isActiveUser) {
       // 📌 track notification error action
+      const isCED = title?.includes("CED") || title?.includes("BJD");
+      const label = isCED ? "Visit the CED Website" : "Visit the Wiley website";
+
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the 'Visit the Wiley website'`,
+          message: `BAD members, make sure you are logged in to your BAD account to get free access to our journals. <br/> To continue to the publication without logging in, click to visit the '${label}'`,
           image: "Error",
           action: [
             {
-              label: `Visit the Wiley website`,
+              label,
               handler: handelRedirect,
             },
             { label: "Login", handler: handelLogin },

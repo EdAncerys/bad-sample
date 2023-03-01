@@ -89,11 +89,11 @@ export const MENU_DATA = [
     url: "/covid-19/",
   },
   {
-    title: "Visit the BJD Website",
+    title: "BJD Journal",
     url: "https://onlinelibrary.wiley.com/journal/13652133",
   },
   {
-    title: "Visit the CED website",
+    title: "CED Journal",
     url: "https://onlinelibrary.wiley.com/journal/13652230",
   },
   {
