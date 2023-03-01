@@ -290,6 +290,7 @@ const Applications = ({ state, actions }) => {
         py3_addressline2: data?.Line2 || "",
         py3_addresscountry: country,
         py3_addresstowncity: data?.City || "",
+        py3_addresscountystate: data?.AdminAreaName || "",
         py3_addresszippostalcode: data?.PostalCode || "",
         dev_address_data: null,
       }));
