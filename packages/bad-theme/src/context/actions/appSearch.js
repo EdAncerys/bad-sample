@@ -15,7 +15,7 @@ export const appSearchAction = async ({ state, query }) => {
       state.auth.WP_HOST +
       `/wp-json/relevanssi/v1/search?keyword=${query}&per_page=${perPage}&page=${pageNo}&_fields=id,title,link,type,content`;
 
-    const data = await fetchDataHandler({ path, state });
+    const data = await fetch(path);
     if (!data.ok) throw new Error("error fetching data form API");
     const result = await data.json();
     // ⬇️ if data contains no result & msg break out of the loop ⬇️
