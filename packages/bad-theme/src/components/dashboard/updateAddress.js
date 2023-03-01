@@ -238,6 +238,7 @@ const UpdateAddress = ({ state, actions, libraries }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         address2_line1: data?.Line1 || "",
+        address2_line2: data?.Line2 || "",
         address2_country: country,
         address2_city: data?.City || "",
         address2_postalcode: data?.PostalCode || "",
