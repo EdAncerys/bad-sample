@@ -59,7 +59,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     if (isMembersOnly && !isActiveUser) {
       // 📌 track notification error action
       const isCED = title?.includes("CED") || title?.includes("BJD");
-      const label = isCED ? "Visit the CED Website" : "Visit the Wiley website";
+      const label = isCED ? "Visit the CED Website" : "Visit the Wiley Website";
 
       setErrorAction({
         dispatch,
