@@ -56,7 +56,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       const queryState = encodeURI(`additional state params`);
       let path =
         state.auth.APP_URL +
-        `/oc-codecolect?redirect=${redirect}&state=${queryState}`;
+        `/ouredirect?redirect=${redirect}&state=${queryState}`;
 
       actions.router.set(path); // ⚠️ redirect to codecolect route handler for auth users
 

@@ -195,7 +195,7 @@ const App = ({ state, actions }) => {
           <ReferralArchive when={urlPath === "/referrals/"} />
 
           <Codecollect when={urlPath.includes("codecollect")} />
-          <OACodecCollect when={urlPath.includes("oc-codecolect")} />
+          <OACodecCollect when={urlPath.includes("ouredirect")} />
 
           <Pils when={data.isPils} />
           <AppSearch when={urlPath === "/search/"} />

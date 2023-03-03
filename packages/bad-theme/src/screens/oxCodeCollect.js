@@ -7,7 +7,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // 📌 Oxford Academics recollect redirect landing page
   // path route example 👇
-  // /oc-codecolect?redirect=https://www.bad.org.uk/&state=hello
+  // /ouredirect?redirect=https://www.bad.org.uk/&state=hello
   // --------------------------------------------------------------------------------
   const path = state.router.link;
   console.log("⭐️ DOM LOAD");
