@@ -156,6 +156,7 @@ const Breadcrumbs = ({ state, actions, libraries }) => {
   if (urlPath === "/") return null; // disable breadcrumbs in home page
   if (urlPath === "/search/") return null; // disable breadcrumbs in search page
   if (urlPath.includes("codecollect")) return null; // disable breadcrumbs in user login process form B2C
+  if (urlPath.includes("oc-codecolect")) return null; // disable breadcrumbs in oc-codecolect path
 
   return (
     <BlockWrapper background={colors.lightSilver}>

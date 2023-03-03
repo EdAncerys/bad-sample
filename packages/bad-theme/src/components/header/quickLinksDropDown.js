@@ -42,18 +42,25 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
 
     const handelRedirect = () => {
       setErrorAction({ dispatch, isError: null });
+
+      // --------------------------------------------------------------------------------
+      // 📌  Redirect handler
+      // Handles internal/external link logic
+      // --------------------------------------------------------------------------------
       setGoToAction({ state, path: authLink, actions });
     };
 
     // 📌 check if logged in user exists & user is BAD member to replace auth link
     if (isMembersOnly && isActiveUser) {
-      authLink = await getWileyAction({
-        state,
-        dispatch,
-        isActiveUser,
-        isFullAccess: true,
-        url,
-      });
+      const redirect = encodeURI(url);
+      const queryState = encodeURI(`additional state params`);
+      let path =
+        state.auth.APP_URL +
+        `/oc-codecolect?redirect=${redirect}&state=${queryState}`;
+
+      actions.router.set(path); // ⚠️ redirect to codecolect route handler for auth users
+
+      return;
     }
 
     if (isMembersOnly && !isActiveUser) {
