@@ -38,7 +38,9 @@ const AccordionHeader = ({
   // --------------------------------------------------------------------------------
   const browser = detect();
   let isFirefox = false;
+  let isSafari = false;
   if (browser && browser.name.includes("firefox")) isFirefox = true;
+  if (browser && browser.name.includes("safari")) isSafari = true;
 
   let body = block.body;
   if (fundingBlock) body = block.acf ? block.acf.overview : null;
@@ -113,6 +115,7 @@ const AccordionHeader = ({
           borderTop: !lg || isFirefox ? null : `1px solid ${colors.darkSilver}`,
           transitionDelay: `1s`,
           WebkitLineClamp: 2,
+          maxHeight: isSafari ? 80 : undefined,
         }}
       >
         <Parcer libraries={libraries} html={body} />
