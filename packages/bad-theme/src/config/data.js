@@ -90,7 +90,8 @@ export const MENU_DATA = [
   },
   {
     title: "BJD Journal",
-    url: "https://academic.oup.com/bjd",
+    // url: "https://academic.oup.com/bjd",
+    url: "https://skylarkdev.digital/httplogger",
   },
   {
     title: "CED Journal",
