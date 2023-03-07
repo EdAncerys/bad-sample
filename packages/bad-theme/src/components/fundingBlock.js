@@ -69,13 +69,14 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
             item.funding_type.includes(Number(funding_filter))
           );
         }
-        if (post_limit) fundingList = fundingList.slice(0, Number(post_limit)); // apply limit on posts
+        let slicedData = fundingList;
+        if (post_limit) slicedData = fundingList.slice(0, Number(post_limit)); // apply limit on posts
 
-        setPostFilter(fundingList);
+        setPostFilter(slicedData);
         setPostListData(fundingList);
         setGroupeType(types);
       } catch (error) {
-        // console.log('⭐️ ', error);
+        // console.log("⭐️ error ", error);
       }
     })();
   }, []);
