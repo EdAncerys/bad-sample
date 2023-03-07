@@ -59,23 +59,25 @@ const CPTBlock = ({ state, actions, libraries, block }) => {
 
   // DATA pre FETCH ----------------------------------------------------------------
   useEffect(async () => {
-    let fundingList = await getFundingData({ state });
-    const types = await getFundingTypes({ state });
+    (async () => {
+      try {
+        let fundingList = await getFundingData({ state });
+        const types = await getFundingTypes({ state });
 
-    if (funding_filter !== "All Levels") {
-      fundingList = fundingList.filter((item) =>
-        item.funding_type.includes(Number(funding_filter))
-      );
-    }
-    if (post_limit) fundingList = fundingList.slice(0, Number(post_limit)); // apply limit on posts
+        if (funding_filter !== "All Levels") {
+          fundingList = fundingList.filter((item) =>
+            item.funding_type.includes(Number(funding_filter))
+          );
+        }
+        if (post_limit) fundingList = fundingList.slice(0, Number(post_limit)); // apply limit on posts
 
-    setPostFilter(fundingList);
-    setPostListData(fundingList);
-    setGroupeType(types);
-
-    return () => {
-      filterRef.current = false; // clean up function
-    };
+        setPostFilter(fundingList);
+        setPostListData(fundingList);
+        setGroupeType(types);
+      } catch (error) {
+        // console.log('⭐️ ', error);
+      }
+    })();
   }, []);
 
   // DATA pre FETCH ---------------------------------------------------------
