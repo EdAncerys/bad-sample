@@ -47,7 +47,9 @@ export const handleUpdateMembershipApplication = async ({
   try {
     setFetching(true);
     const { core_membershipsubscriptionid } = app;
-    // chenck if user have previously submited application for category change
+    // --------------------------------------------------------------------------------
+    // 📌 validate if user have previously submitted application for category change
+    // --------------------------------------------------------------------------------
     let isSubmitted = await handleValidateMembershipChangeAction({
       state,
       core_membershipsubscriptionid,

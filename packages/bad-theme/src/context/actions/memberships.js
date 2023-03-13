@@ -31,7 +31,7 @@ export const validateMembershipFormAction = async ({
   const handleSetInputData = ({ data, name }) => {
     setData((prevFormData) => ({
       ...prevFormData,
-      [name]: data[name],
+      [name]: data[name] !== "Hide", // ⚠️ set boolean values only
     }));
   };
   if (!applicationData) return null;

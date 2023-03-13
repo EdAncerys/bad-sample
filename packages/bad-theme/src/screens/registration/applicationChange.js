@@ -9,7 +9,8 @@ import ActionPlaceholder from "../../components/actionPlaceholder";
 import Loading from "../../components/loading";
 import FormError from "../../components/formError";
 import { proAppFileds } from "../../config/data";
-import SearchDropDown from "../../components/searchDropDown";
+import PickListInput from "../../components/inputs/PickListInput";
+import { FORM_CONFIG } from "../../config/form";
 // CONTEXT -----------------------------------------------------------------
 import {
   useAppDispatch,
@@ -94,6 +95,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const hospitalSearchRef = useRef("");
   const isHospitalValue = formData.py3_hospitalid;
 
+  // --------------------------------------------------------------------------------
+  // 📌  Apply job filters on groupe cat changes
+  // --------------------------------------------------------------------------------
+  let _JOBS = FORM_CONFIG?.formus_jobrole?.Choices;
+
   // ⏬ populate form data values from applicationData
   useEffect(async () => {
     // 📌 redirect to /dashboard if isActiveUser && !applicationData
@@ -131,6 +137,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         bad_categorytype: appType || "",
+        ...isActiveUser,
       }));
     }
 
@@ -381,6 +388,11 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       py3_constitutionagreement: formData._py3_constitutionagreement,
       bad_readpolicydocument: formData._bad_readpolicydocument,
       bad_memberdirectory: formData._bad_memberdirectory,
+      // --------------------------------------------------------------------------------
+      // 📌  Additional fields added to represent pick list values
+      // --------------------------------------------------------------------------------
+      formus_staffgroupcategory: formData._formus_staffgroupcategory,
+      formus_jobrole: formData._formus_jobrole,
     };
 
     try {
@@ -423,6 +435,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       setGoToAction({ state, path: `/dashboard/`, actions });
     } catch (error) {
       // console.log("ERROR", error);
+
       setErrorAction({
         dispatch,
         isError: {
@@ -488,6 +501,8 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
   // SERVERS ---------------------------------------------
   const ServeActions = () => {
+    if (isFetching) return null; // do not show form actions on prefetch state
+
     return (
       <div
         className="flex"
@@ -636,6 +651,39 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                 <div
                   style={{ padding: !lg ? `2em 1em 0 1em` : "1em 1em 0 1em" }}
                 >
+                  {inputValidator.bad_formus_staffgroupcategory && (
+                    <div>
+                      <label className="form-label">Staff Group Category</label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_staffgroupcategory"
+                        value={formData?._formus_staffgroupcategory || ""}
+                        onChange={handleInputChange}
+                        Choices={[
+                          ...FORM_CONFIG?.formus_staffgroupcategory?.Choices,
+                        ]}
+                        labelClass="form-label"
+                      />
+                      <FormError id="py3_gmcnumber" />
+                    </div>
+                  )}
+
+                  {inputValidator.bad_formus_jobrole && (
+                    <div>
+                      <label className="form-label">Job Role</label>
+                      <PickListInput
+                        form={formData}
+                        name="_formus_jobrole"
+                        value={formData?._formus_jobrole || ""}
+                        onChange={handleInputChange}
+                        Choices={[..._JOBS]}
+                        labelClass="form-label"
+                        dashboardWidget="Job Role"
+                      />
+                      <FormError id="py3_gmcnumber" />
+                    </div>
+                  )}
+
                   {inputValidator.bad_py3_gmcnumber && (
                     <div>
                       <label className="required form-label">
@@ -670,20 +718,23 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
 
-                  {inputValidator.bad_py3_ntnno && (
-                    <div>
-                      <label className="required form-label">NTN Number</label>
-                      <input
-                        name="py3_ntnno"
-                        value={formData.py3_ntnno}
-                        onChange={handleInputChange}
-                        type="text"
-                        className="form-control input"
-                        placeholder="NTN Number"
-                      />
-                      <FormError id="py3_ntnno" />
-                    </div>
-                  )}
+                  {inputValidator.bad_py3_ntnno &&
+                    formData.bad_categorytype === "Trainee" && (
+                      <div>
+                        <label className="required form-label">
+                          NTN Number
+                        </label>
+                        <input
+                          name="py3_ntnno"
+                          value={formData.py3_ntnno}
+                          onChange={handleInputChange}
+                          type="text"
+                          className="form-control input"
+                          placeholder="NTN Number"
+                        />
+                        <FormError id="py3_ntnno" />
+                      </div>
+                    )}
 
                   {inputValidator.bad_currentpost && (
                     <div>
@@ -718,13 +769,9 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           <div
                             className="form-control input"
                             style={{
-                              // if canChangeHospital is false, apply disabled style
-                              ...(!canChangeHospital
-                                ? {
-                                    backgroundColor: colors.silverFillTwo,
-                                    color: colors.black,
-                                  }
-                                : {}),
+                              // ⚠️ set disabled style for Hospital input typ[e
+                              backgroundColor: colors.silverFillTwo,
+                              color: colors.black,
                             }}
                           >
                             <div className="flex-row">
@@ -736,42 +783,10 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 }}
                               >
                                 {selectedHospital}
-
-                                {canChangeHospital && (
-                                  <div
-                                    className="filter-icon"
-                                    style={{ top: -7 }}
-                                    onClick={handleClearHospital}
-                                  >
-                                    <CloseIcon
-                                      style={{
-                                        fill: colors.darkSilver,
-                                        padding: 0,
-                                        width: "0.7em",
-                                      }}
-                                    />
-                                  </div>
-                                )}
                               </div>
                             </div>
                           </div>
                         )}
-                        {!selectedHospital && (
-                          <div>
-                            <input
-                              ref={hospitalSearchRef}
-                              onChange={handleHospitalLookup}
-                              type="text"
-                              className="form-control input"
-                              placeholder="Main Hospital / Place of Work / Medical School details"
-                            />
-                            <FormError id="py3_hospitalid" />
-                          </div>
-                        )}
-                        <SearchDropDown
-                          filter={hospitalData}
-                          onClickHandler={handleSelectHospital}
-                        />
                       </div>
                     </div>
                   )}

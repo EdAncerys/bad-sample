@@ -161,6 +161,12 @@ const AccountDashboard = ({ state, actions, libraries }) => {
       dispatch,
       isActiveUser,
       dynamicsApps,
+      // ⚠️ 🚨 TODO: TESTING ONLY Application change data overwrite
+      // app: {
+      //   core_membershipsubscriptionid: "381f6000-947f-ed11-81ad-000d3a2accd8",
+      //   bad_categorytype: "Trainee",
+      // },
+      // ----------------------------------------------------------------
       app: subsData[0], // get first subs data for change of membership
       applicationData,
       setFetching,
@@ -199,11 +205,14 @@ const AccountDashboard = ({ state, actions, libraries }) => {
                     colour: colors.navy,
                     // add redirect link if !isBADMember
                     link: isBADMember ? null : { url: applicationPath },
+                    // ⚠️ 🚨 TODO: TESTING ONLY Application change data overwrite
+                    // onClickAction: () => handleApplyForMembershipChange(),
+                    // ----------------------------------------------------------------
                     // add onClick action if isBADMember
                     onClickAction: isBADMember
                       ? () => handleApplyForMembershipChange()
                       : null,
-                    // disable button if user have Freeze status
+                    // 👇 disable button if user have Freeze status
                     disable:
                       handelValidateMembership({
                         isActiveUser,
