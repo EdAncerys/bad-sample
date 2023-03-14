@@ -46,7 +46,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     core_membershipsubscriptionplanid: "", // new subscription plan id
 
     py3_gmcnumber: "",
-    py3_otherregulatorybodyreference: "",
     py3_ntnno: "",
     bad_currentpost: "",
     py3_hospitalid: "",
@@ -65,7 +64,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   });
   const [inputValidator, setInputValidator] = useState({
     bad_py3_gmcnumber: true,
-    bad_py3_otherregulatorybodyreference: true,
     bad_py3_ntnno: true,
     bad_currentpost: true,
     bad_py3_hospitalid: true,
@@ -350,7 +348,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     const isValid = isFormValidated({
       required: [
         "py3_gmcnumber",
-        "py3_otherregulatorybodyreference",
         "py3_ntnno",
         "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : "",
@@ -368,8 +365,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         formData.core_membershipsubscriptionplanid, // new subscription plan id
 
       py3_gmcnumber: formData.py3_gmcnumber,
-      py3_otherregulatorybodyreference:
-        formData.py3_otherregulatorybodyreference,
       py3_ntnno: formData.py3_ntnno,
       bad_currentpost: formData.bad_currentpost,
       py3_hospitalid: formData.py3_hospitalid,
@@ -694,23 +689,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                         placeholder="GMC / IMC number"
                       />
                       <FormError id="py3_gmcnumber" />
-                    </div>
-                  )}
-
-                  {inputValidator.bad_py3_otherregulatorybodyreference && (
-                    <div>
-                      <label className="required form-label">
-                        Regulatory Body Registration Number
-                      </label>
-                      <input
-                        name="py3_otherregulatorybodyreference"
-                        value={formData.py3_otherregulatorybodyreference}
-                        onChange={handleInputChange}
-                        type="text"
-                        className="form-control input"
-                        placeholder="Regulatory Body Registration Number"
-                      />
-                      <FormError id="py3_otherregulatorybodyreference" />
                     </div>
                   )}
 
