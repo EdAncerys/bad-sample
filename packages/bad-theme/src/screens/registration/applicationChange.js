@@ -9,6 +9,8 @@ import ActionPlaceholder from "../../components/actionPlaceholder";
 import Loading from "../../components/loading";
 import FormError from "../../components/formError";
 import { proAppFileds } from "../../config/data";
+import SearchDropDown from "../../components/searchDropDown";
+import CloseIcon from "@mui/icons-material/Close";
 import PickListInput from "../../components/inputs/PickListInput";
 import { FORM_CONFIG } from "../../config/form";
 // CONTEXT -----------------------------------------------------------------
@@ -47,7 +49,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
     py3_gmcnumber: "",
     py3_ntnno: "",
-    bad_currentpost: "",
     py3_hospitalid: "",
     bad_proposer1: "",
     bad_proposer2: "",
@@ -65,7 +66,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const [inputValidator, setInputValidator] = useState({
     bad_py3_gmcnumber: true,
     bad_py3_ntnno: true,
-    bad_currentpost: true,
     bad_py3_hospitalid: true,
     bad_proposer1: true,
     bad_proposer2: true,
@@ -85,7 +85,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const [applicationType, setType] = useState("");
 
   const [hospitalData, setHospitalData] = useState("");
-  const [canChangeHospital, setCanChangeHospital] = useState(true); // allow user to change hospital is no BAD applications are found
+  const [canChangeHospital, setCanChangeHospital] = useState(true); // do not allow users to change hospital by default
   const [selectedHospital, setSelectedHospital] = useState("");
   const documentRef = useRef("");
   const hospitalSearchRef = useRef("");
@@ -155,20 +155,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     // ⏬ populate form data values from applicationData
     if (!applicationData) return null;
 
-    if (dynamicsApps) {
-      const subsData = dynamicsApps.subs.data; // get subs/approved apps data form dynamic apps
-      // check if user have application under BAD as approved status
-      const isApprovedBAD =
-        subsData.filter((item) => item.bad_organisedfor === "BAD").length > 0;
-      // if user have application pending under reviewed status redirect to application list
-      if (isApprovedBAD) {
-        // console.log("🤖 user have BAD application approved");
-        setCanChangeHospital(false);
-      }
-    }
-
-    // hospital id initial value
-    let hospitalId = null;
+    let hospitalId = null; // hospital id initial value
 
     applicationData.map((data) => {
       // ⬇️  map sigApp fields against applicationData & set formData with field name & value
@@ -183,13 +170,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       });
 
       if (data.bad_categorytype) setType(data.bad_categorytype); // validate BAD application category type
-      // if bad_currentpost is null then set value from user profile data
-      if (!data.bad_currentpost) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [`bad_currentpost`]: isActiveUser.jobtitle,
-        }));
-      }
     });
 
     if (hospitalId) {
@@ -202,6 +182,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         });
         if (hospitalData) {
           setSelectedHospital(hospitalData.name);
+          // setCanChangeHospital(false); // ⚠️ if hospital exist in user records do not allow to change it
         }
       } catch (error) {
         // console.log("🤖 error", error);
@@ -349,7 +330,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       required: [
         "py3_gmcnumber",
         "py3_ntnno",
-        "bad_currentpost",
         isNewHospital ? "sky_newhospitaltype" : "",
         !isNewHospital ? "py3_hospitalid" : "",
       ],
@@ -366,7 +346,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
 
       py3_gmcnumber: formData.py3_gmcnumber,
       py3_ntnno: formData.py3_ntnno,
-      bad_currentpost: formData.bad_currentpost,
       py3_hospitalid: formData.py3_hospitalid,
       bad_proposer1: formData.bad_proposer1,
       bad_proposer2: formData.bad_proposer2,
@@ -710,24 +689,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                       </div>
                     )}
 
-                  {inputValidator.bad_currentpost && (
-                    <div>
-                      <label className="required form-label">
-                        Current Post / Job title field (If retired please enter
-                        retired)
-                      </label>
-                      <input
-                        name="bad_currentpost"
-                        value={formData.bad_currentpost}
-                        onChange={handleInputChange}
-                        type="text"
-                        className="form-control input"
-                        placeholder="Current job title"
-                      />
-                      <FormError id="bad_currentpost" />
-                    </div>
-                  )}
-
                   {inputValidator.bad_py3_hospitalid && (
                     <div>
                       <label className="form-label required">
@@ -743,9 +704,13 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                           <div
                             className="form-control input"
                             style={{
-                              // ⚠️ set disabled style for Hospital input typ[e
-                              backgroundColor: colors.silverFillTwo,
-                              color: colors.black,
+                              // if canChangeHospital is false, apply disabled style
+                              ...(!canChangeHospital
+                                ? {
+                                    backgroundColor: colors.silverFillTwo,
+                                    color: colors.black,
+                                  }
+                                : {}),
                             }}
                           >
                             <div className="flex-row">
@@ -757,10 +722,42 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                                 }}
                               >
                                 {selectedHospital}
+
+                                {canChangeHospital && (
+                                  <div
+                                    className="filter-icon"
+                                    style={{ top: -7 }}
+                                    onClick={handleClearHospital}
+                                  >
+                                    <CloseIcon
+                                      style={{
+                                        fill: colors.darkSilver,
+                                        padding: 0,
+                                        width: "0.7em",
+                                      }}
+                                    />
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
                         )}
+                        {!selectedHospital && (
+                          <div>
+                            <input
+                              ref={hospitalSearchRef}
+                              onChange={handleHospitalLookup}
+                              type="text"
+                              className="form-control input"
+                              placeholder="Main Hospital / Place of Work / Medical School details"
+                            />
+                            <FormError id="py3_hospitalid" />
+                          </div>
+                        )}
+                        <SearchDropDown
+                          filter={hospitalData}
+                          onClickHandler={handleSelectHospital}
+                        />
                       </div>
                     </div>
                   )}
