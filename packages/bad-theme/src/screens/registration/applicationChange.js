@@ -85,7 +85,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   const [applicationType, setType] = useState("");
 
   const [hospitalData, setHospitalData] = useState("");
-  const [canChangeHospital, setCanChangeHospital] = useState(true); // do not allow users to change hospital by default
+  const [canChangeHospital, setCanChangeHospital] = useState(false); // do not allow users to change hospital by default
   const [selectedHospital, setSelectedHospital] = useState("");
   const documentRef = useRef("");
   const hospitalSearchRef = useRef("");
@@ -182,11 +182,12 @@ const ApplicationChange = ({ state, actions, libraries }) => {
         });
         if (hospitalData) {
           setSelectedHospital(hospitalData.name);
-          // setCanChangeHospital(false); // ⚠️ if hospital exist in user records do not allow to change it
         }
       } catch (error) {
         // console.log("🤖 error", error);
       }
+    } else {
+      setCanChangeHospital(true); // ⚠️ if no hospital record exist allow user to add one
     }
 
     // ⏬ validate inputs
