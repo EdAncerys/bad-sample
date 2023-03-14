@@ -53,7 +53,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     bad_proposer1: "",
     bad_proposer2: "",
     sky_cvurl: "",
-    py3_currentgrade: "",
     sky_newhospitalname: "",
     bad_expectedyearofqualification: "",
     sky_newhospitaltype: "",
@@ -73,7 +72,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     bad_proposer1: true,
     bad_proposer2: true,
     bad_sky_cvurl: true,
-    bad_py3_currentgrade: true,
     bad_sky_newhospitalname: true,
     bad_expectedyearofqualification: true,
     bad_py3_constitutionagreement: true,
@@ -378,7 +376,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       bad_proposer1: formData.bad_proposer1,
       bad_proposer2: formData.bad_proposer2,
       sky_cvurl: formData.sky_cvurl,
-      py3_currentgrade: formData.py3_currentgrade,
       sky_newhospitalname: formData.sky_newhospitalname,
       bad_expectedyearofqualification: formData.bad_expectedyearofqualification,
       sky_newhospitaltype: formData.sky_newhospitaltype,
@@ -487,7 +484,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
   };
 
   let isFormFooter =
-    inputValidator.bad_py3_currentgrade ||
     inputValidator.bad_py3_constitutionagreement ||
     inputValidator.bad_readpolicydocument ||
     inputValidator.bad_sky_cvurl;
@@ -858,20 +854,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
                     </div>
                   )}
                 </div>
-
-                {inputValidator.bad_py3_currentgrade && (
-                  <div style={{ padding: "0 1em" }}>
-                    <label className="form-label">Current Grade</label>
-                    <input
-                      name="py3_currentgrade"
-                      value={formData.py3_currentgrade}
-                      onChange={handleInputChange}
-                      type="text"
-                      className="form-control input"
-                      placeholder="Current Grade"
-                    />
-                  </div>
-                )}
 
                 {isFormFooter && (
                   <div
