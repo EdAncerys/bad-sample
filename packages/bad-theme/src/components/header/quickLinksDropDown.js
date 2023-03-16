@@ -31,7 +31,8 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
   };
 
   const onClickLinkHandler = async ({ title, url }) => {
-    const isMembersOnly = title.includes("Journal");
+    const isMembersOnly = title.includes("Journal"); // ⚠️ BJD CED SHD journal links
+    const isSHD = title.includes("SHD"); // 👈 SHD journal link only
     let authLink = url;
 
     // HANDLERS ----------------------------------------------------
@@ -50,8 +51,10 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       setGoToAction({ state, path: authLink, actions });
     };
 
+    // --------------------------------------------------------------------------------
     // 📌 check if logged in user exists & user is BAD member to replace auth link
-    if (isMembersOnly && isActiveUser) {
+    // --------------------------------------------------------------------------------
+    if (isMembersOnly && !isSHD && isActiveUser) {
       const redirect = encodeURI(url);
       const queryState = encodeURI(`additional state params`);
       let path =
@@ -61,6 +64,16 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
       actions.router.set(path); // ⚠️ redirect to codecolect route handler for auth users
 
       return;
+    }
+
+    if (isSHD && isActiveUser) {
+      authLink = await getWileyAction({
+        state,
+        dispatch,
+        isActiveUser,
+        isFullAccess: true,
+        url,
+      });
     }
 
     if (isMembersOnly && !isActiveUser) {

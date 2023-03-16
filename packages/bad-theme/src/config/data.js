@@ -91,11 +91,19 @@ export const MENU_DATA = [
   {
     title: "BJD Journal",
     // url: "https://academic.oup.com/bjd",
-    url: "https://skylarkdev.digital/httplogger",
+    url:
+      "https://skylarkdev.digital/httplogger" +
+      encodeURI(
+        "?origurl=https://academic.oup.com/bjd?sigmaHost=academic.oup.com"
+      ),
   },
   {
     title: "CED Journal",
-    url: "https://academic.oup.com/ced",
+    url:
+      "https://academic.oup.com/ced" +
+      encodeURI(
+        "?origurl=https://academic.oup.com/ced?sigmaHost=academic.oup.com"
+      ),
   },
   {
     title: "SHD Journal",
