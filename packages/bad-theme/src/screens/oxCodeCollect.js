@@ -31,6 +31,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
           const data = await res.json();
           const isAuth = data?.success;
           console.log("⭐️ auth user", isAuth);
+          // await new Promise((resolve) => setTimeout(resolve, 2000));
 
           if (isAuth) {
             // --------------------------------------------------------------------------------
@@ -55,10 +56,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
             // --------------------------------------------------------------------------------
             // 📌  Add meta tag with redirect from current path in 0s to url provided
             // --------------------------------------------------------------------------------
-            let meta = document.createElement("meta");
-            meta.httpEquiv = "refresh";
-            meta.content = `0; url=${b2cRedirect}`;
-            document.getElementsByTagName("head")[0].appendChild(meta);
+            window.location.href = b2cRedirect;
           }
 
           return;
