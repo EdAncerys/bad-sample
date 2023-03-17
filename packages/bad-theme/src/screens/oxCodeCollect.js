@@ -99,7 +99,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
       } catch (error) {
         console.log("⭐️ %s", __filename, error);
 
-        // actions.router.set("/"); // ⚠️ redirect to home landing page
+        actions.router.set("/"); // ⚠️ redirect to home landing page
       }
     })();
   }, []);
