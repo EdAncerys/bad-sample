@@ -29,7 +29,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
           // --------------------------------------------------------------------------------
           const res = await fetch(state.auth.APP_HOST + "/utils/cookie");
           const data = await res.json();
-          const isAuth = data?.data?.level === "auth";
+          const isAuth = data?.success;
           console.log("⭐️ auth user", isAuth);
 
           if (isAuth) {
