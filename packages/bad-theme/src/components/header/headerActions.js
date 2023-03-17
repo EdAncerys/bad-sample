@@ -140,20 +140,13 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleApiRequest = async () => {
     try {
-      let myHeaders = new Headers();
-      myHeaders.append("Authorization", "Basic ZGVtbzphc2RmZ2g=");
-
-      let requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-
-      const res = await fetch(
-        "https://badmainstagstg.wpengine.com/wp-json/wp/v2/memberships?_fields=id,date,slug,title,sog_groupe,acf",
-        requestOptions
-      );
+      const res = await fetch(state.auth.APP_HOST + "/utils/cookie");
+      console.log("⭐️", state.auth.APP_HOST + "/utils/cookie");
+      console.log("⭐️", res);
       const data = await res.json();
+      console.log("⭐️", data);
+      const isAuth = data?.data?.level === "auth";
+      console.log("⭐️ auth user", isAuth);
     } catch (error) {
       // console.log(error);
     }

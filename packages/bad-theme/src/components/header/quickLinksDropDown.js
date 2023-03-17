@@ -56,10 +56,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     // --------------------------------------------------------------------------------
     if (isMembersOnly && !isSHD && isActiveUser) {
       const redirect = encodeURI(url);
-      const queryState = encodeURI(`additional state params`);
-      let path =
-        state.auth.APP_URL +
-        `/ouredirect?redirect=${redirect}&state=${queryState}`;
+      let path = state.auth.APP_URL + `/ouredirect?redirect=${redirect}`;
 
       actions.router.set(path); // ⚠️ redirect to codecolect route handler for auth users
 
