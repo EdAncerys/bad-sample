@@ -91,6 +91,20 @@ export const useB2CLogin = ({ state, actions }) => {
     } catch (error) {
       // console.log(error);
     } finally {
+      // --------------------------------------------------------------------------------
+      // 📌  Handle OU redirects from B2C logon
+      // --------------------------------------------------------------------------------
+      const originPath = new URL(window.location.href);
+      const params = new URLSearchParams(originPath.hash.substring(1)); // get params from hash
+      const stateParam = params.get("state");
+
+      if (stateParam) {
+        const redirect = "/ouredirect?auth=true&state=" + stateParam;
+        actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
+
+        return;
+      }
+
       // get redirect url from cookie
       const redirectUrl = handleGetCookie({ name: "badLoginPath" });
       // console.log("🐞 redirectUrl ", redirectUrl); // debug
