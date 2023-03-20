@@ -3,6 +3,24 @@ import { useEffect } from "react";
 // --------------------------------------------------------------------------------
 import Loading from "../components/loading";
 
+export const metaTagHandler = ({ path }) => {
+  // --------------------------------------------------------------------------------
+  // 📌  Add meta tag to headers
+  // --------------------------------------------------------------------------------
+  const meta1 = document.createElement("meta");
+  meta1.name = "referrer";
+  meta1.content = "no-referrer-when-downgrade";
+  document.head.appendChild(meta1);
+
+  // --------------------------------------------------------------------------------
+  // 📌  Add meta tag with redirect from current path in 0s to url provided
+  // --------------------------------------------------------------------------------
+  let meta = document.createElement("meta");
+  meta.httpEquiv = "refresh";
+  meta.content = `0; url=${path}`;
+  document.getElementsByTagName("head")[0].appendChild(meta);
+};
+
 const OACodecCollect = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   // 📌 Oxford Academics recollect redirect landing page. PATH ouredirect
@@ -11,24 +29,6 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   // --------------------------------------------------------------------------------
   const path = state.router.link;
   console.log("⭐️ DOM LOAD, path", path);
-
-  const metaTagHandler = ({ path }) => {
-    // --------------------------------------------------------------------------------
-    // 📌  Add meta tag to headers
-    // --------------------------------------------------------------------------------
-    const meta1 = document.createElement("meta");
-    meta1.name = "referrer";
-    meta1.content = "no-referrer-when-downgrade";
-    document.head.appendChild(meta1);
-
-    // --------------------------------------------------------------------------------
-    // 📌  Add meta tag with redirect from current path in 0s to url provided
-    // --------------------------------------------------------------------------------
-    let meta = document.createElement("meta");
-    meta.httpEquiv = "refresh";
-    meta.content = `0; url=${path}`;
-    document.getElementsByTagName("head")[0].appendChild(meta);
-  };
 
   useEffect(() => {
     (async () => {
