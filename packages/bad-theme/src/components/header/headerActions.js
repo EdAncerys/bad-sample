@@ -140,7 +140,9 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleApiRequest = async () => {
     try {
-      const res = await fetch(state.auth.APP_HOST + "/utils/cookie");
+      const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
+        credentials: "include",
+      });
       console.log("⭐️", state.auth.APP_HOST + "/utils/cookie");
       console.log("⭐️", res);
       const data = await res.json();

@@ -2,6 +2,8 @@ import { connect } from "frontity";
 import { useEffect } from "react";
 // --------------------------------------------------------------------------------
 import Loading from "../components/loading";
+// CONTEXT ----------------------------------------------------------------
+import { useAppState } from "../context";
 
 export const metaTagHandler = ({ path }) => {
   // --------------------------------------------------------------------------------
@@ -27,6 +29,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   // path route example 👇
   // /ouredirect?redirect=https://www.bad.org.uk/&state=hello
   // --------------------------------------------------------------------------------
+  const { isActiveUser } = useAppState();
   const path = state.router.link;
   console.log("⭐️ DOM LOAD, path", path);
 
@@ -55,11 +58,13 @@ const OACodecCollect = ({ state, actions, libraries }) => {
           // --------------------------------------------------------------------------------
           // 📌  Check if BAD cookie exist in headers
           // --------------------------------------------------------------------------------
-          const res = await fetch(state.auth.APP_HOST + "/utils/cookie");
+          // await new Promise((res) => setTimeout(res, 2000));
+
+          const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
+            credentials: "include",
+          });
           const data = await res.json();
-          const isAuth = data?.data?.level === "auth";
-          console.log("⭐️ auth user", isAuth);
-          // await new Promise((resolve) => setTimeout(resolve, 2000));
+          const isAuth = data?.data?.level === "auth" || isActiveUser;
 
           if (isAuth) {
             // --------------------------------------------------------------------------------
