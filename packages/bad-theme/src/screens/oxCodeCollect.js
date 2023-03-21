@@ -58,7 +58,6 @@ const OACodecCollect = ({ state, actions, libraries }) => {
           // --------------------------------------------------------------------------------
           // 📌  Check if BAD cookie exist in headers
           // --------------------------------------------------------------------------------
-          // await new Promise((res) => setTimeout(res, 2000));
 
           const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
             credentials: "include",
@@ -100,7 +99,9 @@ const OACodecCollect = ({ state, actions, libraries }) => {
         // --------------------------------------------------------------------------------
         // 📌  If none of the above conditions match - redirect back to home page
         // --------------------------------------------------------------------------------
-        actions.router.set("/"); // ⚠️ redirect to home landing page
+        if (!isAuth && !isRedirect && !isOrigUrl) {
+          actions.router.set("/"); // ⚠️ redirect to home landing page
+        }
       } catch (error) {
         console.log("⭐️ %s", __filename, error);
 
