@@ -63,9 +63,9 @@ const OACodecCollect = ({ state, actions, libraries }) => {
             credentials: "include",
           });
           const data = await res.json();
-          const isAuth = data?.data?.level === "auth" || isActiveUser;
+          const isAuthUser = data?.data?.level === "auth" || isActiveUser;
 
-          if (isAuth) {
+          if (isAuthUser) {
             // --------------------------------------------------------------------------------
             // 📌  Redirect auth users to provided url
             // --------------------------------------------------------------------------------
