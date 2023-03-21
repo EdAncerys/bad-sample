@@ -186,12 +186,13 @@ export const setCompleteUserApplicationAction = async ({
 
     const path = state.auth.APP_HOST + `/applications/new/${contactid}`;
 
-    const response = await fetchDataHandler({
-      path,
+    const response = await fetch(path, {
       method: "POST",
-      state,
-      // application data is sent as body
-      body: applicationData,
+      body: JSON.stringify(applicationData),
+      headers: {
+        "Content-Type": "application/json",
+        credentials: "include",
+      },
     });
     const data = await response.json();
 
@@ -223,11 +224,11 @@ export const setCompleteUserApplicationAction = async ({
       });
 
       return data;
-    } else {
-      // console.log("⏬ Failed to Create Membership ⏬");
     }
+
+    return null;
   } catch (error) {
-    // console.log("error", error);
+    console.log("⭐️ %s", __filename, error);
   }
 };
 

@@ -27,9 +27,11 @@ import {
   getHospitalNameAction,
   getBADMembershipSubscriptionData,
   setUserStoreAction,
-  setCompleteUserApplicationAction,
   Parcer,
+  setApplicationDataAction,
 } from "../../context";
+
+import { submitUserApplication } from "../../helpers/inputHelpers";
 
 const ApplicationChange = ({ state, actions, libraries }) => {
   const data = state.source.get(state.router.link);
@@ -370,6 +372,7 @@ const ApplicationChange = ({ state, actions, libraries }) => {
     try {
       setFetching(true);
       // ⏬ get appropriate membership ID for BAD applications only
+
       const response = await getBADMembershipSubscriptionData({
         state,
         category: "BAD",
@@ -380,7 +383,6 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       // ⬇️  update application object with new membership ID ⬇️
       appFromData.core_membershipsubscriptionplanid =
         response.core_membershipsubscriptionplanid;
-      // console.log("appFromData", appFromData); // debug
 
       const store = await setUserStoreAction({
         state,
@@ -393,20 +395,34 @@ const ApplicationChange = ({ state, actions, libraries }) => {
       });
       if (!store.success) throw new Error("Failed to update application");
 
-      // set complete application if app = BAD
-      const appsResponse = await setCompleteUserApplicationAction({
+      const submitRes = await submitUserApplication({
         state,
-        dispatch,
-        isActiveUser,
-        applicationData,
-        changeAppCategory: appFromData,
+        contactid: isActiveUser?.contactid || "",
+        application: applicationData,
       });
-      if (!appsResponse) throw new Error("Failed to create application"); // throw error if store is not successful
+      if (!submitRes?.success) throw new Error("Failed to create application"); // throw error if store is not successful
 
-      // redirect to dashboard
+      // --------------------------------------------------------------------------------
+      // 📌  Clear application data from context
+      // --------------------------------------------------------------------------------
+      setApplicationDataAction({
+        dispatch,
+        applicationData: null,
+      });
+      // --------------------------------------------------------------------------------
+      // 📌  Error msg & redirect handling
+      // --------------------------------------------------------------------------------
+      setErrorAction({
+        dispatch,
+        isError: {
+          message: `Application change to ${appFromData.bad_categorytype} from ${applicationData[0].bad_categorytype} been successfully submitted!`,
+        },
+      });
+
+      await new Promise((res) => setTimeout(res, 100)); // ⚠️ let UI update DOM
       setGoToAction({ state, path: `/dashboard/`, actions });
     } catch (error) {
-      // console.log("ERROR", error);
+      // console.log("⭐️ %s", __filename, error);
 
       setErrorAction({
         dispatch,

@@ -67,6 +67,10 @@ export const handleUpdateMembershipApplication = async ({
       });
     }
 
+    // --------------------------------------------------------------------------------
+    // 📌  Do not allow to re-submit application if there is one already submitted
+    // COMMENT OUT FOR TESTING/DEV MODE
+    // --------------------------------------------------------------------------------
     if (isSubmitted && isSubmitted.length > 0) {
       const confirmationMsg = `You already submitted you request for change of category. BAD category change pending approval.`;
 

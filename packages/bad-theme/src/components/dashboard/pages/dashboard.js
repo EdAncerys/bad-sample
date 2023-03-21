@@ -266,7 +266,10 @@ const Dashboard = ({ state, actions, libraries }) => {
                     }, []);
 
                     if (!appStatus) return <Loading />;
-
+                    // --------------------------------------------------------------------------------
+                    // 📌  Do not allow to re-submit application if there is one already submitted
+                    // COMMENT OUT FOR TESTING/DEV MODE
+                    // --------------------------------------------------------------------------------
                     if (appStatus.length > 0)
                       return (
                         <div

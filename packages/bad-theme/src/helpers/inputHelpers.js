@@ -294,18 +294,10 @@ export const submitUserApplication = async ({
   state,
   contactid,
   application,
-  changeAppCategory,
 }) => {
   try {
     if (!contactid || !application)
       throw new Error("Error. Missing contactid or application.");
-
-    let msg = "Application been successfully submitted!";
-    const type = application?.[0]?.bad_categorytype;
-    if (type) msg = `Your ${type} application has been successfully submitted!`;
-    if (changeAppCategory) {
-      msg = `Application change to ${changeAppCategory?.bad_categorytype} from ${application?.[0]?.bad_categorytype} been successfully submitted!`; // change of category for BAD application error message
-    }
 
     const path = state.auth.APP_HOST + `/applications/new/${contactid}`;
 
