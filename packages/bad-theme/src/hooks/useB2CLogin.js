@@ -102,21 +102,18 @@ export const useB2CLogin = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         // 📌  Add referrer headers
         // --------------------------------------------------------------------------------
+        let setCookiePath =
+          state.auth.APP_HOST + "/users/b2c/auth?token=" + b2cTaken;
+        await fetch(setCookiePath);
+        console.log("⭐️ PATH", setCookiePath);
         const redirect = "/ouredirect/?origurl=" + stateParam;
         actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
 
         return;
       }
 
-      // get redirect url from cookie
-      const redirectUrl = handleGetCookie({ name: "badLoginPath" });
-      // console.log("🐞 redirectUrl ", redirectUrl); // debug
-
-      // ⬇️ redirect to url with path ⬇️
-      setGoToAction({ state, path: redirectUrl || "/", actions });
-      // set placeholder to false
-      // deprecated as of v3.0.0
-      // setPlaceholderAction({ dispatch, isPlaceholder: false });
+      const redirectUrl = handleGetCookie({ name: "badLoginPath" }); // get redirect url from cookie
+      setGoToAction({ state, path: redirectUrl || "/", actions }); // handle redirect
     }
 
     return () => {
