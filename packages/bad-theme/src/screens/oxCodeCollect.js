@@ -2,8 +2,6 @@ import { connect } from "frontity";
 import { useEffect } from "react";
 // --------------------------------------------------------------------------------
 import Loading from "../components/loading";
-// CONTEXT ----------------------------------------------------------------
-import { useAppState } from "../context";
 
 export const metaTagHandler = ({ path }) => {
   // --------------------------------------------------------------------------------
@@ -29,7 +27,6 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   // path route example 👇
   // /ouredirect?redirect=https://www.bad.org.uk/&state=hello
   // --------------------------------------------------------------------------------
-  const { isActiveUser } = useAppState();
   const path = state.router.link;
   console.log("⭐️ DOM LOAD, path", path);
 
@@ -49,24 +46,8 @@ const OACodecCollect = ({ state, actions, libraries }) => {
         let URL = new URLSearchParams(window.location.search);
         const isOURedirect = URL.get("redirect");
         const isOrigUrl = URL.get("origurl");
-        const isState = URL.get("state");
-        const isAuth = URL.get("auth");
-
-        console.log("⭐️ %s URL isOURedirect ", isOURedirect);
-        console.log("⭐️ %s URL isOrigUrl ", isOrigUrl);
 
         const path = isOURedirect; // ⚠️ redirect path from BAD. Extend with additional params if needed
-
-        if (isAuth) {
-          // --------------------------------------------------------------------------------
-          // 📌  Redirect from B2C code collect path. Auth user & redirect back to OU
-          // --------------------------------------------------------------------------------
-          const isAuthUser = await authHandler();
-          if (isAuthUser) {
-            metaTagHandler({ path: isState });
-            return;
-          }
-        }
 
         if (isOrigUrl) {
           // --------------------------------------------------------------------------------

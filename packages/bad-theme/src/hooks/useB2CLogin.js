@@ -102,7 +102,7 @@ export const useB2CLogin = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         // 📌  Add referrer headers
         // --------------------------------------------------------------------------------
-        const redirect = "/ouredirect?auth=true&state=" + stateParam;
+        const redirect = "/ouredirect/?origurl=" + encodeURI(stateParam);
         actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
 
         return;
