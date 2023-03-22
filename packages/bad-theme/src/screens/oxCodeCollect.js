@@ -31,7 +31,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   console.log("⭐️ DOM LOAD, path", path);
 
   const authHandler = async () => {
-    const MAX_RETRIES = 4;
+    const MAX_RETRIES = 10;
     let isAuthUser = false;
     let retryCount = 0;
 
@@ -47,6 +47,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
         retryCount++;
         console.log("⭐️ COUNT", retryCount);
+        console.log("⭐️ data", data?.data);
       }
     }
 
