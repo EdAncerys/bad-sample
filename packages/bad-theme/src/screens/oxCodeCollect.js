@@ -31,27 +31,13 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   console.log("⭐️ DOM LOAD, path", path);
 
   const authHandler = async () => {
-    const MAX_RETRIES = 10;
-    let isAuthUser = false;
-    let retryCount = 0;
+    const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
+      credentials: "include",
+    });
 
-    while (retryCount < MAX_RETRIES && !isAuthUser) {
-      const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
-        credentials: "include",
-      });
+    const data = await res.json();
 
-      const data = await res.json();
-      isAuthUser = data?.data?.level === "auth";
-
-      if (!isAuthUser) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        retryCount++;
-        console.log("⭐️ COUNT", retryCount);
-        console.log("⭐️ data", data?.data);
-      }
-    }
-
-    return isAuthUser;
+    return data?.data?.level === "auth";
   };
 
   useEffect(() => {
