@@ -102,11 +102,7 @@ export const useB2CLogin = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         // 📌  Add referrer headers
         // --------------------------------------------------------------------------------
-        let setCookiePath =
-          state.auth.APP_HOST + "/users/b2c/auth?token=" + b2cTaken;
-        await fetch(setCookiePath);
-        console.log("⭐️ PATH", setCookiePath);
-        const redirect = "/ouredirect/?origurl=" + stateParam;
+        const redirect = "/ouredirect?redirect=" + stateParam;
         actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
 
         return;
