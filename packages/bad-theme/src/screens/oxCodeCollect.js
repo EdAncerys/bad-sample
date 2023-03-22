@@ -31,11 +31,22 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   console.log("⭐️ DOM LOAD, path", path);
 
   const authHandler = async () => {
-    const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
-      credentials: "include",
-    });
-    const data = await res.json();
-    const isAuthUser = data?.data?.level === "auth";
+    let loop = 0;
+    let isAuthUser = false;
+
+    while (loop < 4 && !isAuthUser) {
+      const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      isAuthUser = data?.data?.level === "auth";
+
+      if (!isAuthUser) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        loop++;
+      }
+    }
 
     return isAuthUser;
   };
