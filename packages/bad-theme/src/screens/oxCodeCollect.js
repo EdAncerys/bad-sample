@@ -34,7 +34,6 @@ const OACodecCollect = ({ state, actions, libraries }) => {
     const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
       credentials: "include",
     });
-
     const data = await res.json();
 
     return data?.data?.level === "auth";

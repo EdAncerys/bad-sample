@@ -76,23 +76,6 @@ export const useB2CLogin = ({ state, actions }) => {
         await setAuthenticationCookieAction({ state, b2cTaken });
 
         // --------------------------------------------------------------------------------
-        // 📌  Handle OU redirects from B2C logon
-        // --------------------------------------------------------------------------------
-        const originPath = new URL(window.location.href);
-        const params = new URLSearchParams(originPath.hash.substring(1)); // get params from hash
-        const stateParam = params.get("state");
-        if (stateParam) {
-          // --------------------------------------------------------------------------------
-          // 📌  Add referrer headers
-          // --------------------------------------------------------------------------------
-          await new Promise((res) => setTimeout(res, 100)); // ⚠️ browser state update
-          const redirect = "/ouredirect?redirect=" + stateParam;
-          actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
-
-          return;
-        }
-
-        // --------------------------------------------------------------------------------
         // 📌 get user data by email
         // --------------------------------------------------------------------------------
         const user = await getUserDataByEmail({
@@ -111,6 +94,23 @@ export const useB2CLogin = ({ state, actions }) => {
     } catch (error) {
       // console.log(error);
     } finally {
+      // --------------------------------------------------------------------------------
+      // 📌  Handle OU redirects from B2C logon
+      // --------------------------------------------------------------------------------
+      const originPath = new URL(window.location.href);
+      const params = new URLSearchParams(originPath.hash.substring(1)); // get params from hash
+      const stateParam = params.get("state");
+      if (stateParam) {
+        // --------------------------------------------------------------------------------
+        // 📌  Add referrer headers
+        // --------------------------------------------------------------------------------
+        await new Promise((res) => setTimeout(res, 100)); // ⚠️ browser state update
+        const redirect = "/ouredirect?redirect=" + stateParam;
+        actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
+
+        return;
+      }
+
       const redirectUrl = handleGetCookie({ name: "badLoginPath" }); // get redirect url from cookie
       setGoToAction({ state, path: redirectUrl || "/", actions }); // handle redirect
     }
