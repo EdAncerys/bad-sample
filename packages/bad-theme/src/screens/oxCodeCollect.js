@@ -52,6 +52,8 @@ const OACodecCollect = ({ state, actions, libraries }) => {
           // 📌  Redirect from B2C code collect path. Auth user & redirect back to OU
           // --------------------------------------------------------------------------------
           metaTagHandler({ path: isState });
+
+          return;
         }
 
         if (isOrigUrl) {
@@ -99,9 +101,7 @@ const OACodecCollect = ({ state, actions, libraries }) => {
         // --------------------------------------------------------------------------------
         // 📌  If none of the above conditions match - redirect back to home page
         // --------------------------------------------------------------------------------
-        if (!isAuth && !isRedirect && !isOrigUrl) {
-          actions.router.set("/"); // ⚠️ redirect to home landing page
-        }
+        actions.router.set("/"); // ⚠️ redirect to home landing page
       } catch (error) {
         console.log("⭐️ %s", __filename, error);
 
