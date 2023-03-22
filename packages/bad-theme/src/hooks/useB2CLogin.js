@@ -102,11 +102,6 @@ export const useB2CLogin = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         // 📌  Add referrer headers
         // --------------------------------------------------------------------------------
-        const meta1 = document.createElement("meta");
-        meta1.name = "referrer";
-        meta1.content = "no-referrer-when-downgrade";
-        document.head.appendChild(meta1);
-
         const redirect = "/ouredirect?auth=true&state=" + stateParam;
         actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
 

@@ -33,6 +33,16 @@ const OACodecCollect = ({ state, actions, libraries }) => {
   const path = state.router.link;
   console.log("⭐️ DOM LOAD, path", path);
 
+  const authHandler = async () => {
+    const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
+      credentials: "include",
+    });
+    const data = await res.json();
+    const isAuthUser = data?.data?.level === "auth";
+
+    return isAuthUser;
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -51,21 +61,18 @@ const OACodecCollect = ({ state, actions, libraries }) => {
           // --------------------------------------------------------------------------------
           // 📌  Redirect from B2C code collect path. Auth user & redirect back to OU
           // --------------------------------------------------------------------------------
-          metaTagHandler({ path: isState });
-
-          return;
+          const isAuthUser = await authHandler();
+          if (isAuthUser) {
+            metaTagHandler({ path: isState });
+            return;
+          }
         }
 
         if (isOrigUrl) {
           // --------------------------------------------------------------------------------
           // 📌  Check if BAD cookie exist in headers
           // --------------------------------------------------------------------------------
-
-          const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
-            credentials: "include",
-          });
-          const data = await res.json();
-          const isAuthUser = data?.data?.level === "auth" || isActiveUser;
+          const isAuthUser = await authHandler();
 
           if (isAuthUser) {
             // --------------------------------------------------------------------------------
