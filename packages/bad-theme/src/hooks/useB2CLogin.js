@@ -74,7 +74,10 @@ export const useB2CLogin = ({ state, actions }) => {
 
         // 📌 set auth cookie for authenticated requests
         await setAuthenticationCookieAction({ state, b2cTaken });
+
+        // --------------------------------------------------------------------------------
         // 📌 get user data by email
+        // --------------------------------------------------------------------------------
         const user = await getUserDataByEmail({
           state,
           dispatch,
@@ -91,15 +94,25 @@ export const useB2CLogin = ({ state, actions }) => {
     } catch (error) {
       // console.log(error);
     } finally {
-      // get redirect url from cookie
-      const redirectUrl = handleGetCookie({ name: "badLoginPath" });
-      // console.log("🐞 redirectUrl ", redirectUrl); // debug
+      // --------------------------------------------------------------------------------
+      // 📌  Handle OU redirects from B2C logon
+      // --------------------------------------------------------------------------------
+      const originPath = new URL(window.location.href);
+      const params = new URLSearchParams(originPath.hash.substring(1)); // get params from hash
+      const stateParam = params.get("state");
+      if (stateParam) {
+        // --------------------------------------------------------------------------------
+        // 📌  Add referrer headers
+        // --------------------------------------------------------------------------------
+        await new Promise((res) => setTimeout(res, 100)); // ⚠️ browser state update
+        const redirect = "/ouredirect?redirect=" + stateParam;
+        actions.router.set(redirect); // ⚠️ redirect to redirect to handle redirect from B2C for OX
 
-      // ⬇️ redirect to url with path ⬇️
-      setGoToAction({ state, path: redirectUrl || "/", actions });
-      // set placeholder to false
-      // deprecated as of v3.0.0
-      // setPlaceholderAction({ dispatch, isPlaceholder: false });
+        return;
+      }
+
+      const redirectUrl = handleGetCookie({ name: "badLoginPath" }); // get redirect url from cookie
+      setGoToAction({ state, path: redirectUrl || "/", actions }); // handle redirect
     }
 
     return () => {

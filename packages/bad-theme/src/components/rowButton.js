@@ -68,15 +68,14 @@ const RowButton = ({
 
   const onClickLinkHandler = async () => {
     let authLink = link.url;
-    // 📌 check if logged in user exists & user is BAD member to replace auth link
+
     if (is_wileys_link && isActiveUser) {
-      authLink = await getWileyAction({
-        state,
-        dispatch,
-        isActiveUser,
-        isFullAccess: true,
-        url: link.url,
-      });
+      // --------------------------------------------------------------------------------
+      // 📌  Redirect auth user via OU redirect path
+      // --------------------------------------------------------------------------------
+      actions.router.set(`/ouredirect?redirect=${authLink}`);
+
+      return;
     }
     // const journal = title.match(/[A-Z]{3}/gm)[0];
     // redirect handler

@@ -140,22 +140,59 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const handleApiRequest = async () => {
     try {
-      let myHeaders = new Headers();
-      myHeaders.append("Authorization", "Basic ZGVtbzphc2RmZ2g=");
-
-      let requestOptions = {
-        method: "GET",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-
-      const res = await fetch(
-        "https://badmainstagstg.wpengine.com/wp-json/wp/v2/memberships?_fields=id,date,slug,title,sog_groupe,acf",
-        requestOptions
-      );
+      const res = await fetch(state.auth.APP_HOST + "/utils/cookie", {
+        credentials: "include",
+      });
+      console.log("⭐️", state.auth.APP_HOST + "/utils/cookie");
+      console.log("⭐️", res);
       const data = await res.json();
+      console.log("⭐️", data);
+      const isAuth = data?.data?.level === "auth";
+      console.log("⭐️ auth user", isAuth);
     } catch (error) {
       // console.log(error);
+    }
+  };
+
+  const handleLoginRedirect = async () => {
+    try {
+      const redirectPath = `&state=https://academic.oup.com/bjd&redirect_uri=${state.auth.APP_URL}/codecollect`;
+      let action = "login";
+
+      const url =
+        state.auth.B2C +
+        `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+
+      // --------------------------------------------------------------------------------
+      // 📌 redirect to B2C auth set window location to login page
+      // 📌 on local host need prefix with protocol & localhost
+      // --------------------------------------------------------------------------------
+      window.location.href = url;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAuthRedirect = async () => {
+    try {
+      const path = "https://skylarkdev.digital/httplogger";
+      // --------------------------------------------------------------------------------
+      // 📌  Add meta tag to headers
+      // --------------------------------------------------------------------------------
+      const meta1 = document.createElement("meta");
+      meta1.name = "referrer";
+      meta1.content = "no-referrer-when-downgrade";
+      document.head.appendChild(meta1);
+
+      // --------------------------------------------------------------------------------
+      // 📌  Add meta tag with redirect from current path in 0s to url provided
+      // --------------------------------------------------------------------------------
+      let meta = document.createElement("meta");
+      meta.httpEquiv = "refresh";
+      meta.content = `0; url=${path}`;
+      document.getElementsByTagName("head")[0].appendChild(meta);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -200,20 +237,44 @@ const HeaderActions = ({ state, actions, libraries }) => {
         >
           API req
         </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleLoginRedirect}
+        >
+          Login Redirect
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleB2CRedirect}
+        >
+          Login B2C
+        </div>
+        <div
+          className="blue-btn-reverse"
+          style={{ minWidth: "fit-content" }}
+          onClick={handleAuthRedirect}
+        >
+          auth Redirect
+        </div>
       </div>
     );
   };
 
-  const handleCheck = async () => {
-    let path = state.auth.APP_HOST + "/utils/cookie";
-    const response = await fetchDataHandler({
-      path,
-      state,
-    });
-    let data = "not found";
-    if (response && response.ok) {
-      data = await response.json();
-    }
+  const handleB2CRedirect = () => {
+    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
+    let action = "login";
+
+    const url =
+      state.auth.B2C +
+      `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+
+    // --------------------------------------------------------------------------------
+    // 📌 redirect to B2C auth set window location to login page
+    // 📌 on local host need prefix with protocol & localhost
+    // --------------------------------------------------------------------------------
+    window.location.href = url;
   };
 
   const handleAboutInfo = async () => {
