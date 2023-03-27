@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { connect } from "frontity";
 import Image from "@frontity/components/image";
 
@@ -42,6 +42,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
   const { isActiveUser, applicationData } = useAppState();
 
   const [filter, setFilter] = useState(null);
+  const [customActions, setCustomActions] = useState(); // 👈 header custom actions. CPT to get actions for header btn component
   const [isFetching, setFetching] = useState(null);
   const [searchFilter, setSearchFilter] = useState("");
   const [mobileMenuActive, setMobileMenuActive] = useState(false);
@@ -49,6 +50,23 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const ctaHeight = 45;
   const SiteLogo = !lg ? BADLogo : MobileLogo;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // ⬇️ prefetch custom actions CPT
+        const response = await fetch(
+          state.auth.WP_HOST +
+            "/wp-json/wp/v2/header_actions?_fields=id,slug,type,link,title,content,acf"
+        );
+        const data = await response.json();
+
+        setCustomActions(data);
+      } catch (error) {
+        // console.log(error);
+      }
+    })();
+  }, []);
 
   // HANDLERS --------------------------------------------
   const handleSearchLookup = async () => {
@@ -292,6 +310,35 @@ const HeaderActions = ({ state, actions, libraries }) => {
     return <Login />;
   };
 
+  const CustomActions = () => {
+    const acf = customActions?.[0]?.acf || {};
+    const { published, label, link } = acf;
+
+    if (!published) {
+      return null;
+    }
+
+    const displayLabel =
+      label?.length > 30 ? `${label.slice(0, 30)}...` : label;
+    const handleClick = () => (window.location.href = link);
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 1,
+          top: "50px",
+          left: "16px",
+          width: "315px",
+        }}
+      >
+        <div className="transparent-btn" onClick={handleClick}>
+          {displayLabel}
+        </div>
+      </div>
+    );
+  };
+
   const ServeMobileMenuAction = () => {
     return (
       <div style={{ cursor: "pointer" }}>
@@ -454,9 +501,20 @@ const HeaderActions = ({ state, actions, libraries }) => {
               </div>
             )}
 
-            {!lg ? <ServeLoginAction /> : <ServeMobileLoginAction />}
-            <ServeDashboardAction />
-            {!lg ? <QuickLinksDropDown /> : null}
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                {!lg ? <ServeLoginAction /> : <ServeMobileLoginAction />}
+                <ServeDashboardAction />
+                {!lg ? <QuickLinksDropDown /> : null}
+              </div>
+              {!lg && <CustomActions />}
+            </div>
             {!lg ? null : <ServeMobileMenuAction />}
           </div>
         </div>
