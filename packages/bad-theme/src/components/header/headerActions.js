@@ -57,7 +57,7 @@ const HeaderActions = ({ state, actions, libraries }) => {
         // ⬇️ prefetch custom actions CPT
         const response = await fetch(
           state.auth.WP_HOST +
-            "/wp-json/wp/v2/header_action?_fields=id,slug,type,link,title,content,acf"
+            "/wp-json/wp/v2/header_actions?_fields=id,slug,type,link,title,content,acf"
         );
         const data = await response.json();
 
