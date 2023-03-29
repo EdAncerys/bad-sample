@@ -312,15 +312,24 @@ const HeaderActions = ({ state, actions, libraries }) => {
 
   const CustomActions = () => {
     const acf = customActions?.[0]?.acf || {};
-    const { published, label, link } = acf;
+    const { published, label, link, auth_link } = acf;
 
     if (!published) {
+      // --------------------------------------------------------------------------------
+      // 📌  Do not render component if not published
+      // --------------------------------------------------------------------------------
       return null;
     }
 
     const displayLabel =
-      label?.length > 30 ? `${label.slice(0, 30)}...` : label;
-    const handleClick = () => (window.location.href = link);
+      label?.slice(0, 30) + (label?.length > 30 ? "..." : "");
+
+    // --------------------------------------------------------------------------------
+    // 📌  Handle auth redirects links for logged in users
+    // --------------------------------------------------------------------------------
+    const redirectLink = isActiveUser && auth_link ? auth_link : link;
+
+    const handleClick = () => (window.location.href = redirectLink);
 
     return (
       <div
