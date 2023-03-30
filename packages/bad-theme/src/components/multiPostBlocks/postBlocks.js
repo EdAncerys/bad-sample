@@ -8,6 +8,7 @@ import { useAppDispatch, useAppState, muiQuery } from "../../context";
 
 const MultiPostBlock = ({ state, actions, block, filter }) => {
   const { disable_vertical_padding, add_search_function } = block;
+  const { isActiveUser } = useAppState();
 
   const { sm, md, lg, xl } = muiQuery();
 
@@ -68,9 +69,15 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
             form_link,
             link_label,
             link,
+            auth_link,
             doc_upload,
             title,
           } = block;
+
+          // --------------------------------------------------------------------------------
+          // 📌  Handle auth redirects links for logged in users
+          // --------------------------------------------------------------------------------
+          const redirectLink = isActiveUser && auth_link ? auth_link : link;
 
           if (filter) {
             if (
@@ -84,7 +91,12 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
           if (lg)
             return (
               <RowButton
-                block={{ title: title, link: link, colour: colour, file_link: doc_upload }}
+                block={{
+                  title: title,
+                  link: redirectLink,
+                  colour: colour,
+                  file_link: doc_upload,
+                }}
                 multiPostRowButtons
               />
             );
@@ -97,7 +109,7 @@ const MultiPostBlock = ({ state, actions, block, filter }) => {
                 body={body}
                 colour={colour}
                 link_label={link_label}
-                link={link.url}
+                link={redirectLink?.url}
                 url={isFrom4Col ? null : background_image.url} // optional param
                 form_label={form_label} // optional param
                 form_link={doc_upload ? null : form_link.url} // optional param
