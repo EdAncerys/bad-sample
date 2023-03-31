@@ -38,7 +38,7 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
     // HANDLERS ----------------------------------------------------
     const handelLogin = () => {
       setErrorAction({ dispatch, isError: null });
-      loginAction({ state });
+      loginAction({ state, stateRedirectUrl: authLink });
     };
 
     const handelRedirect = () => {
@@ -91,7 +91,10 @@ const QuickLinksDropDown = ({ state, actions, libraries }) => {
               label,
               handler: handelRedirect,
             },
-            { label: "Login", handler: handelLogin },
+            {
+              label: "Login",
+              handler: handelLogin,
+            },
           ],
         },
       });

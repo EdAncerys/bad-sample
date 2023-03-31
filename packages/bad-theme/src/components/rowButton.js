@@ -60,14 +60,14 @@ const RowButton = ({
   let LABEL = title;
   if (!title && link) LABEL = link.title;
 
-  // HANDLERS -------------------------------------------
-  const handelLogin = () => {
-    setErrorAction({ dispatch, isError: null });
-    loginAction({ state });
-  };
-
   const onClickLinkHandler = async () => {
     let authLink = link.url;
+
+    // HANDLERS -------------------------------------------
+    const handelLogin = () => {
+      setErrorAction({ dispatch, isError: null });
+      loginAction({ state, stateRedirectUrl: authLink });
+    };
 
     if (is_wileys_link && isActiveUser) {
       // --------------------------------------------------------------------------------
@@ -97,7 +97,10 @@ const RowButton = ({
               label: `${title}`,
               handler: handelRedirect,
             },
-            { label: "Login", handler: handelLogin },
+            {
+              label: "Login",
+              handler: handelLogin,
+            },
           ],
         },
       });
