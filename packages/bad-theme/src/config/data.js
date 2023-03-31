@@ -90,11 +90,11 @@ export const MENU_DATA = [
   },
   {
     title: "BJD Journal",
-    url: "https://onlinelibrary.wiley.com/journal/13652133",
+    url: "https://academic.oup.com/bjd",
   },
   {
     title: "CED Journal",
-    url: "https://onlinelibrary.wiley.com/journal/13652230",
+    url: "https://academic.oup.com/ced",
   },
   {
     title: "SHD Journal",

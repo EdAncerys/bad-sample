@@ -19,6 +19,7 @@ import Contact from "./contact";
 import Login from "./login";
 import Home from "./home";
 import Codecollect from "./codecollect";
+import OACodecCollect from "./oxCodeCollect";
 import PilsArchive from "./pilsArchive";
 import Pils from "./pils";
 import AppSearch from "./appSearch";
@@ -194,6 +195,8 @@ const App = ({ state, actions }) => {
           <ReferralArchive when={urlPath === "/referrals/"} />
 
           <Codecollect when={urlPath.includes("codecollect")} />
+          <OACodecCollect when={urlPath.includes("ouredirect")} />
+
           <Pils when={data.isPils} />
           <AppSearch when={urlPath === "/search/"} />
           <Event when={data.isEvents} />
