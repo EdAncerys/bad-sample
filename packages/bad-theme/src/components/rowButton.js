@@ -85,12 +85,12 @@ const RowButton = ({
     };
 
     if (is_wileys_link && !isActiveUser) {
-      // 📌 track notification error action
-      // console.log("HANDLING HERE", is_wileys_link, "title:", title);
+      const journal = title?.includes("CED") ? "CED" : "BJD"; // Journal title name
+
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members should login to get free access to our journals. To continue to the journal without logging in, click 'Read Journal'`,
+          message: `BAD members should login to get free access to our journals. To continue to the journal without logging in, click 'Visit The ${journal} Website'`,
           image: "Error",
           action: [
             {
