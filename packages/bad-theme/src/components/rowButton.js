@@ -90,7 +90,7 @@ const RowButton = ({
       setErrorAction({
         dispatch,
         isError: {
-          message: `BAD members should login to get free access to our journals. To continue to the journal without logging in, click 'Visit The ${journal} Website'`,
+          message: `BAD members should login to get free access to our journals. To continue to the journal without logging in, click 'Visit the ${journal} Website'`,
           image: "Error",
           action: [
             {
