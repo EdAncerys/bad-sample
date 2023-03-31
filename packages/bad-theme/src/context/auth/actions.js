@@ -37,23 +37,19 @@ export const loginActionViaModal = async ({ state, dispatch, transId }) => {
   }
 };
 
-export const loginAction = async ({ state }) => {
-  // console.log("loginAction triggered");
-
+export const loginAction = async ({ state, stateRedirectUrl }) => {
   try {
     // --------------------------------------------------------------------------------
     // 📌  B2C login auth path endpoint
     // --------------------------------------------------------------------------------
-    // 📌 auth B2c redirect url based on App default url
-    const redirectPath = `&redirect_uri=${state.auth.APP_URL}/codecollect`;
-    let action = "login";
+    const { auth } = state || {};
+    const action = "login";
+    const redirectPath = `&redirect_uri=${auth.APP_URL}/codecollect`;
+    const params = stateRedirectUrl ? `&state=${stateRedirectUrl}` : "";
 
-    const url =
-      state.auth.B2C +
-      `${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+    const url = `${auth.B2C}${params}${redirectPath}&scope=openid&response_type=id_token&prompt=${action}`;
+
     const urlPath = state.router.link;
-
-    // get current url path and store in cookieValue for redirects after login
     handleSetCookie({ name: "badLoginPath", value: urlPath });
 
     // --------------------------------------------------------------------------------
@@ -62,7 +58,7 @@ export const loginAction = async ({ state }) => {
     // --------------------------------------------------------------------------------
     window.location.href = url;
   } catch (error) {
-    // console.log("loginAction error", error);
+    console.error("loginAction error:", error);
   }
 };
 
