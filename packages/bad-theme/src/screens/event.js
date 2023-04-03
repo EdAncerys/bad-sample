@@ -88,7 +88,9 @@ const Event = ({ state, actions, libraries }) => {
     contact_allow_attachments,
     contact_recipients,
     contact_email_override,
-  } = event.acf;
+    show_sharing_buttons,
+    show_add_to_calendar,
+  } = event.acf || {};
   const { title, id } = event;
   // console.log("event", event); // debug
 
@@ -524,10 +526,14 @@ const Event = ({ state, actions, libraries }) => {
   };
 
   const ServeSocials = () => {
-    // remove first / from string if its exist in the url
+    // --------------------------------------------------------------------------------
+    // 📌  Kill component if social icons set to hide
+    // --------------------------------------------------------------------------------
+    if (!show_sharing_buttons) return null;
+
     const removeFirstSlash = (url) => {
       if (url?.startsWith("/")) {
-        return url.substring(1);
+        return url.substring(1); // remove first / from string if its exist in the url
       }
       return url;
     };
@@ -546,9 +552,11 @@ const Event = ({ state, actions, libraries }) => {
           <div className="primary-title" style={{ fontSize: 20 }}>
             Share
           </div>
-          <div className="primary-title" style={{ fontSize: 20 }}>
-            Add to calendar
-          </div>
+          {show_add_to_calendar && (
+            <div className="primary-title" style={{ fontSize: 20 }}>
+              Add to calendar
+            </div>
+          )}
         </div>
         <div className="flex-col" style={{ width: `75%` }}>
           <ShareToSocials
@@ -557,7 +565,7 @@ const Event = ({ state, actions, libraries }) => {
             shareUrl={shareUrl}
             date={startDate}
             location={venue}
-            isCalendarLink
+            isCalendarLink={show_add_to_calendar}
           />
         </div>
       </div>
