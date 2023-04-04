@@ -44,7 +44,14 @@ const OACodecCollect = ({ state, actions, libraries }) => {
       try {
         let URL = new URLSearchParams(window.location.search);
         const isOURedirect = URL.get("redirect");
-        const isOrigUrl = URL.get("origurl");
+        let isOrigUrl = URL.get("origurl");
+
+        // --------------------------------------------------------------------------------
+        // 📌  Sanitize origurl param value
+        // --------------------------------------------------------------------------------
+        if (isOrigUrl && isOrigUrl.includes("?")) {
+          isOrigUrl = isOrigUrl.split("?")[0];
+        }
 
         const path = isOURedirect; // ⚠️ redirect path from BAD. Extend with additional params if needed
 
