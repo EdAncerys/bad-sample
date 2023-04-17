@@ -395,11 +395,12 @@ const HeaderActions = ({ state, actions, libraries }) => {
     return (
       <div
         style={{
-          position: "absolute",
+          position: !lg ? "absolute" : undefined,
+          margin: !lg ? undefined : "10px",
           zIndex: 1,
           top: "50px",
           left: "16px",
-          width: "315px",
+          width: !lg ? "315px" : undefined,
         }}
       >
         <div className="transparent-btn" onClick={handleClick}>
@@ -499,6 +500,8 @@ const HeaderActions = ({ state, actions, libraries }) => {
       )}
       <BlockWrapper>
         <ServeInfoBatch />
+
+        {lg && <CustomActions />}
 
         <div className="flex" style={{ padding: !lg ? `2.75em 0` : `0.3em 0` }}>
           <div className="flex">
