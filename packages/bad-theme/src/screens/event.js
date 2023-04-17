@@ -92,7 +92,7 @@ const Event = ({ state, actions, libraries }) => {
     show_add_to_calendar,
   } = event.acf || {};
   const { title, id } = event;
-  // console.log("event", event); // debug
+  console.log("event", event.acf); // debug
 
   if (!position) return <Loading />;
 
@@ -288,19 +288,6 @@ const Event = ({ state, actions, libraries }) => {
     };
 
     const handleRegistrationClick = () => {
-      // uncoment to have registration for active user only
-      // if (!isActiveUser) {
-      //   setErrorAction({
-      //     dispatch,
-      //     isError: {
-      //       message: `Please log in to the BAD website in order to register for this event`,
-      //       image: "Error",
-      //       action: [{ label: "Login", handler: handleLogin }],
-      //     },
-      //   });
-      //   return;
-      // }
-
       if (
         (registration_type === "email" &&
           registration_status_email === "registration_not_open") ||
@@ -396,6 +383,11 @@ const Event = ({ state, actions, libraries }) => {
         if (
           registration_type === "email" &&
           registration_status_email === "register_an_interest"
+        )
+          return "Express an interest";
+        if (
+          registration_type === "external" &&
+          registration_status_external === "express_interest"
         )
           return "Express an interest";
         if (
