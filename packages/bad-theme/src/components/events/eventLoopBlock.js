@@ -25,6 +25,7 @@ const EventLoopBlock = ({
   locationsFilter,
   recommended_events,
   specialtyFilter,
+  monthFilter,
   yearFilter,
 }) => {
   if (!block) return <Loading />;
@@ -45,7 +46,6 @@ const EventLoopBlock = ({
   } = block;
 
   const [eventList, setEventList] = useState(null); // event data
-  const [filteredEvents, setFilteredEvents] = useState(null); // event data
   const [eventFilter, setFilter] = useState(null); // event data
   const currentPageRef = useRef(1);
   const postLimitRef = useRef(0);
@@ -144,7 +144,6 @@ const EventLoopBlock = ({
     }
 
     setEventList(response); // set event data
-    setFilteredEvents(events); // set event data
     setFilter(events); // set event filter data
 
     // ⬇️ set link to anchor for event
@@ -166,9 +165,11 @@ const EventLoopBlock = ({
       !gradesFilter &&
       !locationsFilter &&
       !specialtyFilter &&
+      !monthFilter &&
       !yearFilter
     ) {
-      setFilter(eventList?.slice(0, postLimitRef.current)); // 👉 reset filters
+      setFilter(eventList); // 👉 reset filters
+
       return;
     }
 
@@ -228,9 +229,9 @@ const EventLoopBlock = ({
       });
     }
 
-    if (yearFilter) {
-      const fMonth = new Date(yearFilter).getMonth() + 1;
-      const fYear = new Date(yearFilter).getFullYear();
+    if (monthFilter) {
+      const fMonth = new Date(monthFilter).getMonth() + 1;
+      const fYear = new Date(monthFilter).getFullYear();
 
       // if year filter applied then filter events
       filtered = filtered.filter((event) => {
@@ -253,6 +254,26 @@ const EventLoopBlock = ({
       });
     }
 
+    if (yearFilter) {
+      // --------------------------------------------------------------------------------
+      // 📌 Filter events by relevant year
+      // --------------------------------------------------------------------------------
+      const year = new Date(yearFilter).getFullYear();
+
+      filtered = filtered.filter((event) => {
+        let eventDate = event.acf.date_time;
+        if (!eventDate) return false;
+
+        const yearOp = +eventDate?.[0]?.date?.split("/")?.[2];
+        const yearCl = +eventDate?.[1]?.date?.split("/")?.[2];
+
+        // --------------------------------------------------------------------------------
+        // 📌  Return matching results
+        // --------------------------------------------------------------------------------
+        return yearOp === year || yearCl === year;
+      });
+    }
+
     // ⬇️⬇ sort events by date
     filtered = handleSortFilter({ list: filtered });
 
@@ -263,6 +284,7 @@ const EventLoopBlock = ({
     gradesFilter,
     locationsFilter,
     specialtyFilter,
+    monthFilter,
     yearFilter,
   ]);
 

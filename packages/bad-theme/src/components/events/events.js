@@ -30,6 +30,7 @@ const Events = ({ state, block, disableMargin }) => {
   const [gradesFilter, setGradesFilter] = useState("");
   const [locationsFilter, setLocationsFilter] = useState("");
   const [specialtyFilter, setSpecialtyFilter] = useState("");
+  const [monthFilter, setMonthFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
 
   let marginHorizontal = state.theme.marginHorizontal;
@@ -181,7 +182,7 @@ const Events = ({ state, block, disableMargin }) => {
       );
     };
 
-    const ServeYearFilter = () => {
+    const ServeMonthFilter = () => {
       // get current month
       const currentMonth = new Date().getMonth(); // 👉 current month number representation (1-12)
       // get array of next 12 months and a year based on current month
@@ -210,11 +211,14 @@ const Events = ({ state, block, disableMargin }) => {
       if (block.events_archive) eventSearchMonth = monthsPast;
 
       return (
-        <div className="flex" style={{ width: "100%" }}>
+        <div
+          className="flex"
+          style={{ paddingRight: !lg ? `1em` : 0, width: !lg ? null : "100%" }}
+        >
           <Form.Select
             style={!lg ? styles.input : styles.mobileInput}
-            value={yearFilter}
-            onChange={(e) => setYearFilter(e.target.value)}
+            value={monthFilter}
+            onChange={(e) => setMonthFilter(e.target.value)}
           >
             <option value="" hidden>
               Filter By Month
@@ -225,6 +229,50 @@ const Events = ({ state, block, disableMargin }) => {
 
               return (
                 <option key={key} value={time}>
+                  {formattedDate}
+                </option>
+              );
+            })}
+          </Form.Select>
+        </div>
+      );
+    };
+
+    const ServeYearFilter = () => {
+      const currentYear = new Date().getFullYear();
+
+      const getYearsArray = (startIndex, increment, length) =>
+        [...Array(length).keys()].map((_, index) => {
+          const year = startIndex + index * increment;
+          return `${year}`;
+        });
+
+      let eventSearchYear = [];
+
+      if (block.events_archive) {
+        // if block is set to archive mode, show past 5 years including the current year
+        eventSearchYear = getYearsArray(currentYear, -1, 6).reverse();
+      } else {
+        // if block is set to future mode, show next 5 years including the current year
+        eventSearchYear = getYearsArray(currentYear, 1, 6);
+      }
+
+      return (
+        <div className="flex" style={{ width: "100%" }}>
+          <Form.Select
+            style={!lg ? styles.input : styles.mobileInput}
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value)}
+          >
+            <option value="" hidden>
+              Filter By Year
+            </option>
+            {eventSearchYear.map((year, key) => {
+              const dateObject = new Date(year);
+              const formattedDate = DATE_MODULE.format(dateObject, "YYYY");
+
+              return (
+                <option key={key} value={year}>
                   {formattedDate}
                 </option>
               );
@@ -247,6 +295,7 @@ const Events = ({ state, block, disableMargin }) => {
         <ServeGradeFilter />
         <ServeLocationFilter />
         <ServeSpecialtyFilter />
+        <ServeMonthFilter />
         <ServeYearFilter />
       </div>
     );
@@ -341,11 +390,32 @@ const Events = ({ state, block, disableMargin }) => {
       );
     };
 
+    const ServeSelectedMonthFilter = () => {
+      if (!monthFilter) return null;
+      // get current date
+      const dateObject = new Date(monthFilter);
+      const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+
+      return (
+        <div className="shadow filter">
+          <div>{formattedDate}</div>
+          <div className="filter-icon" onClick={() => setMonthFilter("")}>
+            <CloseIcon
+              style={{
+                fill: colors.darkSilver,
+                padding: 0,
+              }}
+            />
+          </div>
+        </div>
+      );
+    };
+
     const ServeSelectedYearFilter = () => {
       if (!yearFilter) return null;
       // get current date
       const dateObject = new Date(yearFilter);
-      const formattedDate = DATE_MODULE.format(dateObject, "MMMM YYYY");
+      const formattedDate = DATE_MODULE.format(dateObject, "YYYY");
 
       return (
         <div className="shadow filter">
@@ -369,7 +439,6 @@ const Events = ({ state, block, disableMargin }) => {
             searchFilterRef={searchFilterRef}
             handleSearch={handleSearch}
           />
-          {/* <SearchBar search_type="events" block={block} /> */}
           <ServeFilters />
         </div>
         <div className="flex" style={{ marginTop: "0.5em" }}>
@@ -377,6 +446,7 @@ const Events = ({ state, block, disableMargin }) => {
           <ServeSelectedGradesFilter />
           <ServeSelectedLocationFilter />
           <ServeSpecialtyFilter />
+          <ServeSelectedMonthFilter />
           <ServeSelectedYearFilter />
         </div>
       </div>
@@ -393,6 +463,7 @@ const Events = ({ state, block, disableMargin }) => {
         searchFilter={searchFilter}
         gradesFilter={gradesFilter}
         locationsFilter={locationsFilter}
+        monthFilter={monthFilter}
         yearFilter={yearFilter}
         specialtyFilter={specialtyFilter}
       />
