@@ -51,10 +51,28 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
 
   // HELPERS ----------------------------------------------------------------
   const handleInputChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
+    const { name, value, type, checked } = e.target;
+
+    let formattedValue = value;
+
+    if (name === "core_sortcode") {
+      const digits = value.replace(/\D/g, "");
+      formattedValue = digits
+        .slice(0, 6)
+        .replace(
+          /^(\d{2})(\d{1,2})?(\d{1,2})?/,
+          (_, group1, group2, group3) =>
+            group1 + (group2 ? "-" + group2 : "") + (group3 ? "-" + group3 : "")
+        );
+    }
+
+    if (name === "core_accountnumber") {
+      formattedValue = value?.toString()?.slice(0, 8) ?? "";
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : formattedValue,
     }));
   };
 
@@ -232,7 +250,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
                 name="core_accountnumber"
                 value={formData.core_accountnumber}
                 onChange={handleInputChange}
-                type="text"
+                type="number"
                 className="form-control input"
                 placeholder="Account Number"
               />

@@ -71,7 +71,10 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
   if (!isDirectDebitNotification) isSetupDirectDebit = true;
   if (isDebitSetup) isSetupDirectDebit = true;
 
+  // --------------------------------------------------------------------------------
   // 📌 if direct debit setup or no approved applications, return null
+  // ⚠️ Conditional component rendering
+  // --------------------------------------------------------------------------------
   if (isSetupDirectDebit || !isApprovedMemberships) return null;
 
   // HELPERS ----------------------------------------------------------------
@@ -133,10 +136,6 @@ const DirectDebitNotification = ({ state, actions, libraries }) => {
       <ServeActions />
     </div>
   );
-};
-
-const styles = {
-  container: {},
 };
 
 export default connect(DirectDebitNotification);
