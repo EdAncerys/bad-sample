@@ -56,14 +56,20 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
     let formattedValue = value;
 
     if (name === "core_sortcode") {
-      const digits = value.replace(/\D/g, "");
-      formattedValue = digits
-        .slice(0, 6)
-        .replace(
-          /^(\d{2})(\d{1,2})?(\d{1,2})?/,
-          (_, group1, group2, group3) =>
-            group1 + (group2 ? "-" + group2 : "") + (group3 ? "-" + group3 : "")
-        );
+      // --------------------------------------------------------------------------------
+      // 📌  To enable character representation as per example : 11-11-11
+      // Uncomment handler below & change input type to text instead
+      // --------------------------------------------------------------------------------
+      // const digits = value.replace(/\D/g, "");
+      // formattedValue = digits
+      //   .slice(0, 6)
+      //   .replace(
+      //     /^(\d{2})(\d{1,2})?(\d{1,2})?/,
+      //     (_, group1, group2, group3) =>
+      //       group1 + (group2 ? "-" + group2 : "") + (group3 ? "-" + group3 : "")
+      //   );
+
+      formattedValue = value?.toString()?.slice(0, 6) ?? "";
     }
 
     if (name === "core_accountnumber") {
@@ -262,7 +268,7 @@ const DirectDebitPayment = ({ state, actions, libraries }) => {
                 name="core_sortcode"
                 value={formData.core_sortcode}
                 onChange={handleInputChange}
-                type="text"
+                type="number"
                 className="form-control input"
                 placeholder="Sort Code"
               />
