@@ -122,11 +122,11 @@ const Applications = ({ state, actions }) => {
           if (hospitalData) hospitalName = hospitalData.name;
         }
 
-        const bad_categorytype = application?.[0]?.bad_categorytype
-          ?.toLowerCase()
-          ?.replace(/\s/g, "");
         const bad_organisedfor = application?.[0]?.bad_organisedfor;
         const _bad_sigid_value = application?.[0]?._bad_sigid_value;
+
+        console.log("🚨 _bad_sigid_value", __filename, _bad_sigid_value);
+        console.log("🚨 _memberships", __filename, memberships);
 
         // --------------------------------------------------------------------------------
         // 📌 find all applications that match the user's category type selections
