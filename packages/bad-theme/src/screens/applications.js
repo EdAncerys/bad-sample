@@ -506,11 +506,7 @@ const Applications = ({ state, actions }) => {
     }));
   };
 
-  const formSubmitHandler = async () => {
-    // --------------------------------------------------------------------------------
-    // 📌  Handle form submit
-    // --------------------------------------------------------------------------------
-
+  const applicationSubmitHandler = async () => {
     // --------------------------------------------------------------------------------
     // 📌 Form validation handler
     // --------------------------------------------------------------------------------
@@ -523,6 +519,9 @@ const Applications = ({ state, actions }) => {
     });
 
     try {
+      // --------------------------------------------------------------------------------
+      // ⚠️ Application submit handler/. Submits application to server
+      // --------------------------------------------------------------------------------
       setFetching(true);
 
       if (!isValid) {
@@ -541,29 +540,32 @@ const Applications = ({ state, actions }) => {
 
       // --------------------------------------------------------------------------------
       // 📌  Proceed to from submission
+      // 👇 get appropriate membership ID
       // --------------------------------------------------------------------------------
-      // 👉 get appropriate membership ID
       const data = await getBADMembershipSubscriptionData({
         state,
         category: form?.bad_organisedfor === "810170001" ? "SIG" : "BAD", // SIG or BAD
         type: form?.bad_categorytype,
       });
 
-      updatedApplication?.map((input, key) => {
-        let { name, value, info } = input;
+      const updatedApplicationCopy = updatedApplication.map((input, key) => {
+        // --------------------------------------------------------------------------------
+        // 📌  Overwrite current application id with lookup data id
+        // --------------------------------------------------------------------------------
+        let { name, value } = input;
+
         if (name === "core_membershipsubscriptionplanid") {
-          updatedApplication[key] = {
-            ...input,
-            value: data?.[0]?.core_membershipsubscriptionplanid, // set core_membership_id to updatedApplication
-          };
+          value = data?.[0]?.core_membershipsubscriptionplanid;
         }
+
+        return { ...input, value };
       });
 
-      await saveApplicationRecord({ updatedApplication, submit: true }); // 👉 save application record & disable fetch state
+      await saveApplicationRecord({ updatedApplicationCopy, submit: true }); // 👉 save application record & disable fetch state
       const submitRes = await submitUserApplication({
         state,
         contactid: isActiveUser?.contactid || "",
-        application: updatedApplication,
+        application: updatedApplicationCopy,
       });
 
       if (!submitRes?.success) {
@@ -628,23 +630,20 @@ const Applications = ({ state, actions }) => {
       updatedApplication = updatedApplication || application; // ⚠️ set updatedApplication to application if not provided
       updatedApplication[0].step = form?.step; // ⚠️ set step to form step
 
-      updatedApplication?.map((input, key) => {
+      const updatedApplicationCopy = updatedApplication.map((input, key) => {
         let { name, value } = input;
 
         if (form?.[name] !== undefined) {
-          value = form?.[name]; // ⚠️ set value to from value
-
-          // --------------------------------------------------------------------------------
-          // ⚠️ update application with new value
-          // --------------------------------------------------------------------------------
-          updatedApplication[key] = { ...input, value };
+          value = form?.[name];
         }
+
+        return { ...input, value };
       });
 
       const response = await updateDynamicsApplicationAction({
         state,
         contactid: isActiveUser?.contactid || "",
-        application: updatedApplication,
+        application: updatedApplicationCopy,
       });
 
       if (response?.success && saveAndExit) {
@@ -929,7 +928,7 @@ const Applications = ({ state, actions }) => {
         // --------------------------------------------------------------------------------
         // 📌  if SIG, submit form and redirect
         // --------------------------------------------------------------------------------
-        await formSubmitHandler();
+        await applicationSubmitHandler();
         return;
       }
 

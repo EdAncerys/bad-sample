@@ -22,11 +22,6 @@ const CheckboxInput = ({
       form?.bad_categorytype.split(":")[1] || form?.bad_categorytype;
     if (badApp) appName = "BAD`S"; // ⚠️ overwrite all policies with BAD policy name
 
-    // ⚠️ DermpathPRO policy name overwrite
-    if (form?.bad_categorytype === "Full:DermpathPRO Trainee") {
-      appName = "DermpathPRO";
-    }
-
     inputLabel =
       "Please confirm you have read the " + appName + " policy document";
   }

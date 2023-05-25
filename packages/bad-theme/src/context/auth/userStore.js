@@ -274,7 +274,8 @@ export const deleteApplicationAction = async ({
 
   let confirmationMsg = "Application been successfully deleted!";
   if (applicationData) {
-    const type = applicationData[0].bad_categorytype;
+    const type =
+      applicationData[0].core_name ?? applicationData[0].bad_organisedfor; // display user application type in UI
     confirmationMsg = `Your ${type} application has been successfully deleted!`;
   }
 
