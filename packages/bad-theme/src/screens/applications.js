@@ -16,7 +16,6 @@ import {
   updateDynamicsApplicationAction,
   submitUserApplication,
   formValidationHandler,
-  requiredFieldHandler,
 } from "../helpers/inputHelpers";
 import {
   useAppState,
@@ -124,9 +123,6 @@ const Applications = ({ state, actions }) => {
 
         const bad_organisedfor = application?.[0]?.bad_organisedfor;
         const _bad_sigid_value = application?.[0]?._bad_sigid_value;
-
-        console.log("🚨 _bad_sigid_value", __filename, _bad_sigid_value);
-        console.log("🚨 _memberships", __filename, memberships);
 
         // --------------------------------------------------------------------------------
         // 📌 find all applications that match the user's category type selections
@@ -561,7 +557,12 @@ const Applications = ({ state, actions }) => {
         return { ...input, value };
       });
 
-      await saveApplicationRecord({ updatedApplicationCopy, submit: true }); // 👉 save application record & disable fetch state
+      // console.log("🚨 MEMBERSHIP DATA ", data);
+      await saveApplicationRecord({
+        updatedApplication: updatedApplicationCopy,
+        submit: true,
+      }); // 👉 save application record & disable fetch state
+
       const submitRes = await submitUserApplication({
         state,
         contactid: isActiveUser?.contactid || "",
@@ -627,16 +628,19 @@ const Applications = ({ state, actions }) => {
     try {
       if (!submit) setFetching(true);
 
-      updatedApplication = updatedApplication || application; // ⚠️ set updatedApplication to application if not provided
-      updatedApplication[0].step = form?.step; // ⚠️ set step to form step
+      let blob = updatedApplication || application; // ⚠️ set updatedApplication to application if not provided
+      blob[0].step = form?.step; // ⚠️ set step to form step
 
-      const updatedApplicationCopy = updatedApplication.map((input, key) => {
+      const updatedApplicationCopy = blob.map((input, key) => {
         let { name, value } = input;
+
+        if (name === "core_membershipsubscriptionplanid") {
+          return { ...input }; // ⚠️ do not sync membership id value as thats been mutated on application look up stage
+        }
 
         if (form?.[name] !== undefined) {
           value = form?.[name];
         }
-
         return { ...input, value };
       });
 

@@ -679,7 +679,10 @@ export const formValidationHandler = ({
     }
 
     // 👉 check that value form?.[name] is not undefined & is not empty string
-    const isValidInput = form?.[name] !== undefined && form?.[name] !== "";
+    const isValidInput =
+      form?.[name] !== undefined && // do have a value provided
+      form?.[name] !== "" && // value is not empty string
+      form?.[name] !== false; // value of checkbox type input is truthy
 
     if (required && !isValidInput && name) {
       // --------------------------------------------------------------------------------
