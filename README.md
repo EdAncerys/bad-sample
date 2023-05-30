@@ -45,15 +45,15 @@ Production server end point
 https://services.bad.org.uk/dynamicsbridge
 ```
 
-## ⬇️ SWITHC To Developemnt git repo
+## ⬇️ SWITCH To Development git repo
 
 git remote set-url origin https://github.com/SkylarkBAD/bad.org
 
-## ⬇️ SWITHC To Production git repo
+## ⬇️ SWITCH To Production git repo
 
 git remote set-url origin https://github.com/BADComms/Skylark
 
-### Deployment to Versel
+### Deployment to Vercel
 
 #### Deploy Frontity using the vercel command (from the root of your project):
 
