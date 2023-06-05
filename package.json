@@ -7,12 +7,13 @@
     "frontity"
   ],
   "engines": {
-    "node": ">=10.0.0",
+    "node": "16.x",
     "npm": ">=6.0.0"
   },
   "scripts": {
-    "dev": "frontity dev",
+    "dev": "frontity dev --port 8080",
     "build": "frontity build",
+    "wipe": "rm -rf node_modules yarn.json && yarn && yarn dev",
     "serve": "frontity serve"
   },
   "prettier": {},

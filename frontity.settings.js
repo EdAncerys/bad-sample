@@ -120,7 +120,6 @@ const settings = {
               postTypeEndpoint: "events", // endpoint from which posts from this taxonomy are fetched
             },
           ],
-          // redirections: ["404", "/derm_groups_charity/"],
         },
       },
     },

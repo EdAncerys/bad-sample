@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-import { fetch } from "frontity";
 import packageClient from "./client";
 
 // Launch dotenv.
